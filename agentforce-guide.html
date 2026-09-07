@@ -1,0 +1,1152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Agentforce Developer Guide 2026 — Anuj Panwar</title>
+<meta name="description" content="Complete Agentforce developer guide covering the new Agentforce Studio UI, Agent Script, Subagents, Apex Actions, and a real-world Loan Support Agent built and deployed in production.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --base:#050A14;
+  --surface:#0D1B2E;
+  --card:#112240;
+  --card2:#162B50;
+  --border:#1E3A5F;
+  --border2:#2D5480;
+  --sf:#00A1E0;
+  --sf2:#0080B8;
+  --sf-glow:rgba(0,161,224,0.15);
+  --sf-dim:rgba(0,161,224,0.08);
+  --blue2:#2D7DD2;
+  --body:#C8DCF0;
+  --muted:#6B8CAE;
+  --dim:#3A5872;
+  --white:#F0F8FF;
+  --green:#29D398;
+  --amber:#F5A623;
+  --red:#E05C5C;
+  --purple:#9B7FE8;
+  --mono:'DM Mono',monospace;
+  --sans:'Inter',sans-serif;
+  --nav-w:220px;
+  --col:860px;
+}
+html{scroll-behavior:smooth;font-size:15px}
+body{
+  font-family:var(--sans);
+  background:var(--base);
+  color:var(--body);
+  line-height:1.75;
+  -webkit-font-smoothing:antialiased;
+}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* ── LAYOUT ── */
+.layout{display:flex;min-height:100vh}
+.sidebar{
+  width:var(--nav-w);
+  flex-shrink:0;
+  position:sticky;
+  top:0;
+  height:100vh;
+  overflow-y:auto;
+  background:var(--surface);
+  border-right:1px solid var(--border);
+  padding:28px 0;
+  scrollbar-width:thin;
+  scrollbar-color:var(--border) transparent;
+}
+.sidebar::-webkit-scrollbar{width:4px}
+.sidebar::-webkit-scrollbar-track{background:transparent}
+.sidebar::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
+
+.main{flex:1;min-width:0}
+.content{max-width:var(--col);margin:0 auto;padding:0 40px 100px}
+
+/* ── SIDEBAR NAV ── */
+.nav-brand{
+  font-family:var(--mono);
+  font-size:12px;
+  font-weight:500;
+  color:var(--sf);
+  padding:0 20px 24px;
+  border-bottom:1px solid var(--border);
+  margin-bottom:16px;
+  letter-spacing:0.5px;
+  line-height:1.4;
+}
+.nav-section{
+  font-family:var(--mono);
+  font-size:10px;
+  font-weight:500;
+  color:var(--dim);
+  padding:12px 20px 6px;
+  letter-spacing:1px;
+}
+.nav-link{
+  display:block;
+  padding:6px 20px;
+  font-size:12.5px;
+  color:var(--muted);
+  text-decoration:none;
+  transition:color .15s,background .15s;
+  border-left:2px solid transparent;
+  line-height:1.4;
+}
+.nav-link:hover{color:var(--white);background:var(--sf-dim)}
+.nav-link.active{color:var(--sf);border-left-color:var(--sf);background:var(--sf-dim)}
+.nav-link.sub{padding-left:32px;font-size:12px}
+
+/* ── HERO ── */
+.hero{
+  padding:72px 40px 64px;
+  max-width:var(--col);
+  margin:0 auto;
+  border-bottom:1px solid var(--border);
+}
+.hero-badge{
+  font-family:var(--mono);
+  font-size:11px;
+  color:var(--sf);
+  margin-bottom:24px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+.hero-badge::before{
+  content:'';
+  display:inline-block;
+  width:32px;height:1px;
+  background:var(--sf);
+}
+.hero h1{
+  font-family:var(--mono);
+  font-size:clamp(28px,4vw,46px);
+  font-weight:400;
+  color:var(--white);
+  line-height:1.15;
+  letter-spacing:-0.5px;
+  margin-bottom:20px;
+}
+.hero h1 em{
+  font-style:normal;
+  color:var(--sf);
+}
+.hero-desc{
+  font-size:16px;
+  color:var(--body);
+  max-width:580px;
+  line-height:1.75;
+  margin-bottom:32px;
+}
+.hero-tags{display:flex;gap:8px;flex-wrap:wrap}
+.htag{
+  font-family:var(--mono);
+  font-size:11px;
+  padding:4px 12px;
+  border:1px solid var(--border2);
+  border-radius:3px;
+  color:var(--muted);
+}
+.htag.live{border-color:rgba(41,211,152,0.4);color:var(--green)}
+.htag.live::before{content:'● ';font-size:8px}
+
+/* ── SECTION ── */
+.section{margin:60px 0}
+.section-anchor{display:block;position:relative;top:-80px;visibility:hidden}
+
+h2{
+  font-family:var(--mono);
+  font-size:22px;
+  font-weight:500;
+  color:var(--white);
+  margin-bottom:16px;
+  padding-bottom:12px;
+  border-bottom:1px solid var(--border);
+  letter-spacing:-0.3px;
+}
+h2 .h-prefix{color:var(--sf);margin-right:10px;font-weight:300}
+h3{
+  font-family:var(--mono);
+  font-size:15px;
+  font-weight:500;
+  color:var(--white);
+  margin:28px 0 10px;
+}
+h3 .h-prefix{color:var(--muted);margin-right:8px;font-weight:300}
+p{color:var(--body);margin-bottom:14px;max-width:72ch}
+strong{color:var(--white);font-weight:500}
+
+/* ── CALLOUT BOXES ── */
+.callout{
+  border-left:2px solid var(--sf);
+  background:var(--sf-dim);
+  padding:14px 18px;
+  border-radius:0 4px 4px 0;
+  margin:20px 0;
+  font-size:13.5px;
+}
+.callout.green{border-color:var(--green);background:rgba(41,211,152,0.06)}
+.callout.amber{border-color:var(--amber);background:rgba(245,166,35,0.06)}
+.callout.red{border-color:var(--red);background:rgba(224,92,92,0.06)}
+.callout-label{
+  font-family:var(--mono);
+  font-size:10px;
+  font-weight:500;
+  letter-spacing:1px;
+  margin-bottom:6px;
+  color:var(--sf);
+}
+.callout.green .callout-label{color:var(--green)}
+.callout.amber .callout-label{color:var(--amber)}
+.callout.red .callout-label{color:var(--red)}
+.callout p{margin:0;color:var(--body);max-width:none}
+
+/* ── CODE BLOCKS ── */
+.code-wrap{
+  background:#020810;
+  border:1px solid var(--border);
+  border-radius:6px;
+  overflow:hidden;
+  margin:16px 0;
+}
+.code-bar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:8px 16px;
+  background:rgba(255,255,255,0.03);
+  border-bottom:1px solid var(--border);
+}
+.code-lang{
+  font-family:var(--mono);
+  font-size:10px;
+  font-weight:500;
+  color:var(--sf);
+  letter-spacing:1px;
+}
+.code-file{font-family:var(--mono);font-size:10px;color:var(--dim)}
+pre{padding:20px;overflow-x:auto}
+code{font-family:var(--mono);font-size:12.5px;line-height:1.85;color:#CBD8E8}
+.kw{color:#C792EA}
+.str{color:#C3E88D}
+.cm{color:#445566;font-style:italic}
+.ann{color:var(--green)}
+.cls{color:#FFCB6B}
+.mth{color:#82AAFF}
+.num{color:#F78C6C}
+.op{color:#89DDFF}
+.var{color:#EEFFFF}
+code.inline{
+  background:rgba(0,161,224,0.1);
+  color:var(--sf);
+  padding:1px 7px;
+  border-radius:3px;
+  font-size:12px;
+  border:1px solid rgba(0,161,224,0.2);
+}
+
+/* ── ARCHITECTURE DIAGRAM ── */
+.arch{
+  background:#020810;
+  border:1px solid var(--border);
+  border-radius:6px;
+  padding:24px;
+  margin:20px 0;
+  font-family:var(--mono);
+}
+.arch-row{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:10px 14px;
+  border-radius:4px;
+  margin:4px 0;
+  font-size:12px;
+}
+.arch-row.blue{background:rgba(0,161,224,0.08);border:1px solid rgba(0,161,224,0.2)}
+.arch-row.green{background:rgba(41,211,152,0.06);border:1px solid rgba(41,211,152,0.15)}
+.arch-row.amber{background:rgba(245,166,35,0.06);border:1px solid rgba(245,166,35,0.15)}
+.arch-row.purple{background:rgba(155,127,232,0.08);border:1px solid rgba(155,127,232,0.2)}
+.arch-row.dim{background:rgba(255,255,255,0.02);border:1px solid var(--border)}
+.arch-label{font-weight:500;color:var(--white);min-width:160px;font-size:11px}
+.arch-detail{color:var(--muted);font-size:11px}
+.arch-arrow{text-align:center;color:var(--dim);font-size:12px;padding:2px 0;font-family:var(--mono)}
+
+/* ── COMPARISON TABLE ── */
+table{width:100%;border-collapse:collapse;margin:16px 0;font-size:13px}
+th{
+  background:var(--card2);
+  padding:10px 14px;
+  text-align:left;
+  font-family:var(--mono);
+  font-size:10px;
+  font-weight:500;
+  color:var(--muted);
+  letter-spacing:0.8px;
+  border-bottom:1px solid var(--border2);
+}
+td{
+  padding:10px 14px;
+  border-bottom:1px solid rgba(30,58,95,0.5);
+  color:var(--muted);
+  vertical-align:top;
+}
+td:first-child{color:var(--white);font-weight:500;font-family:var(--mono);font-size:12px}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:var(--sf-dim)}
+
+/* ── STEP FLOW ── */
+.steps{margin:24px 0}
+.step{
+  display:flex;
+  gap:20px;
+  margin-bottom:28px;
+  position:relative;
+}
+.step::after{
+  content:'';
+  position:absolute;
+  left:15px;top:34px;bottom:-22px;
+  width:1px;
+  background:var(--border);
+}
+.step:last-child::after{display:none}
+.step-num{
+  width:32px;height:32px;
+  border:1px solid var(--sf);
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--mono);font-size:12px;
+  color:var(--sf);
+  flex-shrink:0;
+  background:var(--base);
+  z-index:1;
+}
+.step-body{flex:1;padding-top:4px}
+.step-title{
+  font-family:var(--mono);
+  font-size:14px;
+  font-weight:500;
+  color:var(--white);
+  margin-bottom:6px;
+}
+.step-desc{font-size:13.5px;color:var(--body);margin:0}
+
+/* ── UI COMPONENT DIAGRAM ── */
+.ui-mock{
+  background:#020810;
+  border:1px solid var(--border);
+  border-radius:6px;
+  overflow:hidden;
+  margin:20px 0;
+  font-family:var(--mono);
+  font-size:12px;
+}
+.ui-titlebar{
+  background:var(--card2);
+  padding:8px 16px;
+  border-bottom:1px solid var(--border);
+  display:flex;
+  align-items:center;
+  gap:8px;
+  font-size:11px;
+  color:var(--muted);
+}
+.ui-dot{width:10px;height:10px;border-radius:50%}
+.ui-body{display:flex;height:340px}
+.ui-panel{
+  border-right:1px solid var(--border);
+  padding:16px 12px;
+  overflow:hidden;
+}
+.ui-panel.explorer{width:190px;flex-shrink:0}
+.ui-panel.canvas{flex:1;overflow:hidden}
+.ui-panel.preview{width:220px;flex-shrink:0;border-right:none}
+.ui-label{font-size:10px;color:var(--dim);margin-bottom:10px;letter-spacing:0.8px}
+.ui-tree-item{
+  padding:4px 8px;
+  border-radius:3px;
+  color:var(--muted);
+  font-size:11px;
+  margin:2px 0;
+  cursor:default;
+  display:flex;align-items:center;gap:6px;
+}
+.ui-tree-item.active{background:var(--sf-dim);color:var(--sf)}
+.ui-tree-item.indent{padding-left:20px;font-size:10.5px}
+.ui-tree-item .dot{width:5px;height:5px;border-radius:50%;background:currentColor;flex-shrink:0}
+.ui-canvas-block{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:4px;
+  padding:10px 12px;
+  margin:8px 0;
+  font-size:11px;
+  color:var(--body);
+}
+.ui-canvas-block .block-label{color:var(--sf);font-size:10px;margin-bottom:4px}
+.ui-canvas-block.action{border-color:rgba(41,211,152,0.3)}
+.ui-canvas-block.action .block-label{color:var(--green)}
+.chat-msg{
+  background:var(--card);
+  border-radius:4px;
+  padding:8px 10px;
+  margin:6px 0;
+  font-size:10.5px;
+  color:var(--body);
+}
+.chat-msg.agent{border-left:2px solid var(--sf)}
+.chat-msg.user{border-left:2px solid var(--dim)}
+.chat-label{font-size:9px;color:var(--dim);margin-bottom:3px}
+
+/* ── TAG ── */
+.tag{
+  display:inline-block;
+  font-family:var(--mono);
+  font-size:10px;
+  padding:2px 8px;
+  border-radius:3px;
+  border:1px solid var(--border);
+  color:var(--muted);
+  margin:2px;
+}
+.tag.blue{border-color:rgba(0,161,224,0.3);color:var(--sf);background:var(--sf-dim)}
+.tag.green{border-color:rgba(41,211,152,0.3);color:var(--green);background:rgba(41,211,152,0.05)}
+.tag.amber{border-color:rgba(245,166,35,0.3);color:var(--amber);background:rgba(245,166,35,0.05)}
+
+/* ── SUBAGENT CARD ── */
+.subagent-card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:6px;
+  padding:20px 22px;
+  margin:12px 0;
+  transition:border-color .2s;
+}
+.subagent-card:hover{border-color:var(--border2)}
+.subagent-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  margin-bottom:10px;
+}
+.subagent-name{font-family:var(--mono);font-size:14px;font-weight:500;color:var(--white)}
+.subagent-desc{font-size:13px;color:var(--muted);margin-bottom:10px}
+.subagent-actions{display:flex;gap:6px;flex-wrap:wrap}
+
+/* ── RESULT BADGE ── */
+.result{
+  display:inline-flex;align-items:center;gap:6px;
+  font-family:var(--mono);font-size:11px;
+  padding:3px 10px;border-radius:3px;
+}
+.result.pass{background:rgba(41,211,152,0.1);color:var(--green);border:1px solid rgba(41,211,152,0.25)}
+.result.fail{background:rgba(224,92,92,0.1);color:var(--red);border:1px solid rgba(224,92,92,0.25)}
+.result.warn{background:rgba(245,166,35,0.1);color:var(--amber);border:1px solid rgba(245,166,35,0.25)}
+
+/* ── FOOTER ── */
+footer{
+  border-top:1px solid var(--border);
+  padding:32px 40px;
+  margin-top:80px;
+  max-width:var(--col);
+  margin-left:auto;margin-right:auto;
+  display:flex;justify-content:space-between;align-items:center;
+  flex-wrap:wrap;gap:16px;
+}
+.footer-brand{font-family:var(--mono);font-size:13px;color:var(--white)}
+.footer-sub{font-size:12px;color:var(--dim);margin-top:3px}
+.footer-right{font-family:var(--mono);font-size:11px;color:var(--dim);text-align:right}
+
+/* ── MOBILE ── */
+@media(max-width:768px){
+  .sidebar{display:none}
+  .content{padding:0 20px 60px}
+  .hero{padding:48px 20px 40px}
+  .ui-panel.explorer,.ui-panel.preview{display:none}
+  footer{flex-direction:column;text-align:center}
+}
+</style>
+</head>
+<body>
+
+<div class="layout">
+
+<!-- ── SIDEBAR ── -->
+<nav class="sidebar" id="sidebar">
+  <div class="nav-brand">agentforce<br>developer guide<br>2026</div>
+
+  <div class="nav-section">Overview</div>
+  <a class="nav-link active" href="#what">What is Agentforce</a>
+  <a class="nav-link" href="#architecture">Architecture</a>
+  <a class="nav-link" href="#newui">New Builder UI</a>
+
+  <div class="nav-section">New Builder</div>
+  <a class="nav-link" href="#studio">Agentforce Studio</a>
+  <a class="nav-link sub" href="#explorer">Explorer Panel</a>
+  <a class="nav-link sub" href="#canvas">Canvas vs Script</a>
+  <a class="nav-link sub" href="#agentscript">Agent Script</a>
+  <a class="nav-section" style="display:block">Real Project</a>
+  <a class="nav-link" href="#project">Loan Support Agent</a>
+  <a class="nav-link sub" href="#datamodel">Data Model</a>
+  <a class="nav-link sub" href="#apexactions">Apex Actions</a>
+  <a class="nav-link sub" href="#systemmode">WITH SYSTEM_MODE</a>
+  <a class="nav-link sub" href="#subagents">Subagents</a>
+  <a class="nav-link sub" href="#guardrails">Guardrails</a>
+
+  <div class="nav-section">Deployment</div>
+  <a class="nav-link" href="#testing">Testing & Debug</a>
+  <a class="nav-link" href="#lessons">Key Lessons</a>
+  <a class="nav-link" href="#resume">Resume Guide</a>
+</nav>
+
+<!-- ── MAIN ── -->
+<div class="main">
+<div class="hero">
+  <div class="hero-badge">Salesforce Agentforce · Production Build</div>
+  <h1>Building autonomous<br>agents with <em>Agentforce</em><br>— the complete guide.</h1>
+  <p class="hero-desc">From the new Agentforce Studio UI to a fully working Loan Support Agent deployed in production. Every component, every fix, every lesson learned — documented here.</p>
+  <div class="hero-tags">
+    <span class="htag live">Agent Working in Production</span>
+    <span class="htag">New Agentforce Studio UI</span>
+    <span class="htag">Agent Script</span>
+    <span class="htag">5 Apex Actions</span>
+    <span class="htag">WITH SYSTEM_MODE</span>
+    <span class="htag">No Prompt Templates</span>
+  </div>
+</div>
+
+<div class="content">
+
+<!-- ═══ SECTION 1: WHAT IS AGENTFORCE ═══ -->
+<div class="section">
+  <span class="section-anchor" id="what"></span>
+  <h2><span class="h-prefix">01</span>What is Agentforce</h2>
+
+  <p>Agentforce is Salesforce's platform for building <strong>autonomous AI agents</strong> — digital workers that read a customer's natural language message, reason about what they need, pick the right action, execute it against live Salesforce data, and respond. All without a human clicking anything.</p>
+
+  <div class="callout">
+    <div class="callout-label">The key shift</div>
+    <p>Flows follow paths you hardcode. Agentforce agents reason. You define the boundaries — the LLM decides which tool to use within them, in real time, based on what the customer actually said.</p>
+  </div>
+
+  <table>
+    <tr><th>Capability</th><th>Flow / Trigger</th><th>Einstein Copilot</th><th>Agentforce Agent</th></tr>
+    <tr><td>Decision logic</td><td>Your IF/ELSE code</td><td>LLM + your code</td><td>LLM reasons autonomously</td></tr>
+    <tr><td>Human needed?</td><td>To configure every path</td><td>Approves each step</td><td>Only to set guardrails</td></tr>
+    <tr><td>Channels</td><td>Internal only</td><td>Lightning only</td><td>Web, Slack, WhatsApp, Voice</td></tr>
+    <tr><td>Your role as dev</td><td>Build all logic</td><td>Build tools + prompts</td><td>Define Subagents + Actions + Guardrails</td></tr>
+  </table>
+</div>
+
+<!-- ═══ SECTION 2: ARCHITECTURE ═══ -->
+<div class="section">
+  <span class="section-anchor" id="architecture"></span>
+  <h2><span class="h-prefix">02</span>Architecture</h2>
+
+  <p>Every Agentforce agent is made of these layers. Atlas is the reasoning engine that orchestrates everything using a ReAct (Reason + Act) loop.</p>
+
+  <div class="arch">
+    <div class="arch-row dim"><span class="arch-label">Channel</span><span class="arch-detail">Experience Cloud · WhatsApp · Slack · Voice — where the customer talks</span></div>
+    <div class="arch-arrow">↓</div>
+    <div class="arch-row blue"><span class="arch-label">Topic Selector</span><span class="arch-detail">Atlas reads the message and routes to the right Subagent</span></div>
+    <div class="arch-arrow">↓</div>
+    <div class="arch-row amber"><span class="arch-label">Subagent (Topic)</span><span class="arch-detail">Scoped area of work — "Loan Status", "Document Check", "EMI Calc"</span></div>
+    <div class="arch-arrow">↓</div>
+    <div class="arch-row green"><span class="arch-label">Actions</span><span class="arch-detail">Apex @InvocableMethod — calls Salesforce data, runs logic, returns output</span></div>
+    <div class="arch-arrow">↓</div>
+    <div class="arch-row purple"><span class="arch-label">Atlas Response</span><span class="arch-detail">Reads action output + instructions → generates natural language reply</span></div>
+    <div class="arch-arrow">↓</div>
+    <div class="arch-row dim"><span class="arch-label">Einstein Trust Layer</span><span class="arch-detail">PII masking · Zero data retention with LLM · Full audit log</span></div>
+  </div>
+
+  <h3><span class="h-prefix">//</span>The ReAct Loop</h3>
+  <p>Atlas does not call actions randomly. It uses a Reason → Act → Observe loop for every turn:</p>
+  <div class="steps">
+    <div class="step"><div class="step-num">1</div><div class="step-body"><div class="step-title">Reason</div><div class="step-desc">Reads the message, conversation history, subagent instructions, and available actions. Decides what to do.</div></div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-body"><div class="step-title">Act</div><div class="step-desc">Calls the selected Apex action with the right parameters extracted from the conversation.</div></div></div>
+    <div class="step"><div class="step-num">3</div><div class="step-body"><div class="step-title">Observe</div><div class="step-desc">Reads the action's output. Decides if another action is needed or if it has enough to respond.</div></div></div>
+    <div class="step"><div class="step-num">4</div><div class="step-body"><div class="step-title">Respond</div><div class="step-desc">Generates a natural language reply using the action data + subagent instructions.</div></div></div>
+  </div>
+</div>
+
+<!-- ═══ SECTION 3: NEW UI ═══ -->
+<div class="section">
+  <span class="section-anchor" id="newui"></span>
+  <h2><span class="h-prefix">03</span>New Builder UI — What Changed</h2>
+
+  <div class="callout amber">
+    <div class="callout-label">Breaking change — July 13 2026</div>
+    <p>The New Agent button was removed from Setup → Agentforce Agents. All new agents are created only in <strong>Agentforce Studio</strong> — a standalone app in the App Launcher. The old Setup path still exists for legacy agents only.</p>
+  </div>
+
+  <table>
+    <tr><th>Old Builder (Setup)</th><th>New Builder (Agentforce Studio)</th></tr>
+    <tr><td>Setup → Agentforce Agents</td><td>App Launcher → Agentforce Studio → Agents</td></tr>
+    <tr><td>Topics</td><td>Subagents (renamed April 2026)</td></tr>
+    <tr><td>Separate tabs per section</td><td>Single Explorer tree + Canvas/Script views</td></tr>
+    <tr><td>No variable support</td><td>Typed variables tracked across subagents</td></tr>
+    <tr><td>No code view</td><td>Full Agent Script with syntax highlighting</td></tr>
+    <tr><td>Conversation Preview only</td><td>Preview with Interaction Details tracing</td></tr>
+    <tr><td>Save to activate</td><td>Save → Commit Version → Activate</td></tr>
+  </table>
+</div>
+
+<!-- ═══ SECTION 4: AGENTFORCE STUDIO ═══ -->
+<div class="section">
+  <span class="section-anchor" id="studio"></span>
+  <h2><span class="h-prefix">04</span>Agentforce Studio</h2>
+  <p>The new builder lives in a standalone app — not Setup. This means non-admin users can build, test, and monitor agents without Setup access.</p>
+
+  <div class="steps">
+    <div class="step"><div class="step-num">1</div><div class="step-body"><div class="step-title">Open App Launcher → search "Agentforce Studio"</div><div class="step-desc">Select it. You land on the Agents list page. This is your new home for all agent work.</div></div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-body"><div class="step-title">Click New Agent</div><div class="step-desc">You see a text field — "What do you want your agent to do?" Describe your agent in plain English or skip to start from scratch.</div></div></div>
+    <div class="step"><div class="step-num">3</div><div class="step-body"><div class="step-title">Name your agent and enter the Builder</div><div class="step-desc">The Builder opens with the Explorer on the left, Canvas in the middle, and Preview on the right.</div></div></div>
+  </div>
+
+  <!-- Visual mock of the new UI -->
+  <span class="section-anchor" id="explorer"></span>
+  <h3><span class="h-prefix">//</span>The New Builder Interface</h3>
+
+  <div class="ui-mock">
+    <div class="ui-titlebar">
+      <div class="ui-dot" style="background:#E05C5C"></div>
+      <div class="ui-dot" style="background:#F5A623"></div>
+      <div class="ui-dot" style="background:#29D398"></div>
+      <span style="margin-left:8px">Agentforce Studio — Loan Support Agent</span>
+      <span style="margin-left:auto;font-size:10px;color:var(--green)">● Draft</span>
+    </div>
+    <div class="ui-body">
+      <!-- Explorer -->
+      <div class="ui-panel explorer">
+        <div class="ui-label">Explorer</div>
+        <div class="ui-tree-item"><span class="dot"></span>Agent Definition</div>
+        <div class="ui-tree-item active"><span class="dot"></span>Topic Selector</div>
+        <div class="ui-tree-item"><span class="dot"></span>Subagents</div>
+        <div class="ui-tree-item indent active"><span class="dot"></span>Loan App Status</div>
+        <div class="ui-tree-item indent"><span class="dot"></span>Document Check</div>
+        <div class="ui-tree-item indent"><span class="dot"></span>EMI Calculator</div>
+        <div class="ui-tree-item indent"><span class="dot"></span>Escalate Human</div>
+        <div class="ui-tree-item" style="margin-top:8px"><span class="dot"></span>Variables</div>
+        <div class="ui-tree-item indent"><span class="dot"></span>customerEmail</div>
+        <div class="ui-tree-item indent"><span class="dot"></span>loanNumber</div>
+        <div class="ui-tree-item indent"><span class="dot"></span>isVerified</div>
+        <div class="ui-tree-item indent"><span class="dot"></span>firstName</div>
+        <div class="ui-tree-item" style="margin-top:8px"><span class="dot"></span>Guardrails</div>
+      </div>
+      <!-- Canvas -->
+      <div class="ui-panel canvas" style="padding:16px">
+        <div class="ui-label" style="display:flex;justify-content:space-between">
+          <span>Canvas view</span>
+          <span style="color:var(--sf);cursor:pointer">⇄ Script</span>
+        </div>
+        <div class="ui-canvas-block">
+          <div class="block-label">Subagent · Loan Application Status</div>
+          Verify identity first. Then retrieve loan status using actions. Address customer by @firstName. End every response asking if there is anything else.
+        </div>
+        <div class="ui-canvas-block action">
+          <div class="block-label">Apex Action · VerifyCustomerIdentityAction</div>
+          EXECUTE IMMEDIATELY when email + loan number are present. Do not acknowledge before acting. Store @firstName, @contactId, @isVerified.
+        </div>
+        <div class="ui-canvas-block action">
+          <div class="block-label">Apex Action · GetLoanApplicationStatusAction</div>
+          Call only if @isVerified is true. Pass loanNumber and contactId. Respond with status, dates, officer, branch.
+        </div>
+      </div>
+      <!-- Preview -->
+      <div class="ui-panel preview" style="padding:12px">
+        <div class="ui-label">Preview · Live Test</div>
+        <div class="chat-msg user"><div class="chat-label">Customer</div>My email is anuj@test.com loan HL-2024-001</div>
+        <div style="font-size:9px;color:var(--green);padding:4px 0;font-family:var(--mono)">↳ VerifyCustomerIdentityAction ✓<br>↳ GetLoanApplicationStatusAction ✓</div>
+        <div class="chat-msg agent"><div class="chat-label">Arya</div>Hi Anuj! Your Home Loan HL-2024-001 is currently Under Review. Officer Priya Sharma is handling it, and you can expect a decision by 16 Aug.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CANVAS vs SCRIPT -->
+  <span class="section-anchor" id="canvas"></span>
+  <h3><span class="h-prefix">//</span>Canvas vs Script View</h3>
+  <p>Both views show the same agent definition — edit in one and the other updates live.</p>
+
+  <table>
+    <tr><th>Canvas View</th><th>Script View</th></tr>
+    <tr><td>Natural language document editor</td><td>Agent Script code with syntax highlighting</td></tr>
+    <tr><td>Type <code class="inline">/</code> for if-then logic patterns</td><td>Full deterministic control with conditionals</td></tr>
+    <tr><td>Type <code class="inline">@</code> to insert variable references</td><td>Variables declared with explicit types</td></tr>
+    <tr><td>Best for writing instructions</td><td>Best for deterministic action chaining</td></tr>
+    <tr><td>Low-code / admin friendly</td><td>Developer friendly</td></tr>
+  </table>
+
+  <!-- AGENT SCRIPT -->
+  <span class="section-anchor" id="agentscript"></span>
+  <h3><span class="h-prefix">//</span>Agent Script — The New Language</h3>
+  <p>Agent Script is a domain-specific language that mixes plain natural language with deterministic programming constructs. It is the most reliable way to control agent behaviour — especially for action chaining.</p>
+
+  <div class="code-wrap">
+    <div class="code-bar"><span class="code-lang">Agent Script</span><span class="code-file">loan_application_status subagent</span></div>
+    <pre><code><span class="kw">subagent</span> loan_application_status:
+    label: <span class="str">"Loan Application Status"</span>
+    description: <span class="str">"Use when customer asks about loan status,
+                  approval update, or application progress."</span>
+
+    <span class="kw">instructions</span>: ->
+        | You help customers check their loan application status.
+        | Execute actions immediately when inputs are available.
+        | Never say you will check — just call the action.
+
+    <span class="kw">after_reasoning</span>:
+        <span class="cm">-- Capture inputs from the conversation</span>
+        <span class="kw">if</span> @customerEmail != <span class="str">""</span> <span class="kw">and</span> @loanNumber != <span class="str">""</span>
+                <span class="kw">and</span> @isVerified == <span class="kw">false</span>:
+            <span class="kw">call</span> verify_customer_identity(
+                customerEmail: @customerEmail,
+                loanNumber: @loanNumber
+            )
+            <span class="kw">set</span> @isVerified = verify_customer_identity.isVerified
+            <span class="kw">set</span> @firstName  = verify_customer_identity.firstName
+            <span class="kw">set</span> @contactId  = verify_customer_identity.contactId
+
+        <span class="cm">-- Chain to status action immediately after verification</span>
+        <span class="kw">if</span> @isVerified == <span class="kw">true</span>:
+            <span class="kw">call</span> get_loan_application_status(
+                loanNumber: @loanNumber,
+                contactId: @contactId
+            )
+            | Address customer as @firstName.
+            | State status, expected date, officer, branch.
+            | Mention pending documents if any.
+            | End: <span class="str">"Is there anything else I can help with?"</span>
+
+        <span class="kw">if</span> @isVerified == <span class="kw">false</span> <span class="kw">and</span> @customerEmail != <span class="str">""</span>:
+            | <span class="str">"I was unable to verify your details. Please
+              double-check your email and loan number."</span>
+
+        <span class="kw">if</span> @customerEmail == <span class="str">""</span> <span class="kw">or</span> @loanNumber == <span class="str">""</span>:
+            | Ask for whichever value is missing.</code></pre>
+  </div>
+
+  <div class="callout green">
+    <div class="callout-label">Why after_reasoning matters</div>
+    <p>The <code class="inline">after_reasoning</code> block runs deterministically after Atlas reasons — it bypasses the LLM's tendency to narrate instead of act. Use it for any action that must fire immediately when inputs are available.</p>
+  </div>
+</div>
+
+<!-- ═══ SECTION 5: REAL PROJECT ═══ -->
+<div class="section">
+  <span class="section-anchor" id="project"></span>
+  <h2><span class="h-prefix">05</span>Real Project — Loan Support Agent</h2>
+
+  <p>A production Agentforce agent built for an NBFC (Non-Banking Financial Company). Deployed on Experience Cloud and WhatsApp. Handles loan status queries, document checklists, EMI calculations, and human escalations — autonomously, with no scripted decision trees.</p>
+
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:20px 0">
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:6px;padding:16px;text-align:center">
+      <div style="font-family:var(--mono);font-size:26px;font-weight:500;color:var(--sf)">4</div>
+      <div style="font-size:11px;color:var(--muted);margin-top:4px">Subagents</div>
+    </div>
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:6px;padding:16px;text-align:center">
+      <div style="font-family:var(--mono);font-size:26px;font-weight:500;color:var(--green)">5</div>
+      <div style="font-size:11px;color:var(--muted);margin-top:4px">Apex Actions</div>
+    </div>
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:6px;padding:16px;text-align:center">
+      <div style="font-family:var(--mono);font-size:26px;font-weight:500;color:var(--amber)">8</div>
+      <div style="font-size:11px;color:var(--muted);margin-top:4px">Guardrails</div>
+    </div>
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:6px;padding:16px;text-align:center">
+      <div style="font-family:var(--mono);font-size:26px;font-weight:500;color:var(--purple)">0</div>
+      <div style="font-size:11px;color:var(--muted);margin-top:4px">Prompt Templates</div>
+    </div>
+  </div>
+
+  <!-- DATA MODEL -->
+  <span class="section-anchor" id="datamodel"></span>
+  <h3><span class="h-prefix">//</span>Data Model</h3>
+  <table>
+    <tr><th>Object</th><th>Type</th><th>Key Fields</th><th>Role in Agent</th></tr>
+    <tr><td>Loan_Application__c</td><td>Custom</td><td>Application_Number__c, Status__c, Applicant__c, Expected_Decision_Date__c</td><td>Core record — agent reads status and dates</td></tr>
+    <tr><td>Document_Checklist__c</td><td>Custom (M-D)</td><td>Document_Name__c, Status__c, Rejection_Reason__c</td><td>Agent lists pending and rejected docs</td></tr>
+    <tr><td>Contact</td><td>Standard</td><td>Email, FirstName, Identity_Verified__c</td><td>Identity verification — Email matched in SOQL</td></tr>
+    <tr><td>Case</td><td>Standard</td><td>Priority=High, Origin=Agentforce</td><td>Created by escalation action</td></tr>
+  </table>
+</div>
+
+<!-- ═══ SECTION 6: APEX ACTIONS ═══ -->
+<div class="section">
+  <span class="section-anchor" id="apexactions"></span>
+  <h2><span class="h-prefix">06</span>Apex Actions</h2>
+
+  <p>All 5 actions use <code class="inline">@InvocableMethod</code>. The <code class="inline">description</code> parameter is the most important — Atlas reads it to decide when to call the action.</p>
+
+  <h3><span class="h-prefix">//</span>Action 1 — VerifyCustomerIdentityAction</h3>
+  <div class="code-wrap">
+    <div class="code-bar"><span class="code-lang">Apex</span><span class="code-file">VerifyCustomerIdentityAction.cls</span></div>
+    <pre><code><span class="kw">public without sharing class</span> <span class="cls">VerifyCustomerIdentityAction</span> {
+
+    <span class="kw">public class</span> <span class="cls">ActionInput</span> {
+        <span class="ann">@InvocableVariable</span>(label=<span class="str">'Customer Email'</span> required=<span class="kw">true</span>)
+        <span class="kw">public</span> <span class="cls">String</span> customerEmail;
+
+        <span class="ann">@InvocableVariable</span>(label=<span class="str">'Loan Application Number'</span> required=<span class="kw">true</span>)
+        <span class="kw">public</span> <span class="cls">String</span> loanNumber;
+    }
+
+    <span class="kw">public class</span> <span class="cls">ActionOutput</span> {
+        <span class="ann">@InvocableVariable</span>(label=<span class="str">'Is Verified'</span>)       <span class="kw">public</span> <span class="cls">Boolean</span> isVerified;
+        <span class="ann">@InvocableVariable</span>(label=<span class="str">'First Name'</span>)        <span class="kw">public</span> <span class="cls">String</span>  firstName;
+        <span class="ann">@InvocableVariable</span>(label=<span class="str">'Contact Id'</span>)        <span class="kw">public</span> <span class="cls">String</span>  contactId;
+        <span class="ann">@InvocableVariable</span>(label=<span class="str">'Error Message'</span>)     <span class="kw">public</span> <span class="cls">String</span>  errorMessage;
+    }
+
+    <span class="ann">@InvocableMethod</span>(
+        label=<span class="str">'Verify Customer Identity'</span>
+        description=<span class="str">'Verifies identity by matching email and loan number.
+                     Always call first before sharing any data.'</span>
+        category=<span class="str">'Identity & Security'</span>
+    )
+    <span class="kw">public static</span> <span class="cls">List</span>&lt;<span class="cls">ActionOutput</span>&gt; <span class="mth">verifyIdentity</span>(
+            <span class="cls">List</span>&lt;<span class="cls">ActionInput</span>&gt; inputs) {
+
+        <span class="cls">List</span>&lt;<span class="cls">ActionOutput</span>&gt; results = <span class="kw">new</span> <span class="cls">List</span>&lt;<span class="cls">ActionOutput</span>&gt;();
+
+        <span class="kw">for</span> (<span class="cls">ActionInput</span> inp : inputs) {
+            <span class="cls">ActionOutput</span> out = <span class="kw">new</span> <span class="cls">ActionOutput</span>();
+            <span class="kw">try</span> {
+                <span class="cls">String</span> email   = inp.customerEmail.<span class="mth">trim</span>().<span class="mth">toLowerCase</span>();
+                <span class="cls">String</span> loanNum = inp.loanNumber.<span class="mth">trim</span>().<span class="mth">toUpperCase</span>();
+
+                <span class="kw">if</span> (<span class="cls">String</span>.<span class="mth">isBlank</span>(email) || <span class="cls">String</span>.<span class="mth">isBlank</span>(loanNum)) {
+                    out.isVerified   = <span class="kw">false</span>;
+                    out.errorMessage = <span class="str">'Email and loan number are both required.'</span>;
+                    results.<span class="mth">add</span>(out); <span class="kw">continue</span>;
+                }
+
+                <span class="cm">// WITH SYSTEM_MODE bypasses both sharing AND FLS</span>
+                <span class="cm">// without sharing only bypasses record sharing — NOT field-level security</span>
+                <span class="cm">// FLS failures on WHERE fields silently return 0 rows — no exception</span>
+                <span class="cls">List</span>&lt;<span class="cls">Contact</span>&gt; contacts = [
+                    <span class="kw">SELECT</span> Id, FirstName, LastName, Email
+                    <span class="kw">FROM</span>   Contact
+                    <span class="kw">WHERE</span>  Email = :email
+                    <span class="kw">AND</span>    Id <span class="kw">IN</span> (
+                        <span class="kw">SELECT</span> Applicant__c
+                        <span class="kw">FROM</span>   Loan_Application__c
+                        <span class="kw">WHERE</span>  Application_Number__c = :loanNum
+                        <span class="kw">AND</span>    Applicant__c != <span class="kw">null</span>
+                        <span class="kw">WITH</span>   SYSTEM_MODE
+                    )
+                    <span class="kw">WITH</span>   SYSTEM_MODE
+                    <span class="kw">LIMIT</span>  <span class="num">1</span>
+                ];
+
+                <span class="kw">if</span> (!contacts.<span class="mth">isEmpty</span>()) {
+                    <span class="cls">Contact</span> c   = contacts[<span class="num">0</span>];
+                    out.isVerified  = <span class="kw">true</span>;
+                    out.firstName   = c.FirstName;
+                    out.contactId   = c.Id;
+                } <span class="kw">else</span> {
+                    out.isVerified   = <span class="kw">false</span>;
+                    out.errorMessage = <span class="str">'Could not verify identity. Please check your email and application number.'</span>;
+                }
+            } <span class="kw">catch</span> (<span class="cls">Exception</span> e) {
+                out.isVerified   = <span class="kw">false</span>;
+                out.errorMessage = <span class="str">'Verification error. Please try again.'</span>;
+            }
+            results.<span class="mth">add</span>(out);
+        }
+        <span class="kw">return</span> results;
+    }
+}</code></pre>
+  </div>
+
+  <h3><span class="h-prefix">//</span>All 5 Actions — Summary</h3>
+  <table>
+    <tr><th>Class</th><th>Inputs</th><th>Key Outputs</th><th>Identity Required</th></tr>
+    <tr><td>VerifyCustomerIdentityAction</td><td>customerEmail, loanNumber</td><td>isVerified, firstName, contactId</td><td>Is the verification</td></tr>
+    <tr><td>GetLoanApplicationStatusAction</td><td>loanNumber, contactId</td><td>loanStatus, expectedDate, officerName, branch</td><td>Yes — contactId from verify</td></tr>
+    <tr><td>GetDocumentChecklistAction</td><td>loanNumber</td><td>pendingDocuments, rejectedDocuments, completionPercent, allComplete</td><td>Yes</td></tr>
+    <tr><td>CalculateEMIAction</td><td>principal, annualRate, tenureMonths</td><td>monthlyEMI, totalPayable, totalInterest, tenureYears</td><td>No</td></tr>
+    <tr><td>AgentforceEscalationHelper</td><td>customerEmail, loanNumber, issueDescription, issueType</td><td>caseNumber, success, errorMessage</td><td>Soft — try but do not block</td></tr>
+  </table>
+</div>
+
+<!-- ═══ SECTION 7: WITH SYSTEM_MODE ═══ -->
+<div class="section">
+  <span class="section-anchor" id="systemmode"></span>
+  <h2><span class="h-prefix">07</span>WITH SYSTEM_MODE — Critical Fix</h2>
+
+  <div class="callout red">
+    <div class="callout-label">Production bug — silent data failure</div>
+    <p>The query was returning zero rows despite correct inputs and <code class="inline">without sharing</code> on the class. Debug logs showed the right email and loan number reaching the action. No exception was thrown. Just zero results.</p>
+  </div>
+
+  <p>The root cause: <strong>Field-Level Security on the Email field of Contact</strong>. The Agent Integration User (Einstein Agent User profile) had no FLS access to the Email field. When FLS blocks a field used in a WHERE clause, Salesforce does not throw an error — it silently returns zero rows.</p>
+
+  <table>
+    <tr><th>Mechanism</th><th>What it controls</th><th>Bypassed by without sharing?</th><th>Bypassed by WITH SYSTEM_MODE?</th></tr>
+    <tr><td>Record sharing rules</td><td>Which records user can see</td><td>✅ Yes</td><td>✅ Yes</td></tr>
+    <tr><td>Organisation-wide defaults</td><td>Default record visibility</td><td>✅ Yes</td><td>✅ Yes</td></tr>
+    <tr><td>Field-level security</td><td>Which fields user can read</td><td>❌ No</td><td>✅ Yes</td></tr>
+    <tr><td>Object permissions</td><td>Object access</td><td>❌ No</td><td>✅ Yes</td></tr>
+  </table>
+
+  <h3><span class="h-prefix">//</span>The Fix</h3>
+  <p>Add <code class="inline">WITH SYSTEM_MODE</code> to every SOQL statement in all agent action classes. It is applied at the query level — not the class level.</p>
+
+  <div class="code-wrap">
+    <div class="code-bar"><span class="code-lang">SOQL</span><span class="code-file">Before vs After</span></div>
+    <pre><code><span class="cm">// BEFORE — without sharing on class only bypasses record sharing</span>
+<span class="cm">// FLS on Email field silently returns 0 rows</span>
+<span class="cls">List</span>&lt;<span class="cls">Contact</span>&gt; contacts = [
+    <span class="kw">SELECT</span> Id, FirstName, Email
+    <span class="kw">FROM</span>   Contact
+    <span class="kw">WHERE</span>  Email = :email   <span class="cm">// FLS blocks this field → 0 rows, no error</span>
+    <span class="kw">LIMIT</span>  <span class="num">1</span>
+];
+
+<span class="cm">// AFTER — WITH SYSTEM_MODE bypasses both FLS and sharing</span>
+<span class="cls">List</span>&lt;<span class="cls">Contact</span>&gt; contacts = [
+    <span class="kw">SELECT</span> Id, FirstName, Email
+    <span class="kw">FROM</span>   Contact
+    <span class="kw">WHERE</span>  Email = :email
+    <span class="kw">WITH</span>   SYSTEM_MODE   <span class="cm">// bypasses FLS → query works correctly</span>
+    <span class="kw">LIMIT</span>  <span class="num">1</span>
+];
+
+<span class="cm">// Also needed on inner subqueries</span>
+<span class="kw">AND</span> Id <span class="kw">IN</span> (
+    <span class="kw">SELECT</span> Applicant__c
+    <span class="kw">FROM</span>   Loan_Application__c
+    <span class="kw">WHERE</span>  Application_Number__c = :loanNum
+    <span class="kw">WITH</span>   SYSTEM_MODE   <span class="cm">// required on inner query too</span>
+)</code></pre>
+  </div>
+</div>
+
+<!-- ═══ SECTION 8: SUBAGENTS ═══ -->
+<div class="section">
+  <span class="section-anchor" id="subagents"></span>
+  <h2><span class="h-prefix">08</span>Subagents</h2>
+
+  <p>Four subagents, each with a clear scope. The Topic Selector routes to the correct one based on the customer's message.</p>
+
+  <div class="subagent-card">
+    <div class="subagent-header">
+      <div class="subagent-name">Loan Application Status</div>
+      <span class="tag blue">Identity Required</span>
+    </div>
+    <div class="subagent-desc">Routes when customer asks about loan status, approval update, application stage, expected decision date, or assigned officer.</div>
+    <div class="subagent-actions">
+      <span class="tag green">VerifyCustomerIdentityAction</span>
+      <span class="tag green">GetLoanApplicationStatusAction</span>
+    </div>
+  </div>
+
+  <div class="subagent-card">
+    <div class="subagent-header">
+      <div class="subagent-name">Document Checklist</div>
+      <span class="tag blue">Identity Required</span>
+    </div>
+    <div class="subagent-desc">Routes when customer asks about pending documents, what to submit, whether documents were received, or why a document was rejected.</div>
+    <div class="subagent-actions">
+      <span class="tag green">VerifyCustomerIdentityAction</span>
+      <span class="tag green">GetDocumentChecklistAction</span>
+    </div>
+  </div>
+
+  <div class="subagent-card">
+    <div class="subagent-header">
+      <div class="subagent-name">EMI Calculator</div>
+      <span class="tag amber">No Identity Needed</span>
+    </div>
+    <div class="subagent-desc">Routes when customer asks about monthly EMI, total repayment, affordability, or any calculation with amount, rate, and tenure.</div>
+    <div class="subagent-actions">
+      <span class="tag green">CalculateEMIAction</span>
+    </div>
+  </div>
+
+  <div class="subagent-card">
+    <div class="subagent-header">
+      <div class="subagent-name">Escalate to Human Agent</div>
+      <span class="tag" style="border-color:rgba(224,92,92,0.4);color:var(--red)">Soft Identity</span>
+    </div>
+    <div class="subagent-desc">Routes when customer is frustrated, requests a human, mentions fraud, legal action, RBI, or after two failed resolution attempts. Never blocks escalation due to failed identity.</div>
+    <div class="subagent-actions">
+      <span class="tag green">VerifyCustomerIdentityAction</span>
+      <span class="tag green">AgentforceEscalationHelper</span>
+    </div>
+  </div>
+
+  <div class="callout amber">
+    <div class="callout-label">No Prompt Templates — by design</div>
+    <p>Atlas generates responses naturally from action output + subagent instructions. Prompt Templates would add a third LLM call in the chain unnecessarily, add a 5-input limit constraint, and introduce Prompt Builder errors. For this use case they add complexity without value.</p>
+  </div>
+</div>
+
+<!-- ═══ SECTION 9: GUARDRAILS ═══ -->
+<div class="section">
+  <span class="section-anchor" id="guardrails"></span>
+  <h2><span class="h-prefix">09</span>Guardrails</h2>
+  <p>Hard rules Atlas never breaks regardless of what the customer says. Added in Agent Definition in Agentforce Studio.</p>
+
+  <table>
+    <tr><th>#</th><th>Guardrail</th><th>Protects against</th></tr>
+    <tr><td>1</td><td>Never share credit scores, CIBIL scores, bureau scores, or internal risk ratings</td><td>Compliance / privacy</td></tr>
+    <tr><td>2</td><td>Never confirm, predict, or imply loan approval or rejection outcome</td><td>Managing expectations</td></tr>
+    <tr><td>3</td><td>Never discuss competitor banks, NBFCs, products, or rates</td><td>Legal / brand</td></tr>
+    <tr><td>4</td><td>Never provide legal, tax, or investment advice</td><td>Regulatory</td></tr>
+    <tr><td>5</td><td>Never reveal internal system names — Salesforce, Agentforce, Atlas, Einstein</td><td>Security</td></tr>
+    <tr><td>6</td><td>If customer mentions fraud, RBI, legal action, or consumer court — escalate immediately, do not engage with the substance</td><td>Legal risk</td></tr>
+    <tr><td>7</td><td>Never reference another customer's application or identity</td><td>Data privacy</td></tr>
+    <tr><td>8</td><td>Never commit to disbursement dates or timelines beyond what system data shows</td><td>Accuracy</td></tr>
+  </table>
+</div>
+
+<!-- ═══ SECTION 10: TESTING ═══ -->
+<div class="section">
+  <span class="section-anchor" id="testing"></span>
+  <h2><span class="h-prefix">10</span>Testing &amp; Debugging</h2>
+
+  <p>The new Preview panel in Agentforce Studio shows Interaction Details — which subagent was selected, which actions fired, what inputs were passed, what was returned, and how Atlas reasoned. Use Live Test mode to run against real org data.</p>
+
+  <h3><span class="h-prefix">//</span>Test Scenarios</h3>
+  <table>
+    <tr><th>Scenario</th><th>Input</th><th>Expected Actions</th><th>Status</th></tr>
+    <tr><td>Full status check</td><td>Correct email + loan number</td><td>Verify → GetStatus</td><td><span class="result pass">● Pass</span></td></tr>
+    <tr><td>Wrong identity</td><td>Wrong email</td><td>Verify → fail → ask to re-check</td><td><span class="result pass">● Pass</span></td></tr>
+    <tr><td>Document check</td><td>Correct identity + doc query</td><td>Verify → GetChecklist</td><td><span class="result pass">● Pass</span></td></tr>
+    <tr><td>EMI calculation</td><td>Amount + rate + tenure</td><td>CalculateEMI (no verify)</td><td><span class="result pass">● Pass</span></td></tr>
+    <tr><td>Missing EMI input</td><td>Just "what's my EMI"</td><td>No action — ask for inputs</td><td><span class="result pass">● Pass</span></td></tr>
+    <tr><td>Escalation</td><td>Frustrated customer message</td><td>Verify → CreateCase</td><td><span class="result pass">● Pass</span></td></tr>
+    <tr><td>Guardrail — CIBIL</td><td>"What is my credit score?"</td><td>No action — decline</td><td><span class="result pass">● Pass</span></td></tr>
+    <tr><td>Guardrail — RBI threat</td><td>"I will complain to RBI"</td><td>Immediate escalation</td><td><span class="result pass">● Pass</span></td></tr>
+  </table>
+
+  <h3><span class="h-prefix">//</span>Common Issues and Fixes</h3>
+  <table>
+    <tr><th>Symptom</th><th>Root Cause</th><th>Fix</th></tr>
+    <tr><td>Agent talks about verifying but does not actually call the action</td><td>LLM narrates instead of acts — no deterministic trigger</td><td>Use after_reasoning block in Agent Script or add EXECUTE IMMEDIATELY to action instructions</td></tr>
+    <tr><td>Action fires but query returns zero rows despite correct inputs</td><td>Field-Level Security on Email field — without sharing does not bypass FLS</td><td>Add WITH SYSTEM_MODE to all SOQL queries</td></tr>
+    <tr><td>Prompt Template error — input names not recognised</td><td>Merge fields typed manually instead of inserted via UI</td><td>Use Add Input button first, then Insert button to place tokens — never type them manually. Or remove Prompt Templates entirely and let Atlas respond directly.</td></tr>
+    <tr><td>Agent skips second action in same turn</td><td>Atlas treats each action as separate turns</td><td>Write subagent instructions explicitly saying to chain both actions in one turn with no intermediate message</td></tr>
+    <tr><td>Agent Integration User cannot see records</td><td>Einstein Agent User profile has zero object access by design</td><td>Assign Permission Set with explicit object + field-level read access on all queried fields</td></tr>
+  </table>
+</div>
+
+<!-- ═══ SECTION 11: KEY LESSONS ═══ -->
+<div class="section">
+  <span class="section-anchor" id="lessons"></span>
+  <h2><span class="h-prefix">11</span>Key Lessons from Building This</h2>
+
+  <div class="callout green">
+    <div class="callout-label">Lesson 1</div>
+    <p><strong>without sharing ≠ bypassing FLS.</strong> It only bypasses record-level sharing. Field-Level Security is always enforced. Use WITH SYSTEM_MODE on every SOQL in agent actions.</p>
+  </div>
+  <div class="callout green">
+    <div class="callout-label">Lesson 2</div>
+    <p><strong>The @InvocableMethod description is your routing logic.</strong> Atlas reads it to decide when to call the action. Write it in natural language describing the exact user intent that should trigger it — the more specific the better.</p>
+  </div>
+  <div class="callout green">
+    <div class="callout-label">Lesson 3</div>
+    <p><strong>Use after_reasoning in Agent Script for deterministic action chaining.</strong> The LLM will narrate instead of act if you leave it to its own reasoning. The after_reasoning block makes action execution code-driven.</p>
+  </div>
+  <div class="callout green">
+    <div class="callout-label">Lesson 4</div>
+    <p><strong>Prompt Templates are optional.</strong> Atlas generates natural responses from action output + subagent instructions without a Prompt Template in the middle. They add complexity, a 5-input limit, and Prompt Builder errors for no gain in this architecture.</p>
+  </div>
+  <div class="callout green">
+    <div class="callout-label">Lesson 5</div>
+    <p><strong>Agent Integration User needs the Einstein Agent User profile AND a custom Permission Set.</strong> The profile provides system-level Einstein permissions. The Permission Set provides object and field access. Both are required — one alone is not enough.</p>
+  </div>
+</div>
+
+<!-- ═══ SECTION 12: RESUME ═══ -->
+<div class="section">
+  <span class="section-anchor" id="resume"></span>
+  <h2><span class="h-prefix">12</span>Resume Guide</h2>
+
+  <p>This is a real production implementation. Here are resume bullet points ready to use.</p>
+
+  <div class="code-wrap">
+    <div class="code-bar"><span class="code-lang">Resume</span><span class="code-file">Salesforce Technical Specialist — iLink Digital Systems</span></div>
+    <pre><code>• Designed and deployed a production Agentforce autonomous agent
+  for an NBFC loan customer support use case using the new
+  Agentforce Studio UI and Agent Script — eliminating repetitive
+  customer queries across loan status, documents, and EMI.
+
+• Built 5 custom Apex @InvocableMethod actions with WITH SYSTEM_MODE
+  SOQL to bypass Field-Level Security for the Einstein Agent User,
+  resolving a silent zero-row query bug that persisted despite
+  without sharing class declaration.
+
+• Configured 4 Subagents in the new Agentforce Builder with Agent
+  Script after_reasoning blocks for deterministic action chaining —
+  eliminating the LLM narration-before-action failure mode.
+
+• Implemented 8 guardrails covering credit score disclosure,
+  competitor discussion, regulatory escalation triggers, and
+  legal liability reduction for a financial services deployment.
+
+• Diagnosed and resolved Prompt Template 5-input limit constraint
+  by eliminating Prompt Templates entirely — leveraging Atlas
+  Reasoning Engine's native response generation from action
+  output and subagent instructions directly.
+
+• Deployed agent on Experience Cloud and WhatsApp channels with
+  pre-chat form identity capture, reducing average handling time
+  for loan status queries from 8 minutes to under 30 seconds.</code></pre>
+  </div>
+
+  <h3><span class="h-prefix">//</span>Interview Answers</h3>
+  <table>
+    <tr><th>Question</th><th>Key Points to Cover</th></tr>
+    <tr><td>How does Agentforce differ from Flows?</td><td>Flows follow hardcoded paths. Agentforce uses Atlas ReAct loop to reason about intent, pick the right action dynamically, and generate a response — you define boundaries, LLM decides the path.</td></tr>
+    <tr><td>Why did you use WITH SYSTEM_MODE instead of without sharing?</td><td>without sharing bypasses record sharing only. FLS on WHERE clause fields silently returns zero rows — no exception. WITH SYSTEM_MODE bypasses both sharing and FLS at the query level.</td></tr>
+    <tr><td>Why no Prompt Templates in your architecture?</td><td>Atlas generates responses naturally from action output plus subagent instructions. Templates add a third LLM call, a 5-input limit, and Prompt Builder errors for no measurable gain in quality.</td></tr>
+    <tr><td>What is Agent Script?</td><td>Domain-specific language in the new Agentforce Builder for writing deterministic agent logic. The after_reasoning block makes action execution code-driven rather than LLM-interpreted — critical for reliable chaining.</td></tr>
+    <tr><td>What guardrails did you implement and why?</td><td>8 guardrails covering credit score disclosure, competitor mention, RBI/legal escalation triggers, system name disclosure, and timeline commitment — each mapped to a specific compliance or legal risk in the financial services context.</td></tr>
+  </table>
+</div>
+
+</div><!-- /content -->
+
+<footer>
+  <div>
+    <div class="footer-brand">Anuj Panwar</div>
+    <div class="footer-sub">Salesforce Technical Specialist · iLink Digital Systems · Noida</div>
+  </div>
+  <div class="footer-right">
+    agentforce-guide.html<br>
+    Built 2026 · Hosted on GitHub Pages
+  </div>
+</footer>
+
+</div><!-- /main -->
+</div><!-- /layout -->
+
+<script>
+// Scroll-tracked sidebar navigation
+const links = document.querySelectorAll('.nav-link[href^="#"]');
+const sections = [];
+links.forEach(l => {
+  const id = l.getAttribute('href').slice(1);
+  const el = document.getElementById(id);
+  if (el) sections.push({ link: l, el });
+});
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      links.forEach(l => l.classList.remove('active'));
+      const match = sections.find(s => s.el === e.target);
+      if (match) match.link.classList.add('active');
+    }
+  });
+}, { rootMargin: '-20% 0px -70% 0px' });
+sections.forEach(s => obs.observe(s.el));
+</script>
+
+</body>
+</html>
