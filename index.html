@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Anuj Panwar — Salesforce Technical Specialist</title>
+<meta name="description" content="Salesforce Technical Specialist with 5.5+ years building on the Salesforce platform. Apex, LWC, Experience Cloud, Agentforce, and AI integrations.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --navy:      #0A0E1A;
+  --surface:   #111827;
+  --card:      #1A2540;
+  --card-border: #243058;
+  --sf-blue:   #00A1E0;
+  --sf-blue-dim: rgba(0,161,224,0.12);
+  --sf-blue-mid: rgba(0,161,224,0.35);
+  --periwinkle: #B4CBFF;
+  --body-text: #C8D6F0;
+  --muted:     #6B7EA8;
+  --white:     #F8FAFF;
+  --radius-sm: 6px;
+  --radius:    12px;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--navy);
+  color: var(--body-text);
+  line-height: 1.7;
+  font-size: 15px;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ─── FADE IN ─── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(22px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.fade-in { animation: fadeUp 0.7s ease both; }
+.delay-1 { animation-delay: 0.12s; }
+.delay-2 { animation-delay: 0.24s; }
+.delay-3 { animation-delay: 0.38s; }
+
+/* ─── LAYOUT ─── */
+.wrap {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 28px;
+}
+
+/* ─── NAV ─── */
+nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(10,14,26,0.88);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid rgba(36,48,88,0.6);
+  padding: 0 28px;
+}
+.nav-inner {
+  max-width: 900px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 56px;
+}
+.nav-logo {
+  font-family: 'Sora', sans-serif;
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--white);
+  text-decoration: none;
+  letter-spacing: -0.3px;
+}
+.nav-logo span { color: var(--sf-blue); }
+.nav-links {
+  display: flex;
+  gap: 28px;
+  list-style: none;
+}
+.nav-links a {
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 13.5px;
+  font-weight: 500;
+  transition: color 0.15s;
+}
+.nav-links a:hover { color: var(--white); }
+
+/* ─── HERO ─── */
+header {
+  padding: 80px 0 72px;
+  border-bottom: 1px solid var(--card-border);
+}
+.hero-layout {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 40px;
+  align-items: start;
+}
+.hero-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--sf-blue);
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+.hero-eyebrow::before {
+  content: '';
+  display: inline-block;
+  width: 28px;
+  height: 2px;
+  background: var(--sf-blue);
+  border-radius: 2px;
+}
+h1 {
+  font-family: 'Sora', sans-serif;
+  font-size: clamp(34px, 5vw, 50px);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -1.5px;
+  color: var(--white);
+  margin-bottom: 20px;
+}
+.hero-desc {
+  font-size: 16px;
+  color: var(--body-text);
+  max-width: 520px;
+  line-height: 1.75;
+  margin-bottom: 32px;
+}
+.hero-actions {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+.btn-primary {
+  display: inline-block;
+  background: var(--sf-blue);
+  color: #fff;
+  padding: 11px 24px;
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background 0.15s, transform 0.1s;
+}
+.btn-primary:hover { background: #0090cc; transform: translateY(-1px); }
+.btn-ghost {
+  display: inline-block;
+  border: 1px solid var(--card-border);
+  color: var(--body-text);
+  padding: 11px 24px;
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: border-color 0.15s, color 0.15s;
+}
+.btn-ghost:hover { border-color: var(--sf-blue); color: var(--white); }
+
+/* Cert badges column */
+.cert-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-top: 8px;
+}
+.cert-badge {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-sm);
+  padding: 8px 14px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--body-text);
+  white-space: nowrap;
+}
+.cert-icon {
+  width: 20px;
+  height: 20px;
+  background: var(--sf-blue-dim);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.cert-icon svg { width: 12px; height: 12px; fill: var(--sf-blue); }
+
+/* ─── STATS STRIP ─── */
+.stats-strip {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  margin: 52px 0;
+}
+.stat-cell {
+  padding: 24px 20px;
+  border-right: 1px solid var(--card-border);
+  background: var(--card);
+}
+.stat-cell:last-child { border-right: none; }
+.stat-number {
+  font-family: 'Sora', sans-serif;
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--sf-blue);
+  letter-spacing: -1px;
+  line-height: 1;
+  margin-bottom: 5px;
+}
+.stat-desc {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.4;
+}
+
+/* ─── SECTION HEADINGS ─── */
+.section { margin: 60px 0; }
+.section-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--muted);
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.section-title {
+  font-family: 'Sora', sans-serif;
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--white);
+  letter-spacing: -0.5px;
+  margin-bottom: 28px;
+}
+
+/* ─── EXPERTISE GRID ─── */
+.expertise-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+.exp-card {
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius);
+  padding: 22px;
+  transition: border-color 0.2s;
+}
+.exp-card:hover { border-color: var(--sf-blue-mid); }
+.exp-icon {
+  font-size: 24px;
+  margin-bottom: 12px;
+  display: block;
+}
+.exp-card h3 {
+  font-family: 'Sora', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--white);
+  margin-bottom: 6px;
+}
+.exp-card p {
+  font-size: 12.5px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+.exp-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 12px;
+}
+.tag {
+  font-size: 10.5px;
+  font-weight: 500;
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: var(--sf-blue-dim);
+  color: var(--periwinkle);
+  border: 1px solid rgba(0,161,224,0.18);
+}
+
+/* ─── PROJECT CARDS ─── */
+.project-card {
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius);
+  padding: 28px 30px;
+  margin-bottom: 16px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 20px;
+  align-items: start;
+  transition: border-color 0.2s;
+  text-decoration: none;
+}
+.project-card:hover { border-color: var(--sf-blue-mid); }
+.project-card.featured {
+  border-color: rgba(0,161,224,0.3);
+  background: linear-gradient(135deg, #1A2540 0%, #1D2E50 100%);
+}
+.project-title {
+  font-family: 'Sora', sans-serif;
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--white);
+  margin-bottom: 6px;
+}
+.project-meta {
+  font-size: 11.5px;
+  color: var(--sf-blue);
+  font-weight: 600;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.project-meta .dot {
+  width: 3px; height: 3px;
+  border-radius: 50%;
+  background: var(--muted);
+  display: inline-block;
+}
+.project-desc {
+  font-size: 13.5px;
+  color: var(--body-text);
+  line-height: 1.65;
+  margin-bottom: 14px;
+}
+.project-tech { display: flex; flex-wrap: wrap; gap: 5px; }
+.project-arrow {
+  color: var(--muted);
+  font-size: 18px;
+  margin-top: 4px;
+  transition: color 0.15s, transform 0.15s;
+}
+.project-card:hover .project-arrow {
+  color: var(--sf-blue);
+  transform: translateX(3px);
+}
+.new-badge {
+  display: inline-block;
+  background: var(--sf-blue);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 4px;
+  vertical-align: middle;
+  margin-left: 8px;
+  letter-spacing: 0.3px;
+}
+
+/* ─── WRITING / GUIDES ─── */
+.guide-list { display: flex; flex-direction: column; gap: 2px; }
+.guide-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 0;
+  border-bottom: 1px solid rgba(36,48,88,0.5);
+  text-decoration: none;
+  gap: 16px;
+  transition: none;
+}
+.guide-item:last-child { border-bottom: none; }
+.guide-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--white);
+  margin-bottom: 3px;
+  transition: color 0.15s;
+}
+.guide-item:hover .guide-title { color: var(--sf-blue); }
+.guide-sub {
+  font-size: 12.5px;
+  color: var(--muted);
+}
+.guide-tag {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 20px;
+  border: 1px solid var(--card-border);
+  color: var(--muted);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.guide-tag.active {
+  border-color: rgba(0,161,224,0.3);
+  color: var(--sf-blue);
+  background: var(--sf-blue-dim);
+}
+
+/* ─── TRAILBLAZER ─── */
+.trail-box {
+  background: linear-gradient(135deg, #0E1C36 0%, #0A1628 100%);
+  border: 1px solid rgba(0,161,224,0.25);
+  border-radius: var(--radius);
+  padding: 32px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  text-decoration: none;
+  transition: border-color 0.2s;
+}
+.trail-box:hover { border-color: rgba(0,161,224,0.55); }
+.trail-logo {
+  width: 56px;
+  height: 56px;
+  background: var(--sf-blue);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 26px;
+}
+.trail-text h3 {
+  font-family: 'Sora', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--white);
+  margin-bottom: 4px;
+}
+.trail-text p { font-size: 13px; color: var(--muted); }
+.trail-cta {
+  margin-left: auto;
+  color: var(--sf-blue);
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* ─── CONNECT ─── */
+.connect-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-top: 24px;
+}
+.connect-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 22px 18px;
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius);
+  text-decoration: none;
+  transition: border-color 0.2s;
+  text-align: center;
+}
+.connect-card:hover { border-color: var(--sf-blue-mid); }
+.connect-icon { font-size: 26px; }
+.connect-label { font-size: 13px; font-weight: 600; color: var(--white); }
+.connect-sub { font-size: 11.5px; color: var(--muted); }
+
+/* ─── FOOTER ─── */
+footer {
+  border-top: 1px solid var(--card-border);
+  padding: 32px 28px;
+  margin-top: 80px;
+}
+.footer-inner {
+  max-width: 900px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.footer-name {
+  font-family: 'Sora', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--white);
+}
+.footer-sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
+.footer-right { font-size: 12px; color: var(--muted); text-align: right; }
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 700px) {
+  .hero-layout { grid-template-columns: 1fr; }
+  .cert-stack { flex-direction: row; flex-wrap: wrap; }
+  .stats-strip { grid-template-columns: repeat(2, 1fr); }
+  .expertise-grid { grid-template-columns: 1fr 1fr; }
+  .connect-grid { grid-template-columns: 1fr 1fr; }
+  .trail-box { flex-wrap: wrap; }
+  .trail-cta { margin-left: 0; }
+  .project-card { grid-template-columns: 1fr; }
+  .project-arrow { display: none; }
+}
+@media (max-width: 480px) {
+  .expertise-grid { grid-template-columns: 1fr; }
+  .connect-grid { grid-template-columns: 1fr; }
+  .stats-strip { grid-template-columns: 1fr 1fr; }
+  h1 { font-size: 30px; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a href="#" class="nav-logo">Anuj<span>.</span>dev</a>
+    <ul class="nav-links">
+      <li><a href="#expertise">Expertise</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#guides">Guides</a></li>
+      <li><a href="#connect">Connect</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header>
+  <div class="wrap">
+    <div class="hero-layout">
+
+      <div class="fade-in">
+        <div class="hero-eyebrow">Salesforce Technical Specialist</div>
+        <h1>Anuj Panwar</h1>
+        <p class="hero-desc">
+          I build on Salesforce — Apex, LWC, Experience Cloud, Agentforce, and AI integrations. 5.5 years turning platform capabilities into solutions that actually work. Based in Noida, India. Currently at iLink Digital Systems.
+        </p>
+        <div class="hero-actions">
+          <a href="#projects" class="btn-primary">View Projects</a>
+          <a href="https://www.salesforce.com/trailblazer/anuj14panwar" target="_blank" class="btn-ghost">Trailblazer Profile</a>
+        </div>
+      </div>
+
+      <div class="cert-stack fade-in delay-2">
+        <div class="cert-badge">
+          <div class="cert-icon">
+            <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          </div>
+          Platform Developer I
+        </div>
+        <div class="cert-badge">
+          <div class="cert-icon">
+            <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          </div>
+          Platform Developer II
+        </div>
+        <div class="cert-badge">
+          <div class="cert-icon">
+            <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          </div>
+          Administrator
+        </div>
+        <div class="cert-badge">
+          <div class="cert-icon">
+            <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          </div>
+          Salesforce Associate
+        </div>
+        <div class="cert-badge">
+          <div class="cert-icon">
+            <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          </div>
+          AI Associate
+        </div>
+      </div>
+
+    </div>
+  </div>
+</header>
+
+<!-- STATS -->
+<div class="wrap">
+  <div class="stats-strip fade-in delay-3">
+    <div class="stat-cell">
+      <div class="stat-number">5.5+</div>
+      <div class="stat-desc">Years on the Salesforce platform</div>
+    </div>
+    <div class="stat-cell">
+      <div class="stat-number">5</div>
+      <div class="stat-desc">Salesforce certifications earned</div>
+    </div>
+    <div class="stat-cell">
+      <div class="stat-number">3</div>
+      <div class="stat-desc">AI-powered tools built in production</div>
+    </div>
+    <div class="stat-cell">
+      <div class="stat-number">∞</div>
+      <div class="stat-desc">Governor limits respected</div>
+    </div>
+  </div>
+</div>
+
+<!-- EXPERTISE -->
+<section class="section" id="expertise">
+  <div class="wrap">
+    <div class="section-label">What I work with</div>
+    <div class="section-title">Core Expertise</div>
+
+    <div class="expertise-grid">
+
+      <div class="exp-card">
+        <span class="exp-icon">⚙️</span>
+        <h3>Apex & Backend</h3>
+        <p>Trigger handlers, Queueables, governor limit patterns, dynamic SOQL, Tooling API, callout architecture.</p>
+        <div class="exp-tags">
+          <span class="tag">Apex Triggers</span>
+          <span class="tag">SOQL</span>
+          <span class="tag">Queueable</span>
+          <span class="tag">Batch Apex</span>
+        </div>
+      </div>
+
+      <div class="exp-card">
+        <span class="exp-icon">🧩</span>
+        <h3>LWC & Frontend</h3>
+        <p>Wire adapters, reactive getters, renderedCallback patterns, base components, file handling with ContentVersion.</p>
+        <div class="exp-tags">
+          <span class="tag">LWC</span>
+          <span class="tag">Wire Adapters</span>
+          <span class="tag">JS Controllers</span>
+        </div>
+      </div>
+
+      <div class="exp-card">
+        <span class="exp-icon">🌐</span>
+        <h3>Experience Cloud</h3>
+        <p>Community user permission patterns, ContentDocumentLink visibility, sharing architecture, portal deployments.</p>
+        <div class="exp-tags">
+          <span class="tag">Experience Cloud</span>
+          <span class="tag">Guest Users</span>
+          <span class="tag">Sharing Rules</span>
+        </div>
+      </div>
+
+      <div class="exp-card">
+        <span class="exp-icon">🤖</span>
+        <h3>Agentforce & AI</h3>
+        <p>Agent Builder, Topics, @InvocableMethod actions, Prompt Templates, Einstein Trust Layer, Named Credential + LLM API integrations.</p>
+        <div class="exp-tags">
+          <span class="tag">Agentforce</span>
+          <span class="tag">Prompt Builder</span>
+          <span class="tag">Claude API</span>
+        </div>
+      </div>
+
+      <div class="exp-card">
+        <span class="exp-icon">🔀</span>
+        <h3>Salesforce Flow</h3>
+        <p>Autolaunched flows as agent actions, approval submission logic, record-triggered automation, sub-flows.</p>
+        <div class="exp-tags">
+          <span class="tag">Flow Builder</span>
+          <span class="tag">Approval Flows</span>
+          <span class="tag">Sub-flows</span>
+        </div>
+      </div>
+
+      <div class="exp-card">
+        <span class="exp-icon">🔔</span>
+        <h3>Notifications & Approvals</h3>
+        <p>Custom notification types, Messaging.CustomNotification, complex multi-step approval routing, resubmit and rejection flows.</p>
+        <div class="exp-tags">
+          <span class="tag">Custom Notifications</span>
+          <span class="tag">Approval Process</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section class="section" id="projects">
+  <div class="wrap">
+    <div class="section-label">Things I've built</div>
+    <div class="section-title">Projects</div>
+
+    <!-- FAPO -->
+    <div class="project-card">
+      <div>
+        <div class="project-meta">Baker Ripley <span class="dot"></span> Nonprofit Financial Aid <span class="dot"></span> Ongoing</div>
+        <div class="project-title">Financial Aid Payment Office (FAPO) System</div>
+        <p class="project-desc">
+          End-to-end Salesforce implementation for Baker Ripley's nonprofit financial aid operations. Built complex TFA Pledge Batch approval workflows with multi-stage routing, rejection handling, and resubmit flows. Architected LWC components with role-gated editing, red flag display with filter chips, and file upload via ContentVersion. Resolved Experience Cloud file visibility issues and community user CRUD bypass using SYSTEM_MODE DML.
+        </p>
+        <div class="project-tech">
+          <span class="tag">Apex Triggers</span>
+          <span class="tag">LWC</span>
+          <span class="tag">Experience Cloud</span>
+          <span class="tag">Flows</span>
+          <span class="tag">Approval Process</span>
+          <span class="tag">Custom Notifications</span>
+        </div>
+      </div>
+      <div class="project-arrow">→</div>
+    </div>
+
+    <!-- AI Tools -->
+    <div class="project-card">
+      <div>
+        <div class="project-meta">iLink Digital Systems <span class="dot"></span> Internal Tooling <span class="dot"></span> Shipped</div>
+        <div class="project-title">AI Developer Toolkit — Salesforce + Claude API</div>
+        <p class="project-desc">
+          Suite of three LWC-based AI tools built inside Salesforce using Named Credentials to call the Claude API. Includes an Apex test class generator (uploads code → generates test class → deploys via Tooling API), a SetupAuditTrail analyzer with dynamic SOQL + AI summarization, and a code quality analyzer that returns severity-rated issues and a quality score.
+        </p>
+        <div class="project-tech">
+          <span class="tag">LWC</span>
+          <span class="tag">Named Credentials</span>
+          <span class="tag">Claude API</span>
+          <span class="tag">Tooling API</span>
+          <span class="tag">Dynamic SOQL</span>
+        </div>
+      </div>
+      <div class="project-arrow">→</div>
+    </div>
+
+    <!-- Agentforce -->
+    <a href="agentforce-guide.html" class="project-card featured">
+      <div>
+        <div class="project-meta">
+          Financial Services <span class="dot"></span> Agentforce
+          <span class="new-badge">Guide Live</span>
+        </div>
+        <div class="project-title">Loan Support Agentforce Agent</div>
+        <p class="project-desc">
+          Autonomous AI agent for NBFC loan customer support. Deployed on Experience Cloud and WhatsApp. Four Topics (loan status, document checklist, EMI calculator, human escalation) backed by custom Apex @InvocableMethod actions and Prompt Templates. Leverages Atlas Reasoning Engine for intent-based routing without scripted decision trees. Full implementation guide published below.
+        </p>
+        <div class="project-tech">
+          <span class="tag">Agentforce</span>
+          <span class="tag">Agent Builder</span>
+          <span class="tag">Apex Actions</span>
+          <span class="tag">Prompt Templates</span>
+          <span class="tag">Experience Cloud</span>
+        </div>
+      </div>
+      <div class="project-arrow">→</div>
+    </a>
+
+  </div>
+</section>
+
+<!-- TRAILBLAZER -->
+<div class="wrap">
+  <a href="https://www.salesforce.com/trailblazer/anuj14panwar" target="_blank" class="trail-box">
+    <div class="trail-logo">☁️</div>
+    <div class="trail-text">
+      <h3>Trailblazer Profile</h3>
+      <p>5 certifications · salesforce.com/trailblazer/anuj14panwar</p>
+    </div>
+    <div class="trail-cta">View on Trailhead →</div>
+  </a>
+</div>
+
+<!-- GUIDES -->
+<section class="section" id="guides">
+  <div class="wrap">
+    <div class="section-label">Written guides</div>
+    <div class="section-title">Technical Writing</div>
+
+    <div class="guide-list">
+
+      <a href="agentforce-guide.html" class="guide-item">
+        <div>
+          <div class="guide-title">The Complete Agentforce Developer Guide</div>
+          <div class="guide-sub">Atlas Reasoning Engine · Agent Builder · Topics · Actions · Prompt Templates · Real-world project with full Apex code</div>
+        </div>
+        <span class="guide-tag active">Published</span>
+      </a>
+
+      <div class="guide-item" style="opacity:0.45; cursor: default;">
+        <div>
+          <div class="guide-title">LWC Patterns: File Uploads, Reactive Bindings & renderedCallback Fixes</div>
+          <div class="guide-sub">ContentVersion creation · native select binding · textarea pre-fill patterns</div>
+        </div>
+        <span class="guide-tag">Coming soon</span>
+      </div>
+
+      <div class="guide-item" style="opacity:0.45; cursor: default;">
+        <div>
+          <div class="guide-title">Experience Cloud File Visibility — The Complete Debug Guide</div>
+          <div class="guide-sub">ContentDocumentLink · portal users · without sharing pitfalls · real solutions</div>
+        </div>
+        <span class="guide-tag">Coming soon</span>
+      </div>
+
+      <div class="guide-item" style="opacity:0.45; cursor: default;">
+        <div>
+          <div class="guide-title">Salesforce AI Integrations: Named Credentials + Claude API in Apex</div>
+          <div class="guide-sub">End-to-end LWC tool · callout patterns · Tooling API deployments</div>
+        </div>
+        <span class="guide-tag">Coming soon</span>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- CONNECT -->
+<section class="section" id="connect">
+  <div class="wrap">
+    <div class="section-label">Get in touch</div>
+    <div class="section-title">Let's Connect</div>
+
+    <div class="connect-grid">
+      <a href="https://www.salesforce.com/trailblazer/anuj14panwar" target="_blank" class="connect-card">
+        <div class="connect-icon">☁️</div>
+        <div class="connect-label">Trailblazer</div>
+        <div class="connect-sub">anuj14panwar</div>
+      </a>
+      <a href="https://linkedin.com" target="_blank" class="connect-card">
+        <div class="connect-icon">💼</div>
+        <div class="connect-label">LinkedIn</div>
+        <div class="connect-sub">Find me on LinkedIn</div>
+      </a>
+      <a href="https://github.com" target="_blank" class="connect-card">
+        <div class="connect-icon">🐙</div>
+        <div class="connect-label">GitHub</div>
+        <div class="connect-sub">anuj14panwar</div>
+      </a>
+    </div>
+
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-name">Anuj Panwar</div>
+      <div class="footer-sub">Salesforce Technical Specialist · iLink Digital Systems · Noida, India</div>
+    </div>
+    <div class="footer-right">
+      Built with HTML · Hosted on GitHub Pages<br>
+      © 2026
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
