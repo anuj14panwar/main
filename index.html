@@ -1,861 +1,393 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Anuj Panwar — Salesforce Technical Specialist</title>
-<meta name="description" content="Salesforce Technical Specialist with 5.5+ years building on the Salesforce platform. Apex, LWC, Experience Cloud, Agentforce, and AI integrations.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<meta name="description" content="Salesforce Technical Specialist with 5.4+ years. Apex, LWC, Experience Cloud, Agentforce, AI integrations. Based in Noida, India.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--base:#050A14;--surface:#0D1B2E;--card:#112240;--card2:#162B50;--border:#1E3A5F;--border2:#2D5480;--sf:#00A1E0;--sf-dim:rgba(0,161,224,0.08);--sf-mid:rgba(0,161,224,0.2);--body:#C8DCF0;--muted:#6B8CAE;--dim:#3A5872;--white:#F0F8FF;--green:#29D398;--amber:#F5A623;--purple:#9B7FE8;--mono:'DM Mono',monospace;--sans:'Inter',sans-serif}
+html{scroll-behavior:smooth;font-size:15px}
+body{font-family:var(--sans);background:var(--base);color:var(--body);line-height:1.75;-webkit-font-smoothing:antialiased}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.fade{animation:fadeUp 0.7s ease both}
+.d1{animation-delay:.1s}.d2{animation-delay:.2s}.d3{animation-delay:.35s}
 
-:root {
-  --navy:      #0A0E1A;
-  --surface:   #111827;
-  --card:      #1A2540;
-  --card-border: #243058;
-  --sf-blue:   #00A1E0;
-  --sf-blue-dim: rgba(0,161,224,0.12);
-  --sf-blue-mid: rgba(0,161,224,0.35);
-  --periwinkle: #B4CBFF;
-  --body-text: #C8D6F0;
-  --muted:     #6B7EA8;
-  --white:     #F8FAFF;
-  --radius-sm: 6px;
-  --radius:    12px;
-}
+/* NAV */
+nav{position:sticky;top:0;z-index:100;background:rgba(5,10,20,0.92);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);padding:0 40px}
+.nav-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:56px}
+.nav-logo{font-family:var(--mono);font-weight:500;font-size:14px;color:var(--white);text-decoration:none}
+.nav-logo span{color:var(--sf)}
+.nav-links{display:flex;gap:24px;list-style:none}
+.nav-links a{color:var(--muted);text-decoration:none;font-size:13px;font-weight:500;transition:color .15s}
+.nav-links a:hover{color:var(--white)}
 
-html { scroll-behavior: smooth; }
+/* LAYOUT */
+.wrap{max-width:1100px;margin:0 auto;padding:0 40px}
 
-body {
-  font-family: 'Inter', sans-serif;
-  background: var(--navy);
-  color: var(--body-text);
-  line-height: 1.7;
-  font-size: 15px;
-  -webkit-font-smoothing: antialiased;
-}
+/* HERO */
+.hero{padding:80px 40px 72px;max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr auto;gap:48px;align-items:start;border-bottom:1px solid var(--border)}
+.hero-eyebrow{font-family:var(--mono);font-size:12px;color:var(--sf);margin-bottom:20px;display:flex;align-items:center;gap:10px}
+.hero-eyebrow::before{content:'';display:inline-block;width:32px;height:1px;background:var(--sf)}
+h1{font-family:var(--mono);font-size:clamp(30px,4vw,50px);font-weight:400;color:var(--white);line-height:1.1;letter-spacing:-1px;margin-bottom:20px}
+h1 em{font-style:normal;color:var(--sf)}
+.hero-desc{font-size:15.5px;color:var(--body);max-width:520px;margin-bottom:28px;line-height:1.75}
+.hero-btns{display:flex;gap:12px;flex-wrap:wrap}
+.btn-primary{display:inline-block;background:var(--sf);color:#fff;padding:10px 22px;border-radius:4px;font-size:13.5px;font-weight:600;text-decoration:none;transition:background .15s,transform .1s}
+.btn-primary:hover{background:#0090cc;transform:translateY(-1px)}
+.btn-ghost{display:inline-block;border:1px solid var(--border2);color:var(--body);padding:10px 22px;border-radius:4px;font-size:13.5px;font-weight:500;text-decoration:none;transition:border-color .15s,color .15s}
+.btn-ghost:hover{border-color:var(--sf);color:var(--white)}
+/* CERT STACK */
+.cert-stack{display:flex;flex-direction:column;gap:7px;padding-top:8px}
+.cert-badge{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--border);border-radius:4px;padding:8px 14px;font-size:12px;color:var(--body);white-space:nowrap}
+.cert-icon{width:18px;height:18px;background:rgba(0,161,224,0.15);border-radius:3px;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--sf);font-size:10px}
 
-/* ─── FADE IN ─── */
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(22px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-.fade-in { animation: fadeUp 0.7s ease both; }
-.delay-1 { animation-delay: 0.12s; }
-.delay-2 { animation-delay: 0.24s; }
-.delay-3 { animation-delay: 0.38s; }
+/* STATS */
+.stats-strip{display:grid;grid-template-columns:repeat(5,1fr);border:1px solid var(--border);border-radius:8px;overflow:hidden;margin:40px 0}
+.stat-cell{padding:22px 18px;border-right:1px solid var(--border);background:var(--card)}
+.stat-cell:last-child{border-right:none}
+.stat-num{font-family:var(--mono);font-size:30px;font-weight:500;color:var(--sf);letter-spacing:-1px;line-height:1;margin-bottom:4px}
+.stat-label{font-size:11px;color:var(--muted)}
 
-/* ─── LAYOUT ─── */
-.wrap {
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 0 28px;
-}
+/* SECTION */
+.section{margin:64px 0}
+h2{font-family:var(--mono);font-size:21px;font-weight:500;color:var(--white);margin-bottom:20px;padding-bottom:12px;border-bottom:1px solid var(--border);letter-spacing:-0.3px}
+h2 .pre{color:var(--sf);margin-right:10px;font-weight:300}
+h3{font-family:var(--mono);font-size:14px;font-weight:500;color:var(--white);margin:20px 0 8px}
+p{color:var(--body);margin-bottom:12px;line-height:1.75}
 
-/* ─── NAV ─── */
-nav {
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  background: rgba(10,14,26,0.88);
-  backdrop-filter: blur(14px);
-  border-bottom: 1px solid rgba(36,48,88,0.6);
-  padding: 0 28px;
-}
-.nav-inner {
-  max-width: 900px;
-  margin: 0 auto;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  height: 56px;
-}
-.nav-logo {
-  font-family: 'Sora', sans-serif;
-  font-weight: 700;
-  font-size: 15px;
-  color: var(--white);
-  text-decoration: none;
-  letter-spacing: -0.3px;
-}
-.nav-logo span { color: var(--sf-blue); }
-.nav-links {
-  display: flex;
-  gap: 28px;
-  list-style: none;
-}
-.nav-links a {
-  color: var(--muted);
-  text-decoration: none;
-  font-size: 13.5px;
-  font-weight: 500;
-  transition: color 0.15s;
-}
-.nav-links a:hover { color: var(--white); }
+/* ABOUT */
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:start}
+.about-fact{display:flex;gap:12px;margin-bottom:12px;font-size:13.5px}
+.about-fact-label{color:var(--muted);min-width:110px;flex-shrink:0;font-family:var(--mono);font-size:12px}
+.about-fact-val{color:var(--body)}
 
-/* ─── HERO ─── */
-header {
-  padding: 80px 0 72px;
-  border-bottom: 1px solid var(--card-border);
-}
-.hero-layout {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 40px;
-  align-items: start;
-}
-.hero-eyebrow {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  color: var(--sf-blue);
-  font-size: 13px;
-  font-weight: 600;
-  margin-bottom: 20px;
-}
-.hero-eyebrow::before {
-  content: '';
-  display: inline-block;
-  width: 28px;
-  height: 2px;
-  background: var(--sf-blue);
-  border-radius: 2px;
-}
-h1 {
-  font-family: 'Sora', sans-serif;
-  font-size: clamp(34px, 5vw, 50px);
-  font-weight: 800;
-  line-height: 1.1;
-  letter-spacing: -1.5px;
-  color: var(--white);
-  margin-bottom: 20px;
-}
-.hero-desc {
-  font-size: 16px;
-  color: var(--body-text);
-  max-width: 520px;
-  line-height: 1.75;
-  margin-bottom: 32px;
-}
-.hero-actions {
-  display: flex;
-  gap: 14px;
-  flex-wrap: wrap;
-}
-.btn-primary {
-  display: inline-block;
-  background: var(--sf-blue);
-  color: #fff;
-  padding: 11px 24px;
-  border-radius: var(--radius-sm);
-  font-size: 14px;
-  font-weight: 600;
-  text-decoration: none;
-  transition: background 0.15s, transform 0.1s;
-}
-.btn-primary:hover { background: #0090cc; transform: translateY(-1px); }
-.btn-ghost {
-  display: inline-block;
-  border: 1px solid var(--card-border);
-  color: var(--body-text);
-  padding: 11px 24px;
-  border-radius: var(--radius-sm);
-  font-size: 14px;
-  font-weight: 500;
-  text-decoration: none;
-  transition: border-color 0.15s, color 0.15s;
-}
-.btn-ghost:hover { border-color: var(--sf-blue); color: var(--white); }
+/* PROJECT CARDS */
+.project-card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:28px 30px;margin-bottom:20px;transition:border-color .2s}
+.project-card:hover{border-color:var(--border2)}
+.project-card.featured{border-color:rgba(0,161,224,0.25);background:linear-gradient(135deg,#112240 0%,#142A52 100%)}
+.proj-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;flex-wrap:wrap;gap:8px}
+.proj-title{font-family:var(--mono);font-size:17px;font-weight:500;color:var(--white)}
+.proj-role{font-family:var(--mono);font-size:10px;padding:3px 10px;border-radius:3px;background:rgba(0,161,224,0.12);border:1px solid rgba(0,161,224,0.25);color:var(--sf)}
+.proj-meta{font-size:12px;color:var(--sf);margin-bottom:10px;font-family:var(--mono)}
+.proj-desc{font-size:13.5px;color:var(--body);margin-bottom:14px;line-height:1.7}
+.proj-highlights{margin:12px 0 16px;padding-left:0;list-style:none}
+.proj-highlights li{font-size:13px;color:var(--muted);padding:4px 0;display:flex;gap:10px}
+.proj-highlights li::before{content:'▸';color:var(--sf);flex-shrink:0;margin-top:1px}
+.proj-tech{display:flex;flex-wrap:wrap;gap:5px}
+.tag{display:inline-block;font-family:var(--mono);font-size:10px;padding:2px 8px;border-radius:3px;border:1px solid var(--border);color:var(--muted);margin:2px}
+.tag.sf{border-color:rgba(0,161,224,0.3);color:var(--sf);background:var(--sf-dim)}
+.tag.ai{border-color:rgba(155,127,232,0.3);color:var(--purple);background:rgba(155,127,232,0.05)}
+.tag.green{border-color:rgba(41,211,152,0.3);color:#29D398;background:rgba(41,211,152,0.05)}
 
-/* Cert badges column */
-.cert-stack {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  padding-top: 8px;
-}
-.cert-badge {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  background: var(--card);
-  border: 1px solid var(--card-border);
-  border-radius: var(--radius-sm);
-  padding: 8px 14px;
-  font-size: 12px;
-  font-weight: 500;
-  color: var(--body-text);
-  white-space: nowrap;
-}
-.cert-icon {
-  width: 20px;
-  height: 20px;
-  background: var(--sf-blue-dim);
-  border-radius: 4px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-.cert-icon svg { width: 12px; height: 12px; fill: var(--sf-blue); }
+/* SKILLS */
+.skills-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.skill-card{background:var(--card);border:1px solid var(--border);border-radius:6px;padding:20px}
+.skill-cat{font-family:var(--mono);font-size:11px;color:var(--sf);margin-bottom:10px;font-weight:500;letter-spacing:0.5px}
+.skill-list{display:flex;flex-wrap:wrap;gap:5px}
 
-/* ─── STATS STRIP ─── */
-.stats-strip {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 0;
-  border: 1px solid var(--card-border);
-  border-radius: var(--radius);
-  overflow: hidden;
-  margin: 52px 0;
-}
-.stat-cell {
-  padding: 24px 20px;
-  border-right: 1px solid var(--card-border);
-  background: var(--card);
-}
-.stat-cell:last-child { border-right: none; }
-.stat-number {
-  font-family: 'Sora', sans-serif;
-  font-size: 32px;
-  font-weight: 800;
-  color: var(--sf-blue);
-  letter-spacing: -1px;
-  line-height: 1;
-  margin-bottom: 5px;
-}
-.stat-desc {
-  font-size: 12px;
-  color: var(--muted);
-  line-height: 1.4;
-}
+/* GUIDES */
+.guides-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+.guide-card{background:var(--card);border:1px solid var(--border);border-radius:6px;padding:22px;text-decoration:none;display:block;transition:border-color .2s}
+.guide-card:hover{border-color:var(--sf);text-decoration:none}
+.guide-icon{font-size:24px;margin-bottom:10px;display:block}
+.guide-title{font-family:var(--mono);font-size:14px;font-weight:500;color:var(--white);margin-bottom:6px}
+.guide-desc{font-size:12.5px;color:var(--muted);line-height:1.6}
+.guide-tag{display:inline-block;margin-top:10px;font-family:var(--mono);font-size:10px;color:var(--sf)}
 
-/* ─── SECTION HEADINGS ─── */
-.section { margin: 60px 0; }
-.section-label {
-  font-size: 11px;
-  font-weight: 600;
-  color: var(--muted);
-  letter-spacing: 1.2px;
-  text-transform: uppercase;
-  margin-bottom: 6px;
-}
-.section-title {
-  font-family: 'Sora', sans-serif;
-  font-size: 26px;
-  font-weight: 700;
-  color: var(--white);
-  letter-spacing: -0.5px;
-  margin-bottom: 28px;
-}
+/* CONNECT */
+.connect-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.connect-card{display:flex;flex-direction:column;align-items:center;gap:8px;padding:20px;background:var(--card);border:1px solid var(--border);border-radius:6px;text-decoration:none;transition:border-color .2s;text-align:center}
+.connect-card:hover{border-color:var(--sf-mid)}
+.connect-icon{font-size:24px}
+.connect-label{font-family:var(--mono);font-size:12px;color:var(--white)}
+.connect-sub{font-size:11px;color:var(--muted)}
 
-/* ─── EXPERTISE GRID ─── */
-.expertise-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 14px;
-}
-.exp-card {
-  background: var(--card);
-  border: 1px solid var(--card-border);
-  border-radius: var(--radius);
-  padding: 22px;
-  transition: border-color 0.2s;
-}
-.exp-card:hover { border-color: var(--sf-blue-mid); }
-.exp-icon {
-  font-size: 24px;
-  margin-bottom: 12px;
-  display: block;
-}
-.exp-card h3 {
-  font-family: 'Sora', sans-serif;
-  font-size: 14px;
-  font-weight: 700;
-  color: var(--white);
-  margin-bottom: 6px;
-}
-.exp-card p {
-  font-size: 12.5px;
-  color: var(--muted);
-  line-height: 1.6;
-}
-.exp-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 5px;
-  margin-top: 12px;
-}
-.tag {
-  font-size: 10.5px;
-  font-weight: 500;
-  padding: 2px 8px;
-  border-radius: 4px;
-  background: var(--sf-blue-dim);
-  color: var(--periwinkle);
-  border: 1px solid rgba(0,161,224,0.18);
-}
+/* FOOTER */
+footer{border-top:1px solid var(--border);padding:28px 40px;margin-top:80px}
+.footer-inner{max-width:1100px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+.footer-brand{font-family:var(--mono);font-size:13px;color:var(--white)}
+.footer-sub{font-size:11px;color:var(--dim);margin-top:2px}
+.footer-right{font-family:var(--mono);font-size:11px;color:var(--dim);text-align:right}
 
-/* ─── PROJECT CARDS ─── */
-.project-card {
-  background: var(--card);
-  border: 1px solid var(--card-border);
-  border-radius: var(--radius);
-  padding: 28px 30px;
-  margin-bottom: 16px;
-  display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 20px;
-  align-items: start;
-  transition: border-color 0.2s;
-  text-decoration: none;
-}
-.project-card:hover { border-color: var(--sf-blue-mid); }
-.project-card.featured {
-  border-color: rgba(0,161,224,0.3);
-  background: linear-gradient(135deg, #1A2540 0%, #1D2E50 100%);
-}
-.project-title {
-  font-family: 'Sora', sans-serif;
-  font-size: 17px;
-  font-weight: 700;
-  color: var(--white);
-  margin-bottom: 6px;
-}
-.project-meta {
-  font-size: 11.5px;
-  color: var(--sf-blue);
-  font-weight: 600;
-  margin-bottom: 10px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-.project-meta .dot {
-  width: 3px; height: 3px;
-  border-radius: 50%;
-  background: var(--muted);
-  display: inline-block;
-}
-.project-desc {
-  font-size: 13.5px;
-  color: var(--body-text);
-  line-height: 1.65;
-  margin-bottom: 14px;
-}
-.project-tech { display: flex; flex-wrap: wrap; gap: 5px; }
-.project-arrow {
-  color: var(--muted);
-  font-size: 18px;
-  margin-top: 4px;
-  transition: color 0.15s, transform 0.15s;
-}
-.project-card:hover .project-arrow {
-  color: var(--sf-blue);
-  transform: translateX(3px);
-}
-.new-badge {
-  display: inline-block;
-  background: var(--sf-blue);
-  color: #fff;
-  font-size: 10px;
-  font-weight: 700;
-  padding: 2px 7px;
-  border-radius: 4px;
-  vertical-align: middle;
-  margin-left: 8px;
-  letter-spacing: 0.3px;
-}
-
-/* ─── WRITING / GUIDES ─── */
-.guide-list { display: flex; flex-direction: column; gap: 2px; }
-.guide-item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 16px 0;
-  border-bottom: 1px solid rgba(36,48,88,0.5);
-  text-decoration: none;
-  gap: 16px;
-  transition: none;
-}
-.guide-item:last-child { border-bottom: none; }
-.guide-title {
-  font-size: 15px;
-  font-weight: 600;
-  color: var(--white);
-  margin-bottom: 3px;
-  transition: color 0.15s;
-}
-.guide-item:hover .guide-title { color: var(--sf-blue); }
-.guide-sub {
-  font-size: 12.5px;
-  color: var(--muted);
-}
-.guide-tag {
-  font-size: 11px;
-  font-weight: 600;
-  padding: 3px 10px;
-  border-radius: 20px;
-  border: 1px solid var(--card-border);
-  color: var(--muted);
-  white-space: nowrap;
-  flex-shrink: 0;
-}
-.guide-tag.active {
-  border-color: rgba(0,161,224,0.3);
-  color: var(--sf-blue);
-  background: var(--sf-blue-dim);
-}
-
-/* ─── TRAILBLAZER ─── */
-.trail-box {
-  background: linear-gradient(135deg, #0E1C36 0%, #0A1628 100%);
-  border: 1px solid rgba(0,161,224,0.25);
-  border-radius: var(--radius);
-  padding: 32px;
-  display: flex;
-  align-items: center;
-  gap: 24px;
-  text-decoration: none;
-  transition: border-color 0.2s;
-}
-.trail-box:hover { border-color: rgba(0,161,224,0.55); }
-.trail-logo {
-  width: 56px;
-  height: 56px;
-  background: var(--sf-blue);
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  font-size: 26px;
-}
-.trail-text h3 {
-  font-family: 'Sora', sans-serif;
-  font-size: 16px;
-  font-weight: 700;
-  color: var(--white);
-  margin-bottom: 4px;
-}
-.trail-text p { font-size: 13px; color: var(--muted); }
-.trail-cta {
-  margin-left: auto;
-  color: var(--sf-blue);
-  font-size: 13px;
-  font-weight: 600;
-  white-space: nowrap;
-  flex-shrink: 0;
-}
-
-/* ─── CONNECT ─── */
-.connect-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 14px;
-  margin-top: 24px;
-}
-.connect-card {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-  padding: 22px 18px;
-  background: var(--card);
-  border: 1px solid var(--card-border);
-  border-radius: var(--radius);
-  text-decoration: none;
-  transition: border-color 0.2s;
-  text-align: center;
-}
-.connect-card:hover { border-color: var(--sf-blue-mid); }
-.connect-icon { font-size: 26px; }
-.connect-label { font-size: 13px; font-weight: 600; color: var(--white); }
-.connect-sub { font-size: 11.5px; color: var(--muted); }
-
-/* ─── FOOTER ─── */
-footer {
-  border-top: 1px solid var(--card-border);
-  padding: 32px 28px;
-  margin-top: 80px;
-}
-.footer-inner {
-  max-width: 900px;
-  margin: 0 auto;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 12px;
-}
-.footer-name {
-  font-family: 'Sora', sans-serif;
-  font-weight: 700;
-  font-size: 14px;
-  color: var(--white);
-}
-.footer-sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
-.footer-right { font-size: 12px; color: var(--muted); text-align: right; }
-
-/* ─── RESPONSIVE ─── */
-@media (max-width: 700px) {
-  .hero-layout { grid-template-columns: 1fr; }
-  .cert-stack { flex-direction: row; flex-wrap: wrap; }
-  .stats-strip { grid-template-columns: repeat(2, 1fr); }
-  .expertise-grid { grid-template-columns: 1fr 1fr; }
-  .connect-grid { grid-template-columns: 1fr 1fr; }
-  .trail-box { flex-wrap: wrap; }
-  .trail-cta { margin-left: 0; }
-  .project-card { grid-template-columns: 1fr; }
-  .project-arrow { display: none; }
-}
-@media (max-width: 480px) {
-  .expertise-grid { grid-template-columns: 1fr; }
-  .connect-grid { grid-template-columns: 1fr; }
-  .stats-strip { grid-template-columns: 1fr 1fr; }
-  h1 { font-size: 30px; }
-}
+@media(max-width:900px){.hero{grid-template-columns:1fr}.cert-stack{flex-direction:row;flex-wrap:wrap}.stats-strip{grid-template-columns:repeat(3,1fr)}.about-grid{grid-template-columns:1fr}.skills-grid{grid-template-columns:1fr 1fr}.guides-grid{grid-template-columns:1fr}.connect-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.wrap,.hero{padding-left:20px;padding-right:20px}nav{padding:0 20px}.stats-strip{grid-template-columns:1fr 1fr}.skills-grid{grid-template-columns:1fr}.connect-grid{grid-template-columns:1fr 1fr}}
 </style>
 </head>
 <body>
-
-<!-- NAV -->
-<nav>
-  <div class="nav-inner">
-    <a href="#" class="nav-logo">Anuj<span>.</span>dev</a>
-    <ul class="nav-links">
-      <li><a href="#expertise">Expertise</a></li>
-      <li><a href="#projects">Projects</a></li>
-      <li><a href="#guides">Guides</a></li>
-      <li><a href="#connect">Connect</a></li>
-    </ul>
-  </div>
-</nav>
+<nav><div class="nav-inner">
+  <a href="index.html" class="nav-logo">Anuj<span>.</span>dev</a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="guides.html">Guides</a></li>
+    <li><a href="#connect">Connect</a></li>
+  </ul>
+</div></nav>
 
 <!-- HERO -->
-<header>
-  <div class="wrap">
-    <div class="hero-layout">
-
-      <div class="fade-in">
-        <div class="hero-eyebrow">Salesforce Technical Specialist</div>
-        <h1>Anuj Panwar</h1>
-        <p class="hero-desc">
-          I build on Salesforce — Apex, LWC, Experience Cloud, Agentforce, and AI integrations. 5.5 years turning platform capabilities into solutions that actually work. Based in Noida, India. Currently at iLink Digital Systems.
-        </p>
-        <div class="hero-actions">
-          <a href="#projects" class="btn-primary">View Projects</a>
-          <a href="https://www.salesforce.com/trailblazer/anuj14panwar" target="_blank" class="btn-ghost">Trailblazer Profile</a>
-        </div>
-      </div>
-
-      <div class="cert-stack fade-in delay-2">
-        <div class="cert-badge">
-          <div class="cert-icon">
-            <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-          </div>
-          Platform Developer I
-        </div>
-        <div class="cert-badge">
-          <div class="cert-icon">
-            <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-          </div>
-          Platform Developer II
-        </div>
-        <div class="cert-badge">
-          <div class="cert-icon">
-            <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-          </div>
-          Administrator
-        </div>
-        <div class="cert-badge">
-          <div class="cert-icon">
-            <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-          </div>
-          Salesforce Associate
-        </div>
-        <div class="cert-badge">
-          <div class="cert-icon">
-            <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-          </div>
-          AI Associate
-        </div>
-      </div>
-
+<div class="hero">
+  <div class="fade">
+    <div class="hero-eyebrow">Salesforce Technical Specialist · 5.4+ Years</div>
+    <h1>Anuj <em>Panwar</em></h1>
+    <p class="hero-desc">I design and deliver scalable Salesforce solutions — from complex Apex architectures and LWC components to autonomous Agentforce AI agents and deep API integrations. Technical Lead at iLink Digital Systems, based in Noida, India.</p>
+    <div class="hero-btns">
+      <a href="#projects" class="btn-primary">View Projects</a>
+      <a href="guides.html" class="btn-ghost">Developer Guides</a>
+      <a href="https://www.salesforce.com/trailblazer/anuj14panwar" target="_blank" class="btn-ghost">Trailblazer Profile</a>
     </div>
   </div>
-</header>
+  <div class="cert-stack fade d2">
+    <div class="cert-badge"><div class="cert-icon">★</div>Platform Developer I</div>
+    <div class="cert-badge"><div class="cert-icon">★</div>Platform Developer II</div>
+    <div class="cert-badge"><div class="cert-icon">★</div>Administrator</div>
+    <div class="cert-badge"><div class="cert-icon">★</div>Salesforce Associate</div>
+    <div class="cert-badge"><div class="cert-icon">★</div>AI Associate</div>
+  </div>
+</div>
 
 <!-- STATS -->
 <div class="wrap">
-  <div class="stats-strip fade-in delay-3">
-    <div class="stat-cell">
-      <div class="stat-number">5.5+</div>
-      <div class="stat-desc">Years on the Salesforce platform</div>
+<div class="stats-strip fade d3">
+  <div class="stat-cell"><div class="stat-num">5.4+</div><div class="stat-label">Years on Salesforce</div></div>
+  <div class="stat-cell"><div class="stat-num">5</div><div class="stat-label">Certifications</div></div>
+  <div class="stat-cell"><div class="stat-num">6</div><div class="stat-label">Major Projects</div></div>
+  <div class="stat-cell"><div class="stat-num">40+</div><div class="stat-label">Process Builders Migrated</div></div>
+  <div class="stat-cell"><div class="stat-num">AI</div><div class="stat-label">Agentforce + Claude</div></div>
+</div>
+
+<!-- ABOUT -->
+<div class="section" id="about">
+  <h2><span class="pre">01</span>About Me</h2>
+  <div class="about-grid">
+    <div>
+      <p>Salesforce Technical Specialist with 5.4+ years designing and delivering enterprise-grade solutions across Sales Cloud, Service Cloud, Experience Cloud, and NPSP. I lead cross-functional development teams, mentor junior developers, and own end-to-end project delivery from solution design through production deployment.</p>
+      <p>My recent focus is on AI-powered Salesforce development — building autonomous Agentforce agents with Apex @InvocableMethod actions, integrating Claude AI via Named Credentials for developer tooling, and deploying agents on Experience Cloud portals.</p>
+      <p>Previously at Wipro where I built LWC applications and Salesforce Community Portals, implemented milestone-based Case Management, and delivered Omni-Channel routing solutions.</p>
     </div>
-    <div class="stat-cell">
-      <div class="stat-number">5</div>
-      <div class="stat-desc">Salesforce certifications earned</div>
-    </div>
-    <div class="stat-cell">
-      <div class="stat-number">3</div>
-      <div class="stat-desc">AI-powered tools built in production</div>
-    </div>
-    <div class="stat-cell">
-      <div class="stat-number">∞</div>
-      <div class="stat-desc">Governor limits respected</div>
+    <div>
+      <div class="about-fact"><span class="about-fact-label">Current Role</span><span class="about-fact-val">Technical Specialist, iLink Digital Systems</span></div>
+      <div class="about-fact"><span class="about-fact-label">Previous Role</span><span class="about-fact-val">Associate Consultant, Wipro</span></div>
+      <div class="about-fact"><span class="about-fact-label">Location</span><span class="about-fact-val">Noida, India</span></div>
+      <div class="about-fact"><span class="about-fact-label">Education</span><span class="about-fact-val">B.Tech Computer Science, MIET Meerut — 7.6 SGPA</span></div>
+      <div class="about-fact"><span class="about-fact-label">Email</span><span class="about-fact-val">anujpanwar445@gmail.com</span></div>
+      <div class="about-fact"><span class="about-fact-label">Phone</span><span class="about-fact-val">+91 7060384878</span></div>
+      <div class="about-fact"><span class="about-fact-label">Languages</span><span class="about-fact-val">English (Professional) · Hindi (Native)</span></div>
+      <div class="about-fact"><span class="about-fact-label">Specialisms</span><span class="about-fact-val">Apex · LWC · Agentforce · API Integrations · Experience Cloud</span></div>
     </div>
   </div>
 </div>
 
-<!-- EXPERTISE -->
-<section class="section" id="expertise">
-  <div class="wrap">
-    <div class="section-label">What I work with</div>
-    <div class="section-title">Core Expertise</div>
-
-    <div class="expertise-grid">
-
-      <div class="exp-card">
-        <span class="exp-icon">⚙️</span>
-        <h3>Apex & Backend</h3>
-        <p>Trigger handlers, Queueables, governor limit patterns, dynamic SOQL, Tooling API, callout architecture.</p>
-        <div class="exp-tags">
-          <span class="tag">Apex Triggers</span>
-          <span class="tag">SOQL</span>
-          <span class="tag">Queueable</span>
-          <span class="tag">Batch Apex</span>
-        </div>
-      </div>
-
-      <div class="exp-card">
-        <span class="exp-icon">🧩</span>
-        <h3>LWC & Frontend</h3>
-        <p>Wire adapters, reactive getters, renderedCallback patterns, base components, file handling with ContentVersion.</p>
-        <div class="exp-tags">
-          <span class="tag">LWC</span>
-          <span class="tag">Wire Adapters</span>
-          <span class="tag">JS Controllers</span>
-        </div>
-      </div>
-
-      <div class="exp-card">
-        <span class="exp-icon">🌐</span>
-        <h3>Experience Cloud</h3>
-        <p>Community user permission patterns, ContentDocumentLink visibility, sharing architecture, portal deployments.</p>
-        <div class="exp-tags">
-          <span class="tag">Experience Cloud</span>
-          <span class="tag">Guest Users</span>
-          <span class="tag">Sharing Rules</span>
-        </div>
-      </div>
-
-      <div class="exp-card">
-        <span class="exp-icon">🤖</span>
-        <h3>Agentforce & AI</h3>
-        <p>Agent Builder, Topics, @InvocableMethod actions, Prompt Templates, Einstein Trust Layer, Named Credential + LLM API integrations.</p>
-        <div class="exp-tags">
-          <span class="tag">Agentforce</span>
-          <span class="tag">Prompt Builder</span>
-          <span class="tag">Claude API</span>
-        </div>
-      </div>
-
-      <div class="exp-card">
-        <span class="exp-icon">🔀</span>
-        <h3>Salesforce Flow</h3>
-        <p>Autolaunched flows as agent actions, approval submission logic, record-triggered automation, sub-flows.</p>
-        <div class="exp-tags">
-          <span class="tag">Flow Builder</span>
-          <span class="tag">Approval Flows</span>
-          <span class="tag">Sub-flows</span>
-        </div>
-      </div>
-
-      <div class="exp-card">
-        <span class="exp-icon">🔔</span>
-        <h3>Notifications & Approvals</h3>
-        <p>Custom notification types, Messaging.CustomNotification, complex multi-step approval routing, resubmit and rejection flows.</p>
-        <div class="exp-tags">
-          <span class="tag">Custom Notifications</span>
-          <span class="tag">Approval Process</span>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</section>
-
 <!-- PROJECTS -->
-<section class="section" id="projects">
-  <div class="wrap">
-    <div class="section-label">Things I've built</div>
-    <div class="section-title">Projects</div>
+<div class="section" id="projects">
+  <h2><span class="pre">02</span>Projects</h2>
 
-    <!-- FAPO -->
-    <div class="project-card">
-      <div>
-        <div class="project-meta">Baker Ripley <span class="dot"></span> Nonprofit Financial Aid <span class="dot"></span> Ongoing</div>
-        <div class="project-title">Financial Aid Payment Office (FAPO) System</div>
-        <p class="project-desc">
-          End-to-end Salesforce implementation for Baker Ripley's nonprofit financial aid operations. Built complex TFA Pledge Batch approval workflows with multi-stage routing, rejection handling, and resubmit flows. Architected LWC components with role-gated editing, red flag display with filter chips, and file upload via ContentVersion. Resolved Experience Cloud file visibility issues and community user CRUD bypass using SYSTEM_MODE DML.
-        </p>
-        <div class="project-tech">
-          <span class="tag">Apex Triggers</span>
-          <span class="tag">LWC</span>
-          <span class="tag">Experience Cloud</span>
-          <span class="tag">Flows</span>
-          <span class="tag">Approval Process</span>
-          <span class="tag">Custom Notifications</span>
-        </div>
-      </div>
-      <div class="project-arrow">→</div>
+  <!-- FAPO -->
+  <div class="project-card featured">
+    <div class="proj-header">
+      <div class="proj-title">Financial Aid Payment Office (FAPO)</div>
+      <span class="proj-role">Team Lead / Technical Lead</span>
     </div>
-
-    <!-- AI Tools -->
-    <div class="project-card">
-      <div>
-        <div class="project-meta">iLink Digital Systems <span class="dot"></span> Internal Tooling <span class="dot"></span> Shipped</div>
-        <div class="project-title">AI Developer Toolkit — Salesforce + Claude API</div>
-        <p class="project-desc">
-          Suite of three LWC-based AI tools built inside Salesforce using Named Credentials to call the Claude API. Includes an Apex test class generator (uploads code → generates test class → deploys via Tooling API), a SetupAuditTrail analyzer with dynamic SOQL + AI summarization, and a code quality analyzer that returns severity-rated issues and a quality score.
-        </p>
-        <div class="project-tech">
-          <span class="tag">LWC</span>
-          <span class="tag">Named Credentials</span>
-          <span class="tag">Claude API</span>
-          <span class="tag">Tooling API</span>
-          <span class="tag">Dynamic SOQL</span>
-        </div>
-      </div>
-      <div class="project-arrow">→</div>
+    <div class="proj-meta">Baker Ripley · Nonprofit Financial Aid · iLink Digital Systems · Ongoing</div>
+    <p class="proj-desc">End-to-end Salesforce implementation for Baker Ripley's nonprofit financial aid operations, managing disbursement of financial assistance to thousands of families. The platform handles TFA (Texas Financial Assistance) Pledge Batch approvals, integrates with MIP — an enterprise financial system storing Chart of Accounts, GL entries, Invoices, and Payments — and manages the full document submission and approval lifecycle.</p>
+    <p class="proj-desc">The two biggest technical challenges on this project were the API integration with MIP and the complex multi-stage approval workflows for Pledge Batches. Both required custom architecture decisions rather than standard Salesforce tooling.</p>
+    <ul class="proj-highlights">
+      <li>Integrated Salesforce with MIP financial system using REST and Composite APIs, enabling real-time secure data exchange of Chart of Accounts, GL entries, invoices, and payment records — eliminating manual data entry between systems</li>
+      <li>Architected complex TFA Pledge Batch multi-stage approval workflows with custom rejection routing, Send Back to Case Manager flows, Final Approval handling, and resubmit logic requiring red flag resolution before resubmission</li>
+      <li>Built role-gated LWC modal components where unit/amount/Funding Program editing is restricted by the user's queue role — using custom permission checks within LWC controllers</li>
+      <li>Integrated Adobe Sign for digital agreement workflows within the financial aid approval chain, replacing paper-based sign-off processes</li>
+      <li>Resolved critical Experience Cloud file visibility bug — ContentDocumentLink queries returning empty for portal users even with without sharing — root cause was FLS enforcement regardless of sharing keyword; fixed using WITH SYSTEM_MODE SOQL</li>
+      <li>Implemented red flag display system with filter chips, requiring case managers to resolve all flagged items before a batch can be resubmitted for approval</li>
+      <li>Built Queueable Apex for async custom notifications (Messaging.CustomNotification) to approval stakeholders at each stage transition</li>
+      <li>Architected trigger handler pattern where all approval submission logic lives in the trigger handler and all workitem approval/rejection logic lives in the controller — strict separation of concerns for maintainability</li>
+      <li>Enhanced security using custom Permission Sets and group-based access controls for community users, ensuring CRUD bypass using AccessLevel.SYSTEM_MODE for portal user DML operations</li>
+    </ul>
+    <div class="proj-tech">
+      <span class="tag sf">Experience Cloud</span><span class="tag sf">Apex Triggers</span><span class="tag sf">LWC</span><span class="tag sf">Flows</span><span class="tag sf">Approval Process</span><span class="tag sf">REST API</span><span class="tag sf">Composite API</span><span class="tag sf">Adobe Sign</span><span class="tag sf">Queueable Apex</span><span class="tag sf">Custom Notifications</span><span class="tag sf">Program Management Module</span>
     </div>
-
-    <!-- Agentforce -->
-    <a href="agentforce-guide.html" class="project-card featured">
-      <div>
-        <div class="project-meta">
-          Financial Services <span class="dot"></span> Agentforce
-          <span class="new-badge">Guide Live</span>
-        </div>
-        <div class="project-title">Loan Support Agentforce Agent</div>
-        <p class="project-desc">
-          Autonomous AI agent for NBFC loan customer support. Deployed on Experience Cloud and WhatsApp. Four Topics (loan status, document checklist, EMI calculator, human escalation) backed by custom Apex @InvocableMethod actions and Prompt Templates. Leverages Atlas Reasoning Engine for intent-based routing without scripted decision trees. Full implementation guide published below.
-        </p>
-        <div class="project-tech">
-          <span class="tag">Agentforce</span>
-          <span class="tag">Agent Builder</span>
-          <span class="tag">Apex Actions</span>
-          <span class="tag">Prompt Templates</span>
-          <span class="tag">Experience Cloud</span>
-        </div>
-      </div>
-      <div class="project-arrow">→</div>
-    </a>
-
   </div>
-</section>
 
-<!-- TRAILBLAZER -->
-<div class="wrap">
-  <a href="https://www.salesforce.com/trailblazer/anuj14panwar" target="_blank" class="trail-box">
-    <div class="trail-logo">☁️</div>
-    <div class="trail-text">
-      <h3>Trailblazer Profile</h3>
-      <p>5 certifications · salesforce.com/trailblazer/anuj14panwar</p>
+  <!-- EARLY REACH -->
+  <div class="project-card featured">
+    <div class="proj-header">
+      <div class="proj-title">Childcare Management System — Early Reach</div>
+      <span class="proj-role">Team Lead / Lead Developer</span>
     </div>
-    <div class="trail-cta">View on Trailhead →</div>
-  </a>
+    <div class="proj-meta">Early Reach · Childcare Operations · iLink Digital Systems · 2500+ Users</div>
+    <p class="proj-desc">Full-scale Salesforce platform implementation for Early Reach, managing childcare operations across 50+ centers serving 2,500+ families and staff. The platform handles end-to-end application processes for family enrollment including save-and-resume functionality, attendance tracking, classroom management, and staff oversight.</p>
+    <p class="proj-desc">The most significant technical challenge was the application approval process — the standard Salesforce approval process was too rigid for Early Reach's multi-stage, rule-heavy approval requirements. We replaced it with custom LWC components that handled approvals programmatically, giving far more control over routing logic, UI, and user experience than the standard tooling allowed.</p>
+    <ul class="proj-highlights">
+      <li>Led a development team of 5 through 8+ sprints with consistent on-time delivery, running client demos post-sprint and managing stakeholder expectations throughout</li>
+      <li>Designed and built custom LWC approval components replacing standard Salesforce approval process — handled complex routing rules, multi-stage approvals, and conditional paths that were impossible to implement declaratively</li>
+      <li>Implemented save-and-resume application flow allowing families to start an enrollment application, save progress, and return later without losing data — required custom state management in Apex and LWC</li>
+      <li>Built attendance tracking system for 50+ childcare centers with classroom-level granularity, staff assignment management, and capacity monitoring</li>
+      <li>Leveraged SurveyForce to build dynamic parent feedback mechanisms, significantly increasing engagement response rates compared to previous manual feedback processes</li>
+      <li>Implemented the Program Management Module (PMM) package, configuring it for childcare-specific workflows and extending it with custom Apex and LWC where the package fell short</li>
+    </ul>
+    <div class="proj-tech">
+      <span class="tag sf">Experience Cloud</span><span class="tag sf">LWC</span><span class="tag sf">Apex</span><span class="tag sf">Program Management Module</span><span class="tag sf">SurveyForce</span><span class="tag sf">Custom Approvals</span><span class="tag sf">Flows</span>
+    </div>
+  </div>
+
+  <!-- AGENTFORCE -->
+  <div class="project-card">
+    <div class="proj-header">
+      <div class="proj-title">Loan Support Agentforce Agent</div>
+      <span class="proj-role">Architect / Developer</span>
+    </div>
+    <div class="proj-meta">Financial Services · Agentforce Studio · New Builder UI · Production</div>
+    <p class="proj-desc">Autonomous AI agent built using the new Agentforce Studio interface (Agent Script, Subagents, Variables) for NBFC loan customer support. Deployed on Experience Cloud and WhatsApp. Handles loan status queries, document checklist checks, EMI calculations, and human escalations without any scripted decision trees — the Atlas Reasoning Engine routes and responds autonomously.</p>
+    <ul class="proj-highlights">
+      <li>Built 5 custom Apex @InvocableMethod actions using WITH SYSTEM_MODE SOQL to bypass FLS for the Einstein Agent User — resolved a silent zero-row query bug that persisted despite without sharing class declaration</li>
+      <li>Used Agent Script after_reasoning blocks for deterministic action chaining, eliminating the LLM narration-before-action failure mode where Atlas would describe what it intended to do rather than doing it</li>
+      <li>Eliminated Prompt Templates entirely — leveraging Atlas Reasoning Engine native response generation from action output and subagent instructions, removing the 5-input limit constraint and Prompt Builder errors</li>
+      <li>Configured 4 Subagents (Loan Status, Document Checklist, EMI Calculator, Escalate to Human) with 8 guardrails covering credit score disclosure, competitor discussion, regulatory escalation triggers</li>
+      <li>Deployed AgentforceEscalationHelper as direct Apex action for case creation, replacing the Flow-based approach for simpler, more reliable escalation handling</li>
+    </ul>
+    <div class="proj-tech">
+      <span class="tag ai">Agentforce</span><span class="tag ai">Agent Script</span><span class="tag ai">Agentforce Studio</span><span class="tag sf">Apex Actions</span><span class="tag sf">WITH SYSTEM_MODE</span><span class="tag sf">Experience Cloud</span><span class="tag sf">Omni-Channel</span>
+    </div>
+  </div>
+
+  <!-- AI TOOLS -->
+  <div class="project-card">
+    <div class="proj-header">
+      <div class="proj-title">AI Developer Toolkit — Salesforce + Claude API</div>
+      <span class="proj-role">Senior Developer</span>
+    </div>
+    <div class="proj-meta">iLink Digital Systems · Internal Tooling · Production</div>
+    <p class="proj-desc">Suite of three AI-powered developer tools built inside Salesforce using Named Credentials to call the Claude API via Apex. Built as LWC components deployable to any org, they give developers AI assistance without leaving Salesforce.</p>
+    <ul class="proj-highlights">
+      <li>Apex Test Class Generator — developer uploads an Apex class, the LWC sends it to Claude API via Named Credential callout, receives a complete test class with positive and negative test methods, and deploys it via Tooling API in one click</li>
+      <li>SetupAuditTrail Analyzer — queries SetupAuditTrail using dynamic SOQL with date/user/action filters, sends results to Claude API for AI summarization, returns a plain English summary of what changed in the org and who made the changes</li>
+      <li>Apex Code Quality Analyzer — file upload LWC accepts an Apex class, sends it to Claude for analysis, returns severity-rated issues (Critical, High, Medium, Low) with specific line references and a quality score out of 100</li>
+      <li>All three tools use the same Named Credential pattern (callout:Anthropic_API) ensuring consistent auth handling and no hardcoded API keys anywhere in the codebase</li>
+    </ul>
+    <div class="proj-tech">
+      <span class="tag ai">Claude API</span><span class="tag sf">Named Credentials</span><span class="tag sf">LWC</span><span class="tag sf">Apex Callouts</span><span class="tag sf">Tooling API</span><span class="tag sf">Dynamic SOQL</span>
+    </div>
+  </div>
+
+  <!-- PAYCOR -->
+  <div class="project-card">
+    <div class="proj-header">
+      <div class="proj-title">Paycor Tech Debt Migration</div>
+      <span class="proj-role">Senior Salesforce Developer</span>
+    </div>
+    <div class="proj-meta">Paycor · Technical Debt Reduction · iLink Digital Systems</div>
+    <p class="proj-desc">Large-scale technical debt remediation project migrating legacy automation to modern Salesforce patterns. Paycor's org had accumulated significant automation debt — 40+ Process Builders and 30+ Workflow Rules that were slow, untestable, and hitting governor limits. The project replaced all of them with scalable Flows and a custom Apex Trigger Framework.</p>
+    <ul class="proj-highlights">
+      <li>Migrated 40+ Process Builders and 30+ Workflow Rules to Record-Triggered Flows and Apex Triggers — improving execution performance, eliminating duplicate automation conflicts, and making logic unit-testable</li>
+      <li>Implemented a robust Apex Trigger Framework enforcing single-trigger-per-object compliance across all custom objects — handler classes, interface contracts, and bypass mechanisms for admin override</li>
+      <li>Refactored and optimized Apex code in alignment with Salesforce best practices — eliminated redundancies, reduced SOQL calls inside loops, consolidated DML operations, and improved bulkification throughout</li>
+      <li>Established code review standards and trigger framework documentation that the client's internal team adopted as the org-wide standard going forward</li>
+    </ul>
+    <div class="proj-tech">
+      <span class="tag sf">Flow Builder</span><span class="tag sf">Apex Triggers</span><span class="tag sf">Trigger Framework</span><span class="tag sf">Process Builder Migration</span><span class="tag sf">Code Refactoring</span>
+    </div>
+  </div>
+
+  <!-- BGCA -->
+  <div class="project-card">
+    <div class="proj-header">
+      <div class="proj-title">BGCA — Critical Incident Management & Managed Service</div>
+      <span class="proj-role">Salesforce Developer</span>
+    </div>
+    <div class="proj-meta">Boys & Girls Clubs of America · Service Cloud + NPSP · iLink Digital Systems</div>
+    <p class="proj-desc">Two parallel workstreams for Boys & Girls Clubs of America — a Critical Incident Management System for structured case escalation and a Managed Service engagement covering NPSP-based fundraising data operations and community portal development.</p>
+    <ul class="proj-highlights">
+      <li>Configured Entitlement Processes for structured Case escalation with customized Email Templates for each escalation level — ensuring incidents were escalated to the right stakeholders within defined SLA windows</li>
+      <li>Built dynamic LWC components for group management enabling real-time user addition and removal with a streamlined UX — used wire adapters and imperative Apex calls for responsive data refresh without page reloads</li>
+      <li>Developed LWC-based Community User forms for Gift Metrics and RD Health Assessment leveraging the NPSP data model — required deep understanding of NPSP's Opportunity and Recurring Donation objects</li>
+      <li>Performed bulk data operations using NPSP Data Import Wizard and Data Loader for large-scale fundraising data migrations and ongoing data management</li>
+    </ul>
+    <div class="proj-tech">
+      <span class="tag sf">Service Cloud</span><span class="tag sf">NPSP</span><span class="tag sf">LWC</span><span class="tag sf">Experience Cloud</span><span class="tag sf">Entitlement Process</span><span class="tag sf">Data Loader</span>
+    </div>
+  </div>
+
+  <!-- WIPRO -->
+  <div class="project-card">
+    <div class="proj-header">
+      <div class="proj-title">HR Case Management — Community Portal</div>
+      <span class="proj-role">Associate Consultant</span>
+    </div>
+    <div class="proj-meta">Wipro · Internal HR Platform · Dec 2020 – Sep 2021</div>
+    <p class="proj-desc">LWC-based Salesforce Community Portal for HR Case Management supporting employee learning and development workflows. Implemented milestone-based Case Management with Omni-Channel routing, reducing average case resolution time significantly.</p>
+    <ul class="proj-highlights">
+      <li>Built LWC-based Community Portal applications for HR case submission, tracking, and resolution with real-time status updates</li>
+      <li>Implemented milestone-based Case Management processes with automated escalation triggers at each milestone boundary</li>
+      <li>Configured Omni-Channel routing to distribute cases to the right HR specialists based on case type, priority, and agent availability — reducing average resolution time</li>
+      <li>Built scalable solutions using Apex and LWC while supporting data management, automation, and user access controls for the HR user base</li>
+    </ul>
+    <div class="proj-tech">
+      <span class="tag sf">LWC</span><span class="tag sf">Experience Cloud</span><span class="tag sf">Omni-Channel</span><span class="tag sf">Apex</span><span class="tag sf">Case Management</span><span class="tag sf">Milestones</span>
+    </div>
+  </div>
+</div>
+
+<!-- SKILLS -->
+<div class="section" id="skills">
+  <h2><span class="pre">03</span>Skills</h2>
+  <div class="skills-grid">
+    <div class="skill-card"><div class="skill-cat">Languages</div><div class="skill-list"><span class="tag sf">Apex</span><span class="tag sf">JavaScript</span><span class="tag sf">HTML</span><span class="tag sf">CSS</span><span class="tag sf">SOQL</span><span class="tag sf">SOSL</span></div></div>
+    <div class="skill-card"><div class="skill-cat">Salesforce Platform</div><div class="skill-list"><span class="tag sf">LWC</span><span class="tag sf">Flows</span><span class="tag sf">Approval Process</span><span class="tag sf">Platform Events</span><span class="tag sf">Async Apex</span><span class="tag sf">Trigger Framework</span></div></div>
+    <div class="skill-card"><div class="skill-cat">AI & Agents</div><div class="skill-list"><span class="tag ai">Agentforce</span><span class="tag ai">Agent Script</span><span class="tag ai">Claude API</span><span class="tag ai">Named Credentials</span><span class="tag ai">Prompt Templates</span></div></div>
+    <div class="skill-card"><div class="skill-cat">Clouds & Products</div><div class="skill-list"><span class="tag sf">Sales Cloud</span><span class="tag sf">Service Cloud</span><span class="tag sf">Experience Cloud</span><span class="tag sf">NPSP</span><span class="tag sf">PMM</span></div></div>
+    <div class="skill-card"><div class="skill-cat">Integrations</div><div class="skill-list"><span class="tag sf">REST API</span><span class="tag sf">Composite API</span><span class="tag sf">Tooling API</span><span class="tag sf">Adobe Sign</span><span class="tag sf">MIP Integration</span><span class="tag sf">Postman</span></div></div>
+    <div class="skill-card"><div class="skill-cat">DevOps & Tools</div><div class="skill-list"><span class="tag sf">Gearset</span><span class="tag sf">VS Code</span><span class="tag sf">Salesforce CLI</span><span class="tag sf">Data Loader</span><span class="tag sf">SFDX</span></div></div>
+  </div>
 </div>
 
 <!-- GUIDES -->
-<section class="section" id="guides">
-  <div class="wrap">
-    <div class="section-label">Written guides</div>
-    <div class="section-title">Technical Writing</div>
-
-    <div class="guide-list">
-
-      <a href="agentforce-guide.html" class="guide-item">
-        <div>
-          <div class="guide-title">The Complete Agentforce Developer Guide</div>
-          <div class="guide-sub">Atlas Reasoning Engine · Agent Builder · Topics · Actions · Prompt Templates · Real-world project with full Apex code</div>
-        </div>
-        <span class="guide-tag active">Published</span>
-      </a>
-
-      <div class="guide-item" style="opacity:0.45; cursor: default;">
-        <div>
-          <div class="guide-title">LWC Patterns: File Uploads, Reactive Bindings & renderedCallback Fixes</div>
-          <div class="guide-sub">ContentVersion creation · native select binding · textarea pre-fill patterns</div>
-        </div>
-        <span class="guide-tag">Coming soon</span>
-      </div>
-
-      <div class="guide-item" style="opacity:0.45; cursor: default;">
-        <div>
-          <div class="guide-title">Experience Cloud File Visibility — The Complete Debug Guide</div>
-          <div class="guide-sub">ContentDocumentLink · portal users · without sharing pitfalls · real solutions</div>
-        </div>
-        <span class="guide-tag">Coming soon</span>
-      </div>
-
-      <div class="guide-item" style="opacity:0.45; cursor: default;">
-        <div>
-          <div class="guide-title">Salesforce AI Integrations: Named Credentials + Claude API in Apex</div>
-          <div class="guide-sub">End-to-end LWC tool · callout patterns · Tooling API deployments</div>
-        </div>
-        <span class="guide-tag">Coming soon</span>
-      </div>
-
-    </div>
+<div class="section" id="guides">
+  <h2><span class="pre">04</span>Developer Guides</h2>
+  <p>Technical guides written from real project experience — not theory. Every pattern here has been used in production.</p>
+  <div class="guides-grid">
+    <a href="agentforce-guide.html" class="guide-card">
+      <span class="guide-icon">🤖</span>
+      <div class="guide-title">Agentforce Complete Guide</div>
+      <div class="guide-desc">New Agentforce Studio UI, Agent Script, Subagents, WITH SYSTEM_MODE, real Loan Support Agent built and deployed in production. Covers every component from architecture to debugging.</div>
+      <span class="guide-tag">Published · Production Build ✓</span>
+    </a>
+    <a href="lwc-guide.html" class="guide-card">
+      <span class="guide-icon">⚡</span>
+      <div class="guide-title">LWC Developer Guide</div>
+      <div class="guide-desc">Lightning Web Components from basics to advanced. Wire adapters, reactive properties, lifecycle hooks, file handling, ContentVersion, renderedCallback patterns, and Spring 26 new features.</div>
+      <span class="guide-tag">Published</span>
+    </a>
+    <a href="apex-guide.html" class="guide-card">
+      <span class="guide-icon">🔷</span>
+      <div class="guide-title">Apex Developer Guide</div>
+      <div class="guide-desc">Synchronous vs asynchronous Apex, best practices, trigger framework, governor limits, SOQL optimization, Batch, Queueable, Scheduled Apex, Platform Events and more.</div>
+      <span class="guide-tag">Published</span>
+    </a>
+    <a href="integration-guide.html" class="guide-card">
+      <span class="guide-icon">🔗</span>
+      <div class="guide-title">Salesforce Integration Guide</div>
+      <div class="guide-desc">REST, SOAP, Composite API, Bulk API, Named Credentials, Connected Apps, External Services, Platform Events, outbound messaging and every integration pattern you need.</div>
+      <span class="guide-tag">Published</span>
+    </a>
   </div>
-</section>
+</div>
 
 <!-- CONNECT -->
-<section class="section" id="connect">
-  <div class="wrap">
-    <div class="section-label">Get in touch</div>
-    <div class="section-title">Let's Connect</div>
-
-    <div class="connect-grid">
-      <a href="https://www.salesforce.com/trailblazer/anuj14panwar" target="_blank" class="connect-card">
-        <div class="connect-icon">☁️</div>
-        <div class="connect-label">Trailblazer</div>
-        <div class="connect-sub">anuj14panwar</div>
-      </a>
-      <a href="https://linkedin.com" target="_blank" class="connect-card">
-        <div class="connect-icon">💼</div>
-        <div class="connect-label">LinkedIn</div>
-        <div class="connect-sub">Find me on LinkedIn</div>
-      </a>
-      <a href="https://github.com" target="_blank" class="connect-card">
-        <div class="connect-icon">🐙</div>
-        <div class="connect-label">GitHub</div>
-        <div class="connect-sub">anuj14panwar</div>
-      </a>
-    </div>
-
+<div class="section" id="connect">
+  <h2><span class="pre">05</span>Connect</h2>
+  <div class="connect-grid">
+    <a href="https://www.salesforce.com/trailblazer/anuj14panwar" target="_blank" class="connect-card"><div class="connect-icon">☁️</div><div class="connect-label">Trailblazer</div><div class="connect-sub">anuj14panwar</div></a>
+    <a href="mailto:anujpanwar445@gmail.com" class="connect-card"><div class="connect-icon">✉️</div><div class="connect-label">Email</div><div class="connect-sub">anujpanwar445@gmail.com</div></a>
+    <a href="tel:+917060384878" class="connect-card"><div class="connect-icon">📱</div><div class="connect-label">Phone</div><div class="connect-sub">+91 7060384878</div></a>
+    <a href="https://github.com/anuj14panwar" target="_blank" class="connect-card"><div class="connect-icon">🐙</div><div class="connect-label">GitHub</div><div class="connect-sub">anuj14panwar</div></a>
   </div>
-</section>
+</div>
+</div>
 
-<!-- FOOTER -->
-<footer>
-  <div class="footer-inner">
-    <div>
-      <div class="footer-name">Anuj Panwar</div>
-      <div class="footer-sub">Salesforce Technical Specialist · iLink Digital Systems · Noida, India</div>
-    </div>
-    <div class="footer-right">
-      Built with HTML · Hosted on GitHub Pages<br>
-      © 2026
-    </div>
-  </div>
-</footer>
-
-</body>
-</html>
+<footer><div class="footer-inner">
+  <div><div class="footer-brand">Anuj Panwar</div><div class="footer-sub">Technical Specialist · iLink Digital Systems · Noida, India</div></div>
+  <div class="footer-right">Built with HTML · Hosted on GitHub Pages<br>© 2026</div>
+</div></footer>
+</body></html>
