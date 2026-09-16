@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Salesforce Integration Guide — Anuj Panwar</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--base:#050A14;--surface:#0D1B2E;--card:#112240;--card2:#162B50;--border:#1E3A5F;--border2:#2D5480;--sf:#00A1E0;--sf-dim:rgba(0,161,224,0.08);--body:#C8DCF0;--muted:#6B8CAE;--dim:#3A5872;--white:#F0F8FF;--green:#29D398;--amber:#F5A623;--red:#E05C5C;--purple:#9B7FE8;--mono:'DM Mono',monospace;--sans:'Inter',sans-serif;--nav-w:220px}
+html{scroll-behavior:smooth;font-size:15px}body{font-family:var(--sans);background:var(--base);color:var(--body);line-height:1.75;-webkit-font-smoothing:antialiased}
+.layout{display:flex;min-height:100vh}
+.sidebar{width:var(--nav-w);flex-shrink:0;position:sticky;top:0;height:100vh;overflow-y:auto;background:var(--surface);border-right:1px solid var(--border);padding:24px 0;scrollbar-width:thin}
+.nav-brand{font-family:var(--mono);font-size:11px;color:var(--sf);padding:0 18px 20px;border-bottom:1px solid var(--border);margin-bottom:14px;line-height:1.4}
+.nav-section{font-family:var(--mono);font-size:9px;color:var(--dim);padding:10px 18px 4px;letter-spacing:1px}
+.nav-link{display:block;padding:5px 18px;font-size:12px;color:var(--muted);text-decoration:none;transition:color .15s,background .15s;border-left:2px solid transparent}
+.nav-link:hover{color:var(--white);background:var(--sf-dim)}.nav-link.active{color:var(--sf);border-left-color:var(--sf);background:var(--sf-dim)}
+.nav-link.sub{padding-left:28px;font-size:11.5px}
+.topbar{position:sticky;top:0;z-index:50;background:rgba(5,10,20,0.92);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);padding:0 32px;display:flex;align-items:center;justify-content:space-between;height:50px}
+.topbar-logo{font-family:var(--mono);font-size:13px;color:var(--white);text-decoration:none}.topbar-logo span{color:var(--sf)}
+.topbar-links{display:flex;gap:20px;list-style:none}.topbar-links a{color:var(--muted);text-decoration:none;font-size:12.5px;transition:color .15s}.topbar-links a:hover{color:var(--white)}
+.main{flex:1;min-width:0}.content{max-width:860px;margin:0 auto;padding:0 36px 100px}
+.hero{padding:56px 36px 48px;max-width:860px;margin:0 auto;border-bottom:1px solid var(--border)}
+.eyebrow{font-family:var(--mono);font-size:11px;color:var(--sf);margin-bottom:16px;display:flex;align-items:center;gap:10px}.eyebrow::before{content:'';display:inline-block;width:28px;height:1px;background:var(--sf)}
+h1{font-family:var(--mono);font-size:clamp(24px,3.5vw,38px);font-weight:400;color:var(--white);letter-spacing:-0.5px;margin-bottom:14px;line-height:1.15}h1 em{font-style:normal;color:var(--sf)}
+.hero-desc{font-size:15px;color:var(--body);max-width:560px;margin-bottom:24px}
+.hero-tags{display:flex;gap:7px;flex-wrap:wrap}
+.htag{font-family:var(--mono);font-size:10px;padding:3px 10px;border:1px solid var(--border2);border-radius:3px;color:var(--muted)}
+.section{margin:52px 0}.anchor{display:block;position:relative;top:-72px;visibility:hidden}
+h2{font-family:var(--mono);font-size:20px;font-weight:500;color:var(--white);margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--border);letter-spacing:-0.3px}
+h2 .pre{color:var(--sf);margin-right:8px;font-weight:300}
+h3{font-family:var(--mono);font-size:14px;font-weight:500;color:var(--white);margin:24px 0 8px}h3 .pre{color:var(--muted);margin-right:6px;font-weight:300}
+p{color:var(--body);margin-bottom:12px;max-width:70ch}strong{color:var(--white);font-weight:500}
+.callout{border-left:2px solid var(--sf);background:var(--sf-dim);padding:12px 16px;border-radius:0 4px 4px 0;margin:16px 0;font-size:13px}
+.callout.green{border-color:var(--green);background:rgba(41,211,152,0.06)}.callout.amber{border-color:var(--amber);background:rgba(245,166,35,0.06)}
+.callout-label{font-family:var(--mono);font-size:9px;font-weight:500;letter-spacing:1px;margin-bottom:5px;color:var(--sf)}.callout.green .callout-label{color:var(--green)}.callout p{margin:0;max-width:none}
+.code-wrap{background:#020810;border:1px solid var(--border);border-radius:5px;overflow:hidden;margin:14px 0}
+.code-bar{display:flex;align-items:center;justify-content:space-between;padding:7px 14px;background:rgba(255,255,255,0.03);border-bottom:1px solid var(--border)}
+.code-lang{font-family:var(--mono);font-size:9px;font-weight:500;color:var(--sf);letter-spacing:1px}.code-file{font-family:var(--mono);font-size:9px;color:var(--dim)}
+pre{padding:18px;overflow-x:auto}code{font-family:var(--mono);font-size:12px;line-height:1.8;color:#CBD8E8}
+code.inline{background:rgba(0,161,224,0.1);color:var(--sf);padding:1px 6px;border-radius:3px;font-size:11.5px;border:1px solid rgba(0,161,224,0.2)}
+.kw{color:#C792EA}.str{color:#C3E88D}.cm{color:#445566;font-style:italic}.ann{color:#29D398}.cls{color:#FFCB6B}.mth{color:#82AAFF}.num{color:#F78C6C}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:12.5px}
+th{background:var(--card2);padding:9px 12px;text-align:left;font-family:var(--mono);font-size:9px;font-weight:500;color:var(--muted);letter-spacing:0.8px;border-bottom:1px solid var(--border2)}
+td{padding:9px 12px;border-bottom:1px solid rgba(30,58,95,0.5);color:var(--muted);vertical-align:top}
+td:first-child{color:var(--white);font-weight:500;font-family:var(--mono);font-size:11.5px}
+tr:last-child td{border-bottom:none}tr:hover td{background:var(--sf-dim)}
+.arch{background:#020810;border:1px solid var(--border);border-radius:5px;padding:20px;margin:14px 0;font-family:var(--mono)}
+.arch-row{display:flex;align-items:center;gap:12px;padding:9px 12px;border-radius:4px;margin:4px 0;font-size:11.5px}
+.arch-row.blue{background:rgba(0,161,224,0.08);border:1px solid rgba(0,161,224,0.2)}.arch-row.green{background:rgba(41,211,152,0.06);border:1px solid rgba(41,211,152,0.15)}
+.arch-row.amber{background:rgba(245,166,35,0.06);border:1px solid rgba(245,166,35,0.15)}.arch-row.dim{background:rgba(255,255,255,0.02);border:1px solid var(--border)}
+.arch-label{font-weight:500;color:var(--white);min-width:160px;font-size:11px}.arch-detail{color:var(--muted);font-size:11px}
+.arch-arrow{text-align:center;color:var(--dim);font-size:11px;padding:2px 0}
+footer{border-top:1px solid var(--border);padding:28px 36px;margin-top:80px}
+.footer-inner{max-width:860px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+.footer-brand{font-family:var(--mono);font-size:12px;color:var(--white)}.footer-sub{font-size:11px;color:var(--dim);margin-top:2px}
+.footer-right{font-family:var(--mono);font-size:10px;color:var(--dim);text-align:right}
+@media(max-width:768px){.sidebar{display:none}.content,.hero{padding-left:20px;padding-right:20px}.topbar{padding:0 20px}}
+</style></head>
+<body>
+<div class="layout">
+<nav class="sidebar">
+  <div class="nav-brand">integration<br>guide<br>2026</div>
+  <div class="nav-section">Integration Types</div>
+  <a class="nav-link active" href="#overview">Overview</a>
+  <a class="nav-link" href="#rest">REST API Callouts</a>
+  <a class="nav-link" href="#soap">SOAP Web Services</a>
+  <a class="nav-link" href="#composite">Composite API</a>
+  <a class="nav-link" href="#bulk">Bulk API</a>
+  <a class="nav-link" href="#platform">Platform Events</a>
+  <div class="nav-section">Auth & Security</div>
+  <a class="nav-link" href="#namedcred">Named Credentials</a>
+  <a class="nav-link" href="#connectedapp">Connected Apps</a>
+  <a class="nav-link" href="#oauth">OAuth 2.0 Flows</a>
+  <div class="nav-section">Advanced</div>
+  <a class="nav-link" href="#external">External Services</a>
+  <a class="nav-link" href="#outbound">Outbound Messaging</a>
+  <a class="nav-link" href="#patterns">Integration Patterns</a>
+  <a class="nav-link" href="#fapo">FAPO Real Example</a>
+</nav>
+<div class="main">
+<div class="topbar">
+  <a href="index.html" class="topbar-logo">Anuj<span>.</span>dev</a>
+  <ul class="topbar-links">
+    <li><a href="index.html">Portfolio</a></li>
+    <li><a href="guides.html">Guides</a></li>
+    <li><a href="lwc-guide.html">LWC</a></li>
+    <li><a href="apex-guide.html">Apex</a></li>
+  </ul>
+</div>
+<div class="hero">
+  <div class="eyebrow">Developer Guide · Integrations</div>
+  <h1>Salesforce integrations —<br>every type, every <em>pattern</em></h1>
+  <p class="hero-desc">REST callouts, Composite API, Bulk API, Named Credentials, Connected Apps, OAuth 2.0, Platform Events, External Services, and outbound messaging. Includes real MIP financial system integration patterns from production.</p>
+  <div class="hero-tags">
+    <span class="htag">REST API</span><span class="htag">Composite API</span><span class="htag">Named Credentials</span>
+    <span class="htag">Connected Apps</span><span class="htag">OAuth 2.0</span><span class="htag">Platform Events</span><span class="htag">Bulk API</span>
+  </div>
+</div>
+<div class="content">
+
+<div class="section"><span class="anchor" id="overview"></span>
+<h2><span class="pre">01</span>Integration Types Overview</h2>
+<p>Salesforce integrations fall into two directions — Salesforce calling out to external systems, and external systems calling into Salesforce. Both have multiple approaches depending on data volume, latency requirements, and auth needs.</p>
+<table>
+  <tr><th>Type</th><th>Direction</th><th>Protocol</th><th>Best For</th></tr>
+  <tr><td>REST Callout</td><td>Salesforce → External</td><td>HTTP/JSON</td><td>Real-time single record operations, Claude API, modern APIs</td></tr>
+  <tr><td>SOAP Callout</td><td>Salesforce → External</td><td>HTTP/XML</td><td>Legacy enterprise systems — SAP, Oracle, older financial systems</td></tr>
+  <tr><td>Composite API</td><td>Salesforce → Salesforce</td><td>HTTP/JSON</td><td>Creating multiple related records in one HTTP request</td></tr>
+  <tr><td>Bulk API</td><td>Salesforce ↔ External</td><td>HTTP/CSV or JSON</td><td>Loading or extracting millions of records</td></tr>
+  <tr><td>Platform Events</td><td>Any → Any</td><td>Streaming/CometD</td><td>Real-time event-driven integration, decoupled systems</td></tr>
+  <tr><td>Outbound Messaging</td><td>Salesforce → External</td><td>SOAP</td><td>Workflow-triggered notifications to external systems</td></tr>
+  <tr><td>External Services</td><td>Salesforce → External</td><td>OpenAPI/Swagger</td><td>No-code REST integration via Flow</td></tr>
+  <tr><td>Change Data Capture</td><td>Salesforce → External</td><td>Streaming</td><td>Near-real-time record change notifications to external consumers</td></tr>
+</table>
+</div>
+
+<div class="section"><span class="anchor" id="rest"></span>
+<h2><span class="pre">02</span>REST API Callouts from Apex</h2>
+<p>The most common integration pattern — calling an external REST API from Apex. Used in the FAPO project to sync with MIP and in the AI Developer Toolkit to call the Claude API.</p>
+<div class="code-wrap">
+  <div class="code-bar"><span class="code-lang">Apex</span><span class="code-file">Full REST callout pattern</span></div>
+  <pre><code><span class="kw">public class</span> <span class="cls">MIPIntegrationService</span> {
+
+    <span class="kw">public static</span> <span class="cls">MIPResponse</span> <span class="mth">getLoanAccount</span>(<span class="cls">String</span> accountCode) {
+        <span class="cls">Http</span> http = <span class="kw">new</span> <span class="cls">Http</span>();
+        <span class="cls">HttpRequest</span> req = <span class="kw">new</span> <span class="cls">HttpRequest</span>();
+
+        <span class="cm">// Named Credential handles auth — no hardcoded credentials</span>
+        req.<span class="mth">setEndpoint</span>(<span class="str">'callout:MIP_API/accounts/'</span> + accountCode);
+        req.<span class="mth">setMethod</span>(<span class="str">'GET'</span>);
+        req.<span class="mth">setHeader</span>(<span class="str">'Content-Type'</span>, <span class="str">'application/json'</span>);
+        req.<span class="mth">setHeader</span>(<span class="str">'Accept'</span>, <span class="str">'application/json'</span>);
+        req.<span class="mth">setTimeout</span>(<span class="num">30000</span>); <span class="cm">// 30 seconds max timeout</span>
+
+        <span class="cls">HttpResponse</span> res;
+        <span class="kw">try</span> {
+            res = http.<span class="mth">send</span>(req);
+        } <span class="kw">catch</span> (<span class="cls">System.CalloutException</span> e) {
+            <span class="kw">throw new</span> <span class="cls">AuraHandledException</span>(<span class="str">'Callout failed: '</span> + e.<span class="mth">getMessage</span>());
+        }
+
+        <span class="kw">if</span> (res.<span class="mth">getStatusCode</span>() == <span class="num">200</span>) {
+            <span class="cm">// Deserialise JSON response to typed class</span>
+            <span class="kw">return</span> (<span class="cls">MIPResponse</span>) <span class="cls">JSON</span>.<span class="mth">deserialize</span>(
+                res.<span class="mth">getBody</span>(), <span class="cls">MIPResponse</span>.<span class="kw">class</span>
+            );
+        } <span class="kw">else</span> {
+            <span class="kw">throw new</span> <span class="cls">AuraHandledException</span>(
+                <span class="str">'MIP API error: '</span> + res.<span class="mth">getStatusCode</span>() + <span class="str">' '</span> + res.<span class="mth">getBody</span>()
+            );
+        }
+    }
+
+    <span class="kw">public static</span> <span class="cls">String</span> <span class="mth">createInvoice</span>(<span class="cls">MIPInvoiceRequest</span> payload) {
+        <span class="cls">Http</span> http = <span class="kw">new</span> <span class="cls">Http</span>();
+        <span class="cls">HttpRequest</span> req = <span class="kw">new</span> <span class="cls">HttpRequest</span>();
+        req.<span class="mth">setEndpoint</span>(<span class="str">'callout:MIP_API/invoices'</span>);
+        req.<span class="mth">setMethod</span>(<span class="str">'POST'</span>);
+        req.<span class="mth">setHeader</span>(<span class="str">'Content-Type'</span>, <span class="str">'application/json'</span>);
+        req.<span class="mth">setBody</span>(<span class="cls">JSON</span>.<span class="mth">serialize</span>(payload)); <span class="cm">// serialize Apex object to JSON</span>
+        req.<span class="mth">setTimeout</span>(<span class="num">30000</span>);
+
+        <span class="cls">HttpResponse</span> res = http.<span class="mth">send</span>(req);
+        <span class="kw">if</span> (res.<span class="mth">getStatusCode</span>() != <span class="num">201</span>) {
+            <span class="kw">throw new</span> <span class="cls">AuraHandledException</span>(<span class="str">'Failed to create invoice'</span>);
+        }
+        <span class="cls">Map</span>&lt;<span class="cls">String</span>, <span class="cls">Object</span>&gt; responseMap =
+            (<span class="cls">Map</span>&lt;<span class="cls">String</span>, <span class="cls">Object</span>&gt;) <span class="cls">JSON</span>.<span class="mth">deserializeUntyped</span>(res.<span class="mth">getBody</span>());
+        <span class="kw">return</span> (<span class="cls">String</span>) responseMap.<span class="mth">get</span>(<span class="str">'invoiceId'</span>);
+    }
+
+    <span class="cm">// Typed response class — maps JSON fields to Apex properties</span>
+    <span class="kw">public class</span> <span class="cls">MIPResponse</span> {
+        <span class="kw">public</span> <span class="cls">String</span>  accountCode;
+        <span class="kw">public</span> <span class="cls">String</span>  accountName;
+        <span class="kw">public</span> <span class="cls">Decimal</span> balance;
+        <span class="kw">public</span> <span class="cls">String</span>  status;
+    }
+}</code></pre>
+</div>
+
+<div class="callout amber">
+  <div class="callout-label">Callouts cannot be made after DML in the same transaction</div>
+  <p>If you insert/update a record and then try to make an HTTP callout in the same synchronous transaction, Salesforce throws: "You have uncommitted work pending". Solutions: use @future(callout=true), Queueable implementing Database.AllowsCallouts, or restructure to do the callout before the DML.</p>
+</div>
+
+<h3><span class="pre">//</span>Mock Callouts in Tests</h3>
+<div class="code-wrap">
+  <div class="code-bar"><span class="code-lang">Apex</span><span class="code-file">HttpCalloutMock implementation</span></div>
+  <pre><code><span class="ann">@IsTest</span>
+<span class="kw">global class</span> <span class="cls">MIPMockResponse</span> <span class="kw">implements</span> <span class="cls">HttpCalloutMock</span> {
+    <span class="kw">global</span> <span class="cls">HttpResponse</span> <span class="mth">respond</span>(<span class="cls">HttpRequest</span> req) {
+        <span class="cls">HttpResponse</span> res = <span class="kw">new</span> <span class="cls">HttpResponse</span>();
+        res.<span class="mth">setStatusCode</span>(<span class="num">200</span>);
+        res.<span class="mth">setHeader</span>(<span class="str">'Content-Type'</span>, <span class="str">'application/json'</span>);
+        res.<span class="mth">setBody</span>(<span class="str">'{"accountCode":"ACC-001","balance":50000,"status":"Active"}'</span>);
+        <span class="kw">return</span> res;
+    }
+}
+<span class="cm">// In test: Test.setMock(HttpCalloutMock.class, new MIPMockResponse());</span></code></pre>
+</div>
+</div>
+
+<div class="section"><span class="anchor" id="composite"></span>
+<h2><span class="pre">03</span>Composite API</h2>
+<p>The Composite API lets you execute multiple Salesforce API requests in a single HTTP call. Critical for the FAPO project where creating a Pledge Batch required simultaneously creating the batch record, its child items, and a related payment record.</p>
+<table>
+  <tr><th>Composite Feature</th><th>What It Does</th><th>Max Records</th></tr>
+  <tr><td>Composite (subrequests)</td><td>Up to 25 requests in one call with response chaining using reference IDs</td><td>25 subrequests</td></tr>
+  <tr><td>Composite Batch</td><td>Execute independent requests in parallel — no chaining</td><td>25 subrequests</td></tr>
+  <tr><td>SObject Collections</td><td>CRUD on multiple records of the same or different types in one call</td><td>200 records</td></tr>
+  <tr><td>SObject Tree</td><td>Create parent and child records in a single request using nested structure</td><td>5 levels deep, 200 records</td></tr>
+</table>
+<div class="code-wrap">
+  <div class="code-bar"><span class="code-lang">Apex</span><span class="code-file">Composite API — create parent and child in one call</span></div>
+  <pre><code><span class="kw">public class</span> <span class="cls">CompositeAPIService</span> {
+
+    <span class="kw">public static void</span> <span class="mth">createPledgeBatchWithItems</span>(
+            <span class="cls">String</span> batchName, <span class="cls">List</span>&lt;<span class="cls">Map</span>&lt;<span class="cls">String</span>,<span class="cls">Object</span>&gt;&gt; items) {
+
+        <span class="cm">// Build composite request body</span>
+        <span class="cls">List</span>&lt;<span class="cls">Map</span>&lt;<span class="cls">String</span>, <span class="cls">Object</span>&gt;&gt; subrequests = <span class="kw">new</span> <span class="cls">List</span>&lt;<span class="cls">Map</span>&lt;<span class="cls">String</span>, <span class="cls">Object</span>&gt;&gt;();
+
+        <span class="cm">// Subrequest 1 — create the parent Pledge Batch</span>
+        subrequests.<span class="mth">add</span>(<span class="kw">new</span> <span class="cls">Map</span>&lt;<span class="cls">String</span>, <span class="cls">Object</span>&gt;{
+            <span class="str">'method'</span>      => <span class="str">'POST'</span>,
+            <span class="str">'url'</span>         => <span class="str">'/services/data/v63.0/sobjects/TFA_Pledge_Batch__c'</span>,
+            <span class="str">'referenceId'</span> => <span class="str">'newBatch'</span>, <span class="cm">// Reference ID for chaining</span>
+            <span class="str">'body'</span>        => <span class="kw">new</span> <span class="cls">Map</span>&lt;<span class="cls">String</span>, <span class="cls">Object</span>&gt;{
+                <span class="str">'Name'</span>   => batchName,
+                <span class="str">'Status__c'</span> => <span class="str">'Draft'</span>
+            }
+        });
+
+        <span class="cm">// Subrequest 2 — create child item using @{newBatch.id} reference</span>
+        subrequests.<span class="mth">add</span>(<span class="kw">new</span> <span class="cls">Map</span>&lt;<span class="cls">String</span>, <span class="cls">Object</span>&gt;{
+            <span class="str">'method'</span>      => <span class="str">'POST'</span>,
+            <span class="str">'url'</span>         => <span class="str">'/services/data/v63.0/sobjects/Pledge_Batch_Item__c'</span>,
+            <span class="str">'referenceId'</span> => <span class="str">'newItem'</span>,
+            <span class="str">'body'</span>        => <span class="kw">new</span> <span class="cls">Map</span>&lt;<span class="cls">String</span>, <span class="cls">Object</span>&gt;{
+                <span class="str">'Batch__c'</span>   => <span class="str">'@{newBatch.id}'</span>, <span class="cm">// Uses response from subrequest 1</span>
+                <span class="str">'Amount__c'</span>  => <span class="num">5000</span>
+            }
+        });
+
+        <span class="cls">Map</span>&lt;<span class="cls">String</span>, <span class="cls">Object</span>&gt; payload = <span class="kw">new</span> <span class="cls">Map</span>&lt;<span class="cls">String</span>, <span class="cls">Object</span>&gt;{
+            <span class="str">'allOrNone'</span>    => <span class="kw">true</span>, <span class="cm">// Roll back all if any fail</span>
+            <span class="str">'compositeRequest'</span> => subrequests
+        };
+
+        <span class="cls">Http</span> http = <span class="kw">new</span> <span class="cls">Http</span>();
+        <span class="cls">HttpRequest</span> req = <span class="kw">new</span> <span class="cls">HttpRequest</span>();
+        req.<span class="mth">setEndpoint</span>(<span class="cls">URL</span>.<span class="mth">getOrgDomainUrl</span>().<span class="mth">toExternalForm</span>()
+                       + <span class="str">'/services/data/v63.0/composite'</span>);
+        req.<span class="mth">setMethod</span>(<span class="str">'POST'</span>);
+        req.<span class="mth">setHeader</span>(<span class="str">'Content-Type'</span>, <span class="str">'application/json'</span>);
+        req.<span class="mth">setHeader</span>(<span class="str">'Authorization'</span>, <span class="str">'Bearer '</span> + <span class="cls">UserInfo</span>.<span class="mth">getSessionId</span>());
+        req.<span class="mth">setBody</span>(<span class="cls">JSON</span>.<span class="mth">serialize</span>(payload));
+        <span class="cls">HttpResponse</span> res = http.<span class="mth">send</span>(req);
+    }
+}</code></pre>
+</div>
+<div class="callout green">
+  <div class="callout-label">allOrNone = true</div>
+  <p>When allOrNone is true, if any subrequest fails the entire composite operation rolls back — like a transaction. Set to false to allow partial success where successful subrequests are committed even if others fail.</p>
+</div>
+</div>
+
+<div class="section"><span class="anchor" id="namedcred"></span>
+<h2><span class="pre">04</span>Named Credentials</h2>
+<p>Named Credentials store endpoint URLs and authentication details securely in Salesforce Setup. They eliminate hardcoded credentials and API keys from Apex code. All Claude API integrations in the AI Developer Toolkit use this pattern.</p>
+<div class="arch">
+  <div class="arch-row dim"><span class="arch-label">Apex Code</span><span class="arch-detail">req.setEndpoint('callout:MIP_API/accounts') — no URL, no credentials in code</span></div>
+  <div class="arch-arrow">↓</div>
+  <div class="arch-row blue"><span class="arch-label">Named Credential</span><span class="arch-detail">Stores: URL, Auth Protocol (OAuth/Basic/JWT), certificates</span></div>
+  <div class="arch-arrow">↓</div>
+  <div class="arch-row green"><span class="arch-label">External System</span><span class="arch-detail">Receives: authenticated request with correct headers — Apex never sees the credentials</span></div>
+</div>
+
+<h3><span class="pre">//</span>Create a Named Credential — Step by Step</h3>
+<p><strong>Setup → Named Credentials → New Legacy / New (External Credential)</strong></p>
+<p>From Summer 22 onwards Salesforce uses a two-object model: External Credential (stores the auth config) and Named Credential (the endpoint that references the External Credential).</p>
+<table>
+  <tr><th>Field</th><th>Example Value</th><th>Notes</th></tr>
+  <tr><td>Label</td><td>Claude API</td><td>Display name</td></tr>
+  <tr><td>Name</td><td>Anthropic_API</td><td>Used in Apex: callout:Anthropic_API</td></tr>
+  <tr><td>URL</td><td>https://api.anthropic.com</td><td>Base URL — path appended in Apex</td></tr>
+  <tr><td>Authentication Protocol</td><td>Custom Headers</td><td>For API key auth — use Named Principal</td></tr>
+  <tr><td>Generate Authorization Header</td><td>Unchecked for custom header auth</td><td>Check for OAuth flows</td></tr>
+</table>
+<div class="code-wrap">
+  <div class="code-bar"><span class="code-lang">Apex</span><span class="code-file">Using Named Credential — Claude API callout</span></div>
+  <pre><code><span class="kw">public class</span> <span class="cls">ClaudeAPIService</span> {
+
+    <span class="kw">public static</span> <span class="cls">String</span> <span class="mth">analyseCode</span>(<span class="cls">String</span> apexCode) {
+        <span class="cls">Http</span> http = <span class="kw">new</span> <span class="cls">Http</span>();
+        <span class="cls">HttpRequest</span> req = <span class="kw">new</span> <span class="cls">HttpRequest</span>();
+
+        <span class="cm">// Named Credential handles the base URL and API key header</span>
+        req.<span class="mth">setEndpoint</span>(<span class="str">'callout:Anthropic_API/v1/messages'</span>);
+        req.<span class="mth">setMethod</span>(<span class="str">'POST'</span>);
+        req.<span class="mth">setHeader</span>(<span class="str">'Content-Type'</span>, <span class="str">'application/json'</span>);
+        req.<span class="mth">setHeader</span>(<span class="str">'anthropic-version'</span>, <span class="str">'2023-06-01'</span>);
+        req.<span class="mth">setTimeout</span>(<span class="num">60000</span>);
+
+        <span class="cls">Map</span>&lt;<span class="cls">String</span>, <span class="cls">Object</span>&gt; body = <span class="kw">new</span> <span class="cls">Map</span>&lt;<span class="cls">String</span>, <span class="cls">Object</span>&gt;{
+            <span class="str">'model'</span>      => <span class="str">'claude-sonnet-4-6'</span>,
+            <span class="str">'max_tokens'</span> => <span class="num">2000</span>,
+            <span class="str">'messages'</span>   => <span class="kw">new</span> <span class="cls">List</span>&lt;<span class="cls">Object</span>&gt;{
+                <span class="kw">new</span> <span class="cls">Map</span>&lt;<span class="cls">String</span>, <span class="cls">Object</span>&gt;{
+                    <span class="str">'role'</span>    => <span class="str">'user'</span>,
+                    <span class="str">'content'</span> => <span class="str">'Review this Apex class for issues: '</span> + apexCode
+                }
+            }
+        };
+        req.<span class="mth">setBody</span>(<span class="cls">JSON</span>.<span class="mth">serialize</span>(body));
+
+        <span class="cls">HttpResponse</span> res = http.<span class="mth">send</span>(req);
+        <span class="cls">Map</span>&lt;<span class="cls">String</span>, <span class="cls">Object</span>&gt; respMap =
+            (<span class="cls">Map</span>&lt;<span class="cls">String</span>, <span class="cls">Object</span>&gt;) <span class="cls">JSON</span>.<span class="mth">deserializeUntyped</span>(res.<span class="mth">getBody</span>());
+        <span class="cls">List</span>&lt;<span class="cls">Object</span>&gt; content = (<span class="cls">List</span>&lt;<span class="cls">Object</span>&gt;) respMap.<span class="mth">get</span>(<span class="str">'content'</span>);
+        <span class="cls">Map</span>&lt;<span class="cls">String</span>, <span class="cls">Object</span>&gt; firstBlock =
+            (<span class="cls">Map</span>&lt;<span class="cls">String</span>, <span class="cls">Object</span>&gt;) content[<span class="num">0</span>];
+        <span class="kw">return</span> (<span class="cls">String</span>) firstBlock.<span class="mth">get</span>(<span class="str">'text'</span>);
+    }
+}</code></pre>
+</div>
+</div>
+
+<div class="section"><span class="anchor" id="connectedapp"></span>
+<h2><span class="pre">05</span>Connected Apps</h2>
+<p>A Connected App is a framework that enables an external application to integrate with Salesforce using OAuth 2.0. It defines the OAuth client ID and secret, the allowed OAuth flows, and the permission scope.</p>
+<table>
+  <tr><th>Setting</th><th>Value / Options</th><th>Notes</th></tr>
+  <tr><td>App Name</td><td>MIP Integration App</td><td>Display name</td></tr>
+  <tr><td>Contact Email</td><td>developer email</td><td>Required</td></tr>
+  <tr><td>OAuth Scopes</td><td>api, refresh_token, offline_access</td><td>api = access to Salesforce data. Add only what you need.</td></tr>
+  <tr><td>Callback URL</td><td>https://yourdomain.com/oauth/callback</td><td>Where Salesforce redirects after auth. Use https://login.salesforce.com/services/oauth2/success for testing</td></tr>
+  <tr><td>Client Credentials Flow</td><td>Enabled for server-to-server</td><td>No user interaction — external system authenticates as itself</td></tr>
+</table>
+
+<div class="callout">
+  <div class="callout-label">Consumer Key and Secret</div>
+  <p>After saving a Connected App, Salesforce generates a Consumer Key (client_id) and Consumer Secret (client_secret). These are used by the external system to obtain access tokens. Store them securely — never commit to source control. Use Named Credentials or environment secrets.</p>
+</div>
+</div>
+
+<div class="section"><span class="anchor" id="oauth"></span>
+<h2><span class="pre">06</span>OAuth 2.0 Flows</h2>
+<table>
+  <tr><th>Flow</th><th>How It Works</th><th>Use When</th></tr>
+  <tr><td>Web Server Flow (Authorization Code)</td><td>User logs in → Salesforce redirects to callback with code → exchange code for token</td><td>Web applications where a user authenticates — Experience Cloud, external portals</td></tr>
+  <tr><td>User-Agent Flow</td><td>Token returned directly to client in URL fragment — no server involved</td><td>Single-page apps, mobile apps — token exposed in browser, less secure</td></tr>
+  <tr><td>Username-Password Flow</td><td>Send username + password + security token directly to get access token</td><td>Legacy integrations and testing only — Salesforce is deprecating this flow</td></tr>
+  <tr><td>Client Credentials Flow</td><td>Send client_id + client_secret to get token — no user involved</td><td>Server-to-server integrations, MIP, background jobs, microservices</td></tr>
+  <tr><td>JWT Bearer Flow</td><td>Sign a JWT with private key → exchange for access token</td><td>Automated integrations, CI/CD pipelines, Salesforce CLI auth</td></tr>
+  <tr><td>Refresh Token Flow</td><td>Use refresh_token to get a new access_token without re-authenticating</td><td>Long-running integrations where the access token expires</td></tr>
+</table>
+
+<h3><span class="pre">//</span>Client Credentials Flow — Code Pattern</h3>
+<div class="code-wrap">
+  <div class="code-bar"><span class="code-lang">Apex</span><span class="code-file">Get access token via Client Credentials</span></div>
+  <pre><code><span class="kw">public class</span> <span class="cls">OAuthService</span> {
+    <span class="kw">public static</span> <span class="cls">String</span> <span class="mth">getAccessToken</span>() {
+        <span class="cls">Http</span> http = <span class="kw">new</span> <span class="cls">Http</span>();
+        <span class="cls">HttpRequest</span> req = <span class="kw">new</span> <span class="cls">HttpRequest</span>();
+        req.<span class="mth">setEndpoint</span>(<span class="str">'callout:MIP_Auth/oauth/token'</span>);
+        req.<span class="mth">setMethod</span>(<span class="str">'POST'</span>);
+        req.<span class="mth">setHeader</span>(<span class="str">'Content-Type'</span>, <span class="str">'application/x-www-form-urlencoded'</span>);
+        req.<span class="mth">setBody</span>(
+            <span class="str">'grant_type=client_credentials'</span>
+            + <span class="str">'&client_id=YOUR_CLIENT_ID'</span>   <span class="cm">// from Connected App</span>
+            + <span class="str">'&client_secret=YOUR_SECRET'</span>    <span class="cm">// store in Custom Setting, not here</span>
+            + <span class="str">'&scope=api'</span>
+        );
+        <span class="cls">HttpResponse</span> res = http.<span class="mth">send</span>(req);
+        <span class="cls">Map</span>&lt;<span class="cls">String</span>,<span class="cls">Object</span>&gt; tokenResp =
+            (<span class="cls">Map</span>&lt;<span class="cls">String</span>,<span class="cls">Object</span>&gt;) <span class="cls">JSON</span>.<span class="mth">deserializeUntyped</span>(res.<span class="mth">getBody</span>());
+        <span class="kw">return</span> (<span class="cls">String</span>) tokenResp.<span class="mth">get</span>(<span class="str">'access_token'</span>);
+    }
+}</code></pre>
+</div>
+</div>
+
+<div class="section"><span class="anchor" id="bulk"></span>
+<h2><span class="pre">07</span>Bulk API</h2>
+<p>The Bulk API processes large volumes of records asynchronously — up to 100 million records per 24 hours. Used in the BGCA project for large-scale fundraising data operations. Also the technology behind Data Loader.</p>
+<table>
+  <tr><th>Feature</th><th>Bulk API 1.0</th><th>Bulk API 2.0</th></tr>
+  <tr><td>Data format</td><td>CSV or XML</td><td>CSV only</td></tr>
+  <tr><td>Job creation</td><td>Multiple steps</td><td>Single endpoint</td></tr>
+  <tr><td>Record limit per batch</td><td>10,000</td><td>No batch concept — single job</td></tr>
+  <tr><td>PK chunking</td><td>✅ Supported</td><td>✅ Supported for queries</td></tr>
+  <tr><td>Recommended for</td><td>Legacy integrations</td><td>New integrations</td></tr>
+</table>
+<p>In practice, most Salesforce developers use Data Loader for bulk operations rather than writing raw Bulk API code. For programmatic bulk operations from external systems, Bulk API 2.0 is the modern approach.</p>
+</div>
+
+<div class="section"><span class="anchor" id="patterns"></span>
+<h2><span class="pre">08</span>Integration Patterns</h2>
+<table>
+  <tr><th>Pattern</th><th>How</th><th>Use When</th></tr>
+  <tr><td>Request-Reply (Sync)</td><td>REST callout, wait for response, process result in same transaction</td><td>Real-time data needed immediately — fetch GL account before saving a record</td></tr>
+  <tr><td>Fire and Forget (Async)</td><td>@future or Queueable callout — no waiting for response</td><td>Notifying external system of a change — Salesforce does not need the response</td></tr>
+  <tr><td>Batch Data Sync</td><td>Scheduled Apex running Batch to sync records nightly</td><td>High-volume syncs where real-time not needed — end-of-day reconciliation</td></tr>
+  <tr><td>Event-Driven</td><td>Platform Events published in Salesforce, consumed by external system via CometD or Pub/Sub API</td><td>Real-time notification to microservices without coupling — status change notifications</td></tr>
+  <tr><td>Webhook Inbound</td><td>External system calls Salesforce REST endpoint (Apex REST or REST API) when event occurs</td><td>Payment gateway posting payment confirmation back to Salesforce</td></tr>
+  <tr><td>Polling</td><td>External system polls Salesforce API on a schedule</td><td>Legacy systems that cannot receive webhooks — check for new records every 5 minutes</td></tr>
+</table>
+</div>
+
+<div class="section"><span class="anchor" id="fapo"></span>
+<h2><span class="pre">09</span>Real Example — FAPO MIP Integration</h2>
+<p>The Financial Aid Payment Office project required bidirectional integration with MIP — a financial accounting system storing Chart of Accounts, GL entries, invoices, and payments. Here is the architecture we used.</p>
+<div class="arch">
+  <div class="arch-row blue"><span class="arch-label">Salesforce FAPO</span><span class="arch-detail">Loan Applications, Pledge Batches, Payment Records in Salesforce</span></div>
+  <div class="arch-arrow">↓ REST POST (Composite API) — create batch + items in one call</div>
+  <div class="arch-row green"><span class="arch-label">MIP Financial System</span><span class="arch-detail">Chart of Accounts, GL entries, Invoices, Payments</span></div>
+  <div class="arch-arrow">↓ REST GET — fetch GL account data before posting</div>
+  <div class="arch-row blue"><span class="arch-label">Salesforce FAPO</span><span class="arch-detail">Display GL balance and account name on Pledge Batch record for officer review</span></div>
+  <div class="arch-arrow">↓ @future callout — async payment confirmation back to MIP</div>
+  <div class="arch-row green"><span class="arch-label">MIP Financial System</span><span class="arch-detail">Marks invoice as paid, updates GL</span></div>
+</div>
+
+<h3><span class="pre">//</span>Key Decisions Made</h3>
+<table>
+  <tr><th>Decision</th><th>Why</th></tr>
+  <tr><td>Named Credential for MIP auth</td><td>API key must not be in code — Named Credential stores it securely in Setup</td></tr>
+  <tr><td>Composite API for batch creation</td><td>Creating batch + items in separate calls risks partial failure — Composite with allOrNone=true ensures both succeed or both roll back</td></tr>
+  <tr><td>@future for payment confirmation to MIP</td><td>Payment confirmation happens after DML on Salesforce records — cannot make callout after DML in same transaction. @future runs in separate transaction.</td></tr>
+  <tr><td>REST not SOAP for MIP</td><td>MIP supports both — REST is faster, JSON is easier to parse than XML, and the Apex code is significantly simpler</td></tr>
+  <tr><td>Typed response classes</td><td>JSON.deserialize to typed class is safer than deserializeUntyped — compile-time checking catches missing fields during development</td></tr>
+</table>
+</div>
+
+<div class="section"><span class="anchor" id="external"></span>
+<h2><span class="pre">10</span>External Services</h2>
+<p>External Services is Salesforce's no-code integration option — import an OpenAPI/Swagger spec and Salesforce generates invocable actions that can be used in Flows, Agentforce, and Process Builder without writing Apex.</p>
+<div class="callout">
+  <div class="callout-label">When to use External Services vs Apex callout</div>
+  <p><strong>Use External Services</strong> when the external API has an OpenAPI spec, the integration logic is simple (pass data in, get data back), and you want admin-maintainable no-code integration.<br><strong>Use Apex callout</strong> when you need complex transformation, error handling, retry logic, callout chaining, or the API has no Swagger spec.</p>
+</div>
+</div>
+
+</div>
+<footer><div class="footer-inner">
+  <div><div class="footer-brand">Anuj Panwar</div><div class="footer-sub">Salesforce Integration Guide · 2026</div></div>
+  <div class="footer-right"><a href="guides.html" style="color:var(--sf);text-decoration:none">← All Guides</a><br>Hosted on GitHub Pages</div>
+</div></footer>
+</div></div>
+<script>
+const links=document.querySelectorAll('.nav-link[href^="#"]');
+const sections=[];
+links.forEach(l=>{const id=l.getAttribute('href').slice(1);const el=document.getElementById(id);if(el)sections.push({link:l,el})});
+const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){links.forEach(l=>l.classList.remove('active'));const m=sections.find(s=>s.el===e.target);if(m)m.link.classList.add('active')}})},{rootMargin:'-20% 0px -70% 0px'});
+sections.forEach(s=>obs.observe(s.el));
+</script>
+</body></html>
