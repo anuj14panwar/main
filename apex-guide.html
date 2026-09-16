@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Apex Developer Guide — Anuj Panwar</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--base:#050A14;--surface:#0D1B2E;--card:#112240;--card2:#162B50;--border:#1E3A5F;--border2:#2D5480;--sf:#00A1E0;--sf-dim:rgba(0,161,224,0.08);--body:#C8DCF0;--muted:#6B8CAE;--dim:#3A5872;--white:#F0F8FF;--green:#29D398;--amber:#F5A623;--red:#E05C5C;--purple:#9B7FE8;--mono:'DM Mono',monospace;--sans:'Inter',sans-serif;--nav-w:220px}
+html{scroll-behavior:smooth;font-size:15px}body{font-family:var(--sans);background:var(--base);color:var(--body);line-height:1.75;-webkit-font-smoothing:antialiased}
+.layout{display:flex;min-height:100vh}
+.sidebar{width:var(--nav-w);flex-shrink:0;position:sticky;top:0;height:100vh;overflow-y:auto;background:var(--surface);border-right:1px solid var(--border);padding:24px 0;scrollbar-width:thin}
+.nav-brand{font-family:var(--mono);font-size:11px;color:var(--sf);padding:0 18px 20px;border-bottom:1px solid var(--border);margin-bottom:14px;line-height:1.4}
+.nav-section{font-family:var(--mono);font-size:9px;color:var(--dim);padding:10px 18px 4px;letter-spacing:1px}
+.nav-link{display:block;padding:5px 18px;font-size:12px;color:var(--muted);text-decoration:none;transition:color .15s,background .15s;border-left:2px solid transparent}
+.nav-link:hover{color:var(--white);background:var(--sf-dim)}.nav-link.active{color:var(--sf);border-left-color:var(--sf);background:var(--sf-dim)}
+.nav-link.sub{padding-left:28px;font-size:11.5px}
+.topbar{position:sticky;top:0;z-index:50;background:rgba(5,10,20,0.92);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);padding:0 32px;display:flex;align-items:center;justify-content:space-between;height:50px}
+.topbar-logo{font-family:var(--mono);font-size:13px;color:var(--white);text-decoration:none}.topbar-logo span{color:var(--sf)}
+.topbar-links{display:flex;gap:20px;list-style:none}.topbar-links a{color:var(--muted);text-decoration:none;font-size:12.5px;transition:color .15s}.topbar-links a:hover{color:var(--white)}
+.main{flex:1;min-width:0}
+.content{max-width:860px;margin:0 auto;padding:0 36px 100px}
+.hero{padding:56px 36px 48px;max-width:860px;margin:0 auto;border-bottom:1px solid var(--border)}
+.eyebrow{font-family:var(--mono);font-size:11px;color:var(--sf);margin-bottom:16px;display:flex;align-items:center;gap:10px}.eyebrow::before{content:'';display:inline-block;width:28px;height:1px;background:var(--sf)}
+h1{font-family:var(--mono);font-size:clamp(24px,3.5vw,38px);font-weight:400;color:var(--white);letter-spacing:-0.5px;margin-bottom:14px;line-height:1.15}
+h1 em{font-style:normal;color:var(--sf)}.hero-desc{font-size:15px;color:var(--body);max-width:560px;margin-bottom:24px}
+.hero-tags{display:flex;gap:7px;flex-wrap:wrap}
+.htag{font-family:var(--mono);font-size:10px;padding:3px 10px;border:1px solid var(--border2);border-radius:3px;color:var(--muted)}
+.section{margin:52px 0}
+.anchor{display:block;position:relative;top:-72px;visibility:hidden}
+h2{font-family:var(--mono);font-size:20px;font-weight:500;color:var(--white);margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--border);letter-spacing:-0.3px}
+h2 .pre{color:var(--sf);margin-right:8px;font-weight:300}
+h3{font-family:var(--mono);font-size:14px;font-weight:500;color:var(--white);margin:24px 0 8px}
+h3 .pre{color:var(--muted);margin-right:6px;font-weight:300}
+p{color:var(--body);margin-bottom:12px;max-width:70ch}strong{color:var(--white);font-weight:500}
+.callout{border-left:2px solid var(--sf);background:var(--sf-dim);padding:12px 16px;border-radius:0 4px 4px 0;margin:16px 0;font-size:13px}
+.callout.green{border-color:var(--green);background:rgba(41,211,152,0.06)}.callout.amber{border-color:var(--amber);background:rgba(245,166,35,0.06)}.callout.red{border-color:var(--red);background:rgba(224,92,92,0.06)}
+.callout-label{font-family:var(--mono);font-size:9px;font-weight:500;letter-spacing:1px;margin-bottom:5px;color:var(--sf)}
+.callout.green .callout-label{color:var(--green)}.callout.amber .callout-label{color:var(--amber)}.callout p{margin:0;max-width:none}
+.code-wrap{background:#020810;border:1px solid var(--border);border-radius:5px;overflow:hidden;margin:14px 0}
+.code-bar{display:flex;align-items:center;justify-content:space-between;padding:7px 14px;background:rgba(255,255,255,0.03);border-bottom:1px solid var(--border)}
+.code-lang{font-family:var(--mono);font-size:9px;font-weight:500;color:var(--sf);letter-spacing:1px}.code-file{font-family:var(--mono);font-size:9px;color:var(--dim)}
+pre{padding:18px;overflow-x:auto}code{font-family:var(--mono);font-size:12px;line-height:1.8;color:#CBD8E8}
+code.inline{background:rgba(0,161,224,0.1);color:var(--sf);padding:1px 6px;border-radius:3px;font-size:11.5px;border:1px solid rgba(0,161,224,0.2)}
+.kw{color:#C792EA}.str{color:#C3E88D}.cm{color:#445566;font-style:italic}.ann{color:#29D398}.cls{color:#FFCB6B}.mth{color:#82AAFF}.num{color:#F78C6C}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:12.5px}
+th{background:var(--card2);padding:9px 12px;text-align:left;font-family:var(--mono);font-size:9px;font-weight:500;color:var(--muted);letter-spacing:0.8px;border-bottom:1px solid var(--border2)}
+td{padding:9px 12px;border-bottom:1px solid rgba(30,58,95,0.5);color:var(--muted);vertical-align:top}
+td:first-child{color:var(--white);font-weight:500;font-family:var(--mono);font-size:11.5px}
+tr:last-child td{border-bottom:none}tr:hover td{background:var(--sf-dim)}
+footer{border-top:1px solid var(--border);padding:28px 36px;margin-top:80px}
+.footer-inner{max-width:860px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+.footer-brand{font-family:var(--mono);font-size:12px;color:var(--white)}.footer-sub{font-size:11px;color:var(--dim);margin-top:2px}
+.footer-right{font-family:var(--mono);font-size:10px;color:var(--dim);text-align:right}
+@media(max-width:768px){.sidebar{display:none}.content,.hero{padding-left:20px;padding-right:20px}.topbar{padding:0 20px}}
+</style></head>
+<body>
+<div class="layout">
+<nav class="sidebar">
+  <div class="nav-brand">apex<br>developer guide<br>2026</div>
+  <div class="nav-section">Fundamentals</div>
+  <a class="nav-link active" href="#basics">Apex Basics</a>
+  <a class="nav-link" href="#governor">Governor Limits</a>
+  <a class="nav-link" href="#soql">SOQL Optimization</a>
+  <div class="nav-section">Sync vs Async</div>
+  <a class="nav-link" href="#sync">Synchronous Apex</a>
+  <a class="nav-link" href="#async">Asynchronous Apex</a>
+  <a class="nav-link sub" href="#batch">Batch Apex</a>
+  <a class="nav-link sub" href="#queueable">Queueable Apex</a>
+  <a class="nav-link sub" href="#scheduled">Scheduled Apex</a>
+  <a class="nav-link sub" href="#future">Future Methods</a>
+  <div class="nav-section">Architecture</div>
+  <a class="nav-link" href="#trigger">Trigger Framework</a>
+  <a class="nav-link" href="#invocable">@InvocableMethod</a>
+  <a class="nav-link" href="#platform">Platform Events</a>
+  <div class="nav-section">Production</div>
+  <a class="nav-link" href="#testing">Testing Best Practices</a>
+  <a class="nav-link" href="#bestpractices">Best Practices</a>
+</nav>
+<div class="main">
+<div class="topbar">
+  <a href="index.html" class="topbar-logo">Anuj<span>.</span>dev</a>
+  <ul class="topbar-links">
+    <li><a href="index.html">Portfolio</a></li>
+    <li><a href="guides.html">Guides</a></li>
+    <li><a href="lwc-guide.html">LWC</a></li>
+    <li><a href="integration-guide.html">Integration</a></li>
+  </ul>
+</div>
+<div class="hero">
+  <div class="eyebrow">Developer Guide · Apex</div>
+  <h1>Apex — sync, async,<br>best practices &amp; <em>real patterns</em></h1>
+  <p class="hero-desc">Complete Apex reference covering synchronous vs asynchronous execution, governor limits, trigger framework architecture, @InvocableMethod for Agentforce, Platform Events, and testing best practices — all from production implementations.</p>
+  <div class="hero-tags">
+    <span class="htag">Sync vs Async</span><span class="htag">Governor Limits</span><span class="htag">Trigger Framework</span>
+    <span class="htag">Batch Apex</span><span class="htag">Queueable</span><span class="htag">Platform Events</span><span class="htag">@InvocableMethod</span>
+  </div>
+</div>
+<div class="content">
+
+<div class="section"><span class="anchor" id="basics"></span>
+<h2><span class="pre">01</span>Apex Basics</h2>
+<p>Apex is Salesforce's proprietary object-oriented programming language — Java-like syntax, runs on the Salesforce platform, and has access to all Salesforce objects and APIs. It runs on the server, not the browser.</p>
+<table>
+  <tr><th>Concept</th><th>Apex</th><th>Java Equivalent</th></tr>
+  <tr><td>Class</td><td>public class MyClass {}</td><td>public class MyClass {}</td></tr>
+  <tr><td>List</td><td>List&lt;Account&gt; accs = new List&lt;Account&gt;();</td><td>ArrayList&lt;Account&gt;</td></tr>
+  <tr><td>Map</td><td>Map&lt;Id, Account&gt; accMap;</td><td>HashMap&lt;String, Account&gt;</td></tr>
+  <tr><td>Null check</td><td>String.isBlank(s)</td><td>s == null || s.isEmpty()</td></tr>
+  <tr><td>Type casting</td><td>(String) obj</td><td>(String) obj</td></tr>
+  <tr><td>Exception</td><td>try/catch/finally — same as Java</td><td>Same</td></tr>
+</table>
+</div>
+
+<div class="section"><span class="anchor" id="governor"></span>
+<h2><span class="pre">02</span>Governor Limits — The Most Important Concept</h2>
+<p>Salesforce is a multi-tenant platform. Governor limits prevent any single org from consuming too many shared resources. Exceeding a limit throws a LimitException that cannot be caught.</p>
+<table>
+  <tr><th>Limit</th><th>Synchronous</th><th>Asynchronous</th><th>Most Common Violation</th></tr>
+  <tr><td>SOQL queries</td><td>100</td><td>200</td><td>SOQL inside a for loop</td></tr>
+  <tr><td>SOQL rows returned</td><td>50,000</td><td>50,000</td><td>Querying without LIMIT</td></tr>
+  <tr><td>DML statements</td><td>150</td><td>150</td><td>DML inside a for loop</td></tr>
+  <tr><td>DML rows</td><td>10,000</td><td>10,000</td><td>Inserting individual records in loop</td></tr>
+  <tr><td>CPU time</td><td>10,000ms</td><td>60,000ms</td><td>Heavy computation in loops</td></tr>
+  <tr><td>Heap size</td><td>6MB</td><td>12MB</td><td>Building huge collections in memory</td></tr>
+  <tr><td>Callouts</td><td>100</td><td>100</td><td>Callout inside a loop</td></tr>
+  <tr><td>Future calls</td><td>50 per transaction</td><td>—</td><td>Calling future from loop</td></tr>
+</table>
+<div class="callout red">
+  <div class="callout-label">Never do SOQL or DML inside a for loop</div>
+  <p>This is the single most common governor limit violation. Always collect IDs in the loop, then query or DML outside it. Salesforce processes records in batches of 200 — a trigger with SOQL inside a loop will hit the 100 query limit immediately when 1 record is processed per query.</p>
+</div>
+<div class="code-wrap">
+  <div class="code-bar"><span class="code-lang">Apex</span><span class="code-file">Bulkification — correct pattern</span></div>
+  <pre><code><span class="cm">// WRONG — SOQL inside loop = governor limit violation</span>
+<span class="kw">for</span> (<span class="cls">Loan_Application__c</span> loan : trigger.new) {
+    <span class="cls">Contact</span> c = [<span class="kw">SELECT</span> Id <span class="kw">FROM</span> Contact <span class="kw">WHERE</span> Id = :loan.Applicant__c]; <span class="cm">// ❌</span>
+}
+
+<span class="cm">// CORRECT — collect IDs first, query once outside loop</span>
+<span class="cls">Set</span>&lt;<span class="cls">Id</span>&gt; contactIds = <span class="kw">new</span> <span class="cls">Set</span>&lt;<span class="cls">Id</span>&gt;();
+<span class="kw">for</span> (<span class="cls">Loan_Application__c</span> loan : trigger.new) {
+    <span class="kw">if</span> (loan.Applicant__c != <span class="kw">null</span>) contactIds.<span class="mth">add</span>(loan.Applicant__c);
+}
+<span class="cls">Map</span>&lt;<span class="cls">Id</span>, <span class="cls">Contact</span>&gt; contactMap = <span class="kw">new</span> <span class="cls">Map</span>&lt;<span class="cls">Id</span>, <span class="cls">Contact</span>&gt;([
+    <span class="kw">SELECT</span> Id, FirstName, Email <span class="kw">FROM</span> Contact <span class="kw">WHERE</span> Id IN :contactIds
+]); <span class="cm">// ✅ One query for all records</span>
+
+<span class="cls">List</span>&lt;<span class="cls">Loan_Application__c</span>&gt; toUpdate = <span class="kw">new</span> <span class="cls">List</span>&lt;<span class="cls">Loan_Application__c</span>&gt;();
+<span class="kw">for</span> (<span class="cls">Loan_Application__c</span> loan : trigger.new) {
+    <span class="cls">Contact</span> c = contactMap.<span class="mth">get</span>(loan.Applicant__c);
+    <span class="kw">if</span> (c != <span class="kw">null</span>) {
+        toUpdate.<span class="mth">add</span>(<span class="kw">new</span> <span class="cls">Loan_Application__c</span>(
+            Id = loan.Id,
+            Contact_Email__c = c.Email
+        ));
+    }
+}
+<span class="kw">if</span> (!toUpdate.<span class="mth">isEmpty</span>()) update toUpdate; <span class="cm">// ✅ One DML for all records</span></code></pre>
+</div>
+</div>
+
+<div class="section"><span class="anchor" id="soql"></span>
+<h2><span class="pre">03</span>SOQL Optimization</h2>
+<table>
+  <tr><th>Technique</th><th>Example</th><th>Why</th></tr>
+  <tr><td>Always use LIMIT</td><td>SELECT Id FROM Contact LIMIT 200</td><td>Prevents accidentally returning 50k rows</td></tr>
+  <tr><td>Query only needed fields</td><td>SELECT Id, Name, Email FROM Contact</td><td>SELECT * equivalent does not exist — but naming every field wastes heap and CPU</td></tr>
+  <tr><td>Use indexed fields in WHERE</td><td>WHERE Id = :id or WHERE Email = :email</td><td>Salesforce indexes Id, Name, CreatedDate, SystemModstamp, and all external ID fields by default</td></tr>
+  <tr><td>Avoid non-selective filters</td><td>WHERE IsActive = true on a 1M row table</td><td>Non-selective queries trigger full table scans and fail with UNABLE_TO_LOCK_ROW errors under load</td></tr>
+  <tr><td>Use WITH SYSTEM_MODE for agent actions</td><td>SELECT Id FROM Contact WHERE Email = :e WITH SYSTEM_MODE</td><td>Bypasses FLS — required for Einstein Agent User who has no field access by default</td></tr>
+  <tr><td>Use bind variables not string concat</td><td>WHERE Id = :myId not WHERE Id = '" + myId + "'"</td><td>String concatenation opens SOQL injection vulnerability</td></tr>
+</table>
+</div>
+
+<div class="section"><span class="anchor" id="sync"></span>
+<h2><span class="pre">04</span>Synchronous Apex</h2>
+<p>Synchronous Apex runs in the same thread as the triggering action — a user click, a trigger, a REST callout. It must complete within the CPU time limit (10 seconds) and the transaction's governor limits.</p>
+<table>
+  <tr><th>Type</th><th>Triggered By</th><th>Use For</th></tr>
+  <tr><td>Apex Trigger</td><td>DML operations on records</td><td>Before/after insert/update/delete/undelete logic</td></tr>
+  <tr><td>@AuraEnabled method</td><td>LWC / Aura component call</td><td>Reading and writing data from UI components</td></tr>
+  <tr><td>REST Apex (WebService)</td><td>External HTTP callout to Salesforce</td><td>Exposing Salesforce data to external systems</td></tr>
+  <tr><td>@InvocableMethod</td><td>Flow, Agentforce Agent, Process Builder</td><td>Giving declarative tools access to Apex logic</td></tr>
+</table>
+</div>
+
+<div class="section"><span class="anchor" id="async"></span>
+<h2><span class="pre">05</span>Asynchronous Apex — Overview</h2>
+<p>Asynchronous Apex runs in a separate thread, outside the original transaction. It has higher governor limits and can do things synchronous Apex cannot — like making HTTP callouts from triggers.</p>
+<table>
+  <tr><th>Type</th><th>CPU Limit</th><th>SOQL Limit</th><th>Callouts</th><th>Chaining</th><th>Best For</th></tr>
+  <tr><td>@future</td><td>60s</td><td>200</td><td>✅</td><td>❌</td><td>Simple one-off async tasks, callouts from triggers</td></tr>
+  <tr><td>Queueable</td><td>60s</td><td>200</td><td>✅</td><td>✅ (chain)</td><td>Complex async with state, chaining multiple jobs</td></tr>
+  <tr><td>Batch Apex</td><td>60s per chunk</td><td>200 per chunk</td><td>✅</td><td>Via finish()</td><td>Processing millions of records</td></tr>
+  <tr><td>Scheduled Apex</td><td>60s</td><td>200</td><td>✅</td><td>Via schedule</td><td>Timed jobs — daily digest, nightly sync</td></tr>
+</table>
+</div>
+
+<div class="section"><span class="anchor" id="batch"></span>
+<h2><span class="pre">06</span>Batch Apex</h2>
+<p>Batch Apex processes large data sets by breaking them into configurable chunks (scope). Each chunk runs in its own transaction with fresh governor limits. Used in the FAPO project for daily vendor digest and the Paycor migration for bulk data processing.</p>
+<div class="code-wrap">
+  <div class="code-bar"><span class="code-lang">Apex</span><span class="code-file">Complete Batch pattern</span></div>
+  <pre><code><span class="kw">public class</span> <span class="cls">LoanStatusDailyBatch</span>
+        <span class="kw">implements</span> <span class="cls">Database.Batchable</span>&lt;<span class="cls">SObject</span>&gt;, <span class="cls">Database.Stateful</span> {
+
+    <span class="cm">// Database.Stateful preserves instance variables between chunks</span>
+    <span class="kw">private</span> <span class="cls">Integer</span> processedCount = <span class="num">0</span>;
+    <span class="kw">private</span> <span class="cls">List</span>&lt;<span class="cls">String</span>&gt; errors = <span class="kw">new</span> <span class="cls">List</span>&lt;<span class="cls">String</span>&gt;();
+
+    <span class="cm">// start() — returns the query scope. Runs ONCE.</span>
+    <span class="kw">public</span> <span class="cls">Database.QueryLocator</span> <span class="mth">start</span>(<span class="cls">Database.BatchableContext</span> bc) {
+        <span class="kw">return</span> <span class="cls">Database</span>.<span class="mth">getQueryLocator</span>([
+            <span class="kw">SELECT</span> Id, Status__c, Applicant__c, Contact_Email__c
+            <span class="kw">FROM</span>   Loan_Application__c
+            <span class="kw">WHERE</span>  Status__c = <span class="str">'Under Review'</span>
+            <span class="kw">AND</span>    Applied_Date__c = LAST_N_DAYS:30
+        ]);
+    }
+
+    <span class="cm">// execute() — runs for each chunk. Batch size default 200, max 2000.</span>
+    <span class="kw">public void</span> <span class="mth">execute</span>(<span class="cls">Database.BatchableContext</span> bc,
+                         <span class="cls">List</span>&lt;<span class="cls">Loan_Application__c</span>&gt; scope) {
+        <span class="cls">List</span>&lt;<span class="cls">Loan_Application__c</span>&gt; toUpdate = <span class="kw">new</span> <span class="cls">List</span>&lt;<span class="cls">Loan_Application__c</span>&gt;();
+        <span class="kw">for</span> (<span class="cls">Loan_Application__c</span> loan : scope) {
+            <span class="cm">// process each record</span>
+            loan.Last_Reviewed_Date__c = <span class="cls">Date</span>.<span class="mth">today</span>();
+            toUpdate.<span class="mth">add</span>(loan);
+            processedCount++;
+        }
+        <span class="cls">Database</span>.<span class="mth">update</span>(toUpdate, <span class="kw">false</span>); <span class="cm">// false = allow partial success</span>
+    }
+
+    <span class="cm">// finish() — runs ONCE after all chunks. Send summary email, chain another batch.</span>
+    <span class="kw">public void</span> <span class="mth">finish</span>(<span class="cls">Database.BatchableContext</span> bc) {
+        <span class="cls">System</span>.<span class="mth">debug</span>(<span class="str">'Processed: '</span> + processedCount + <span class="str">' loans'</span>);
+        <span class="cm">// Chain another batch if needed:</span>
+        <span class="cm">// Database.executeBatch(new AnotherBatch(), 200);</span>
+    }
+}
+
+<span class="cm">// Execute: Database.executeBatch(new LoanStatusDailyBatch(), 200);</span>
+<span class="cm">// The 200 is the chunk size — lower = more transactions, higher = more governor usage per chunk</span></code></pre>
+</div>
+<table>
+  <tr><th>Database.Stateful</th><th>Without it</th><th>With it</th></tr>
+  <tr><td>Instance variables</td><td>Reset to null between chunks</td><td>Preserved across all chunks</td></tr>
+  <tr><td>Use for</td><td>Stateless processing</td><td>Counters, error lists, aggregations across chunks</td></tr>
+  <tr><td>Performance</td><td>Faster — no state serialization</td><td>Slightly slower — state serialized between chunks</td></tr>
+</table>
+</div>
+
+<div class="section"><span class="anchor" id="queueable"></span>
+<h2><span class="pre">07</span>Queueable Apex</h2>
+<p>Queueable is the modern replacement for @future methods. It supports chaining, type-safe parameters, and monitoring. Used in FAPO for async custom notifications after approval events.</p>
+<div class="code-wrap">
+  <div class="code-bar"><span class="code-lang">Apex</span><span class="code-file">Queueable with chaining</span></div>
+  <pre><code><span class="kw">public class</span> <span class="cls">SendApprovalNotificationJob</span> <span class="kw">implements</span> <span class="cls">Queueable</span> {
+    <span class="kw">private</span> <span class="cls">List</span>&lt;<span class="cls">Id</span>&gt; loanIds;
+    <span class="kw">private</span> <span class="cls">String</span> notificationType;
+
+    <span class="kw">public</span> <span class="cls">SendApprovalNotificationJob</span>(<span class="cls">List</span>&lt;<span class="cls">Id</span>&gt; ids, <span class="cls">String</span> type) {
+        <span class="kw">this</span>.loanIds       = ids;
+        <span class="kw">this</span>.notificationType = type;
+    }
+
+    <span class="kw">public void</span> <span class="mth">execute</span>(<span class="cls">QueueableContext</span> qc) {
+        <span class="cm">// Send custom notifications</span>
+        <span class="cls">CustomNotificationType</span> cnt = [
+            <span class="kw">SELECT</span> Id <span class="kw">FROM</span> CustomNotificationType
+            <span class="kw">WHERE</span>  DeveloperName = :notificationType LIMIT <span class="num">1</span>
+        ];
+        <span class="cls">Messaging.CustomNotification</span> notif =
+            <span class="kw">new</span> <span class="cls">Messaging.CustomNotification</span>();
+        notif.<span class="mth">setNotificationTypeId</span>(cnt.Id);
+        notif.<span class="mth">setTitle</span>(<span class="str">'Loan Application Update'</span>);
+        notif.<span class="mth">setBody</span>(<span class="str">'Your application has been updated'</span>);
+        notif.<span class="mth">send</span>(<span class="kw">new</span> <span class="cls">Set</span>&lt;<span class="cls">String</span>&gt;{ <span class="cm">/* recipient user IDs */</span> });
+
+        <span class="cm">// Chain another Queueable if needed</span>
+        <span class="kw">if</span> (!<span class="cls">Test</span>.<span class="mth">isRunningTest</span>()) {
+            <span class="cls">System</span>.<span class="mth">enqueueJob</span>(<span class="kw">new</span> <span class="cls">UpdateLoanStageJob</span>(loanIds));
+        }
+    }
+}
+
+<span class="cm">// Enqueue from trigger:</span>
+<span class="cls">System</span>.<span class="mth">enqueueJob</span>(<span class="kw">new</span> <span class="cls">SendApprovalNotificationJob</span>(ids, <span class="str">'Loan_Update'</span>));</code></pre>
+</div>
+<table>
+  <tr><th></th><th>@future</th><th>Queueable</th></tr>
+  <tr><td>Type-safe parameters</td><td>❌ Only primitives and primitive collections</td><td>✅ Any type including SObjects and custom classes</td></tr>
+  <tr><td>Job monitoring</td><td>❌ Cannot track</td><td>✅ AsyncApexJob — trackable in Setup</td></tr>
+  <tr><td>Chaining</td><td>❌ Cannot chain from future</td><td>✅ enqueueJob from execute()</td></tr>
+  <tr><td>Callouts</td><td>✅ (with callout=true annotation)</td><td>✅ (implements Database.AllowsCallouts)</td></tr>
+  <tr><td>Max per transaction</td><td>50</td><td>50 (1 from a trigger context)</td></tr>
+</table>
+</div>
+
+<div class="section"><span class="anchor" id="scheduled"></span>
+<h2><span class="pre">08</span>Scheduled Apex</h2>
+<div class="code-wrap">
+  <div class="code-bar"><span class="code-lang">Apex</span><span class="code-file">Scheduled job — runs a batch nightly</span></div>
+  <pre><code><span class="kw">public class</span> <span class="cls">NightlyLoanReviewScheduler</span> <span class="kw">implements</span> <span class="cls">Schedulable</span> {
+    <span class="kw">public void</span> <span class="mth">execute</span>(<span class="cls">SchedulableContext</span> sc) {
+        <span class="cm">// Usually just kicks off a Batch</span>
+        <span class="cls">Database</span>.<span class="mth">executeBatch</span>(<span class="kw">new</span> <span class="cls">LoanStatusDailyBatch</span>(), <span class="num">200</span>);
+    }
+}
+
+<span class="cm">// Schedule from Anonymous Apex (cron expression):</span>
+<span class="cm">// '0 0 2 * * ?' = every day at 2am</span>
+<span class="cls">String</span> cronExp = <span class="str">'0 0 2 * * ?'</span>;
+<span class="cls">System</span>.<span class="mth">schedule</span>(<span class="str">'Nightly Loan Review'</span>, cronExp,
+               <span class="kw">new</span> <span class="cls">NightlyLoanReviewScheduler</span>());</code></pre>
+</div>
+<table>
+  <tr><th>Cron Expression</th><th>Meaning</th></tr>
+  <tr><td>0 0 2 * * ?</td><td>Every day at 2:00 AM</td></tr>
+  <tr><td>0 0 8 ? * MON-FRI</td><td>Weekdays at 8:00 AM</td></tr>
+  <tr><td>0 0 0 1 * ?</td><td>First day of every month at midnight</td></tr>
+  <tr><td>0 0/30 * * * ?</td><td>Every 30 minutes</td></tr>
+</table>
+</div>
+
+<div class="section"><span class="anchor" id="future"></span>
+<h2><span class="pre">09</span>@future Methods</h2>
+<div class="code-wrap">
+  <div class="code-bar"><span class="code-lang">Apex</span><span class="code-file">@future with callout</span></div>
+  <pre><code><span class="kw">public class</span> <span class="cls">MIPIntegrationAsync</span> {
+    <span class="cm">// callout=true required to make HTTP calls from @future</span>
+    <span class="ann">@future</span>(callout=<span class="kw">true</span>)
+    <span class="kw">public static void</span> <span class="mth">syncToMIP</span>(<span class="cls">Set</span>&lt;<span class="cls">Id</span>&gt; loanIds) {
+        <span class="cm">// @future only accepts primitives — no SObjects</span>
+        <span class="cm">// Must re-query inside the method</span>
+        <span class="cls">List</span>&lt;<span class="cls">Loan_Application__c</span>&gt; loans = [
+            <span class="kw">SELECT</span> Id, Status__c, Applied_Amount__c
+            <span class="kw">FROM</span>   Loan_Application__c
+            <span class="kw">WHERE</span>  Id IN :loanIds
+        ];
+        <span class="cm">// Make HTTP callout to MIP system</span>
+        <span class="cls">Http</span> http = <span class="kw">new</span> <span class="cls">Http</span>();
+        <span class="cls">HttpRequest</span> req = <span class="kw">new</span> <span class="cls">HttpRequest</span>();
+        req.<span class="mth">setEndpoint</span>(<span class="str">'callout:MIP_API/loans'</span>);
+        req.<span class="mth">setMethod</span>(<span class="str">'POST'</span>);
+        <span class="cm">// ... build payload and send</span>
+    }
+}</code></pre>
+</div>
+</div>
+
+<div class="section"><span class="anchor" id="trigger"></span>
+<h2><span class="pre">10</span>Trigger Framework</h2>
+<p>A trigger framework enforces single-trigger-per-object compliance and separates the trigger file from the business logic. This is the pattern used in the Paycor migration where 40+ legacy automations were consolidated.</p>
+<div class="code-wrap">
+  <div class="code-bar"><span class="code-lang">Apex</span><span class="code-file">The trigger — thin, delegates to handler</span></div>
+  <pre><code><span class="kw">trigger</span> <span class="cls">LoanApplicationTrigger</span> <span class="kw">on</span> <span class="cls">Loan_Application__c</span> (
+    before insert, before update, before delete,
+    after insert,  after update,  after delete, after undelete
+) {
+    <span class="cm">// One line. All logic in the handler class.</span>
+    <span class="kw">new</span> <span class="cls">LoanApplicationTriggerHandler</span>().<span class="mth">run</span>();
+}</code></pre>
+</div>
+<div class="code-wrap">
+  <div class="code-bar"><span class="code-lang">Apex</span><span class="code-file">TriggerHandler base class</span></div>
+  <pre><code><span class="kw">public abstract class</span> <span class="cls">TriggerHandler</span> {
+
+    <span class="kw">public void</span> <span class="mth">run</span>() {
+        <span class="kw">if</span> (!isTriggerEnabled()) <span class="kw">return</span>; <span class="cm">// bypass switch</span>
+        <span class="kw">switch on</span> <span class="cls">Trigger</span>.operationType {
+            <span class="kw">when</span> BEFORE_INSERT  { <span class="kw">this</span>.<span class="mth">beforeInsert</span>();  }
+            <span class="kw">when</span> BEFORE_UPDATE  { <span class="kw">this</span>.<span class="mth">beforeUpdate</span>();  }
+            <span class="kw">when</span> AFTER_INSERT   { <span class="kw">this</span>.<span class="mth">afterInsert</span>();   }
+            <span class="kw">when</span> AFTER_UPDATE   { <span class="kw">this</span>.<span class="mth">afterUpdate</span>();   }
+            <span class="kw">when</span> BEFORE_DELETE  { <span class="kw">this</span>.<span class="mth">beforeDelete</span>();  }
+            <span class="kw">when</span> AFTER_DELETE   { <span class="kw">this</span>.<span class="mth">afterDelete</span>();   }
+            <span class="kw">when</span> AFTER_UNDELETE { <span class="kw">this</span>.<span class="mth">afterUndelete</span>(); }
+        }
+    }
+
+    <span class="cm">// Subclasses override only what they need</span>
+    <span class="kw">protected virtual void</span> <span class="mth">beforeInsert</span>()  {}
+    <span class="kw">protected virtual void</span> <span class="mth">beforeUpdate</span>()  {}
+    <span class="kw">protected virtual void</span> <span class="mth">afterInsert</span>()   {}
+    <span class="kw">protected virtual void</span> <span class="mth">afterUpdate</span>()   {}
+    <span class="kw">protected virtual void</span> <span class="mth">beforeDelete</span>()  {}
+    <span class="kw">protected virtual void</span> <span class="mth">afterDelete</span>()   {}
+    <span class="kw">protected virtual void</span> <span class="mth">afterUndelete</span>() {}
+
+    <span class="kw">private</span> <span class="cls">Boolean</span> <span class="mth">isTriggerEnabled</span>() {
+        <span class="cm">// Check custom metadata or custom setting to bypass trigger</span>
+        <span class="kw">return</span> !<span class="cls">Trigger_Bypass__c</span>.<span class="mth">getInstance</span>()?.Bypass_Loan_Trigger__c;
+    }
+}</code></pre>
+</div>
+<div class="code-wrap">
+  <div class="code-bar"><span class="code-lang">Apex</span><span class="code-file">Concrete handler — only overrides needed contexts</span></div>
+  <pre><code><span class="kw">public class</span> <span class="cls">LoanApplicationTriggerHandler</span> <span class="kw">extends</span> <span class="cls">TriggerHandler</span> {
+
+    <span class="kw">private</span> <span class="cls">List</span>&lt;<span class="cls">Loan_Application__c</span>&gt; newList;
+    <span class="kw">private</span> <span class="cls">Map</span>&lt;<span class="cls">Id</span>, <span class="cls">Loan_Application__c</span>&gt; oldMap;
+
+    <span class="kw">public</span> <span class="cls">LoanApplicationTriggerHandler</span>() {
+        <span class="kw">this</span>.newList = (<span class="cls">List</span>&lt;<span class="cls">Loan_Application__c</span>&gt;) <span class="cls">Trigger</span>.new;
+        <span class="kw">this</span>.oldMap  = (<span class="cls">Map</span>&lt;<span class="cls">Id</span>, <span class="cls">Loan_Application__c</span>&gt;) <span class="cls">Trigger</span>.oldMap;
+    }
+
+    <span class="kw">protected override void</span> <span class="mth">beforeInsert</span>() {
+        <span class="cls">LoanApplicationService</span>.<span class="mth">setExpectedDecisionDate</span>(newList);
+    }
+
+    <span class="kw">protected override void</span> <span class="mth">afterUpdate</span>() {
+        <span class="cls">List</span>&lt;<span class="cls">Loan_Application__c</span>&gt; statusChanged = <span class="kw">new</span> <span class="cls">List</span>&lt;<span class="cls">Loan_Application__c</span>&gt;();
+        <span class="kw">for</span> (<span class="cls">Loan_Application__c</span> loan : newList) {
+            <span class="kw">if</span> (loan.Status__c != oldMap.<span class="mth">get</span>(loan.Id).Status__c) {
+                statusChanged.<span class="mth">add</span>(loan);
+            }
+        }
+        <span class="kw">if</span> (!statusChanged.<span class="mth">isEmpty</span>()) {
+            <span class="cls">System</span>.<span class="mth">enqueueJob</span>(<span class="kw">new</span> <span class="cls">SendApprovalNotificationJob</span>(
+                <span class="kw">new</span> <span class="cls">Map</span>&lt;<span class="cls">Id</span>, <span class="cls">SObject</span>&gt;(statusChanged).<span class="mth">keySet</span>(),
+                <span class="str">'Loan_Status_Change'</span>
+            ));
+        }
+    }
+}</code></pre>
+</div>
+</div>
+
+<div class="section"><span class="anchor" id="invocable"></span>
+<h2><span class="pre">11</span>@InvocableMethod for Agentforce &amp; Flows</h2>
+<p>@InvocableMethod exposes Apex logic to Flows, Process Builders, and Agentforce agents. The description parameter is critical for Agentforce — Atlas reads it to decide when to call the action.</p>
+<div class="code-wrap">
+  <div class="code-bar"><span class="code-lang">Apex</span><span class="code-file">@InvocableMethod — full pattern</span></div>
+  <pre><code><span class="kw">public class</span> <span class="cls">MyInvocableAction</span> {
+    <span class="cm">// Inner class for inputs — must be public</span>
+    <span class="kw">public class</span> <span class="cls">ActionInput</span> {
+        <span class="ann">@InvocableVariable</span>(
+            label=<span class="str">'Customer Email'</span>
+            description=<span class="str">'Email provided by the customer'</span>
+            required=<span class="kw">true</span>
+        )
+        <span class="kw">public</span> <span class="cls">String</span> customerEmail;
+    }
+    <span class="cm">// Inner class for outputs — must be public</span>
+    <span class="kw">public class</span> <span class="cls">ActionOutput</span> {
+        <span class="ann">@InvocableVariable</span>(label=<span class="str">'Result'</span>)
+        <span class="kw">public</span> <span class="cls">String</span> result;
+    }
+    <span class="cm">// The method — must be static, must accept List, must return List</span>
+    <span class="ann">@InvocableMethod</span>(
+        label=<span class="str">'My Action Label'</span>
+        description=<span class="str">'Write this in plain English describing WHEN to call it.'</span>
+        category=<span class="str">'My Category'</span>
+    )
+    <span class="kw">public static</span> <span class="cls">List</span>&lt;<span class="cls">ActionOutput</span>&gt; <span class="mth">execute</span>(<span class="cls">List</span>&lt;<span class="cls">ActionInput</span>&gt; inputs) {
+        <span class="kw">return</span> <span class="kw">new</span> <span class="cls">List</span>&lt;<span class="cls">ActionOutput</span>&gt;();
+    }
+}</code></pre>
+</div>
+</div>
+
+<div class="section"><span class="anchor" id="platform"></span>
+<h2><span class="pre">12</span>Platform Events</h2>
+<p>Platform Events are Salesforce's event bus — fire-and-forget messaging between systems. They decouple the publisher from the subscriber and work across orgs and external systems.</p>
+<div class="code-wrap">
+  <div class="code-bar"><span class="code-lang">Apex</span><span class="code-file">Publishing a Platform Event</span></div>
+  <pre><code><span class="cm">// Define the event in Setup: Loan_Status_Event__e</span>
+<span class="cm">// Fields: Loan_Number__c (Text), Status__c (Text), Timestamp__c (DateTime)</span>
+
+<span class="kw">public class</span> <span class="cls">LoanEventPublisher</span> {
+    <span class="kw">public static void</span> <span class="mth">publishStatusChange</span>(<span class="cls">String</span> loanNumber, <span class="cls">String</span> status) {
+        <span class="cls">Loan_Status_Event__e</span> evt = <span class="kw">new</span> <span class="cls">Loan_Status_Event__e</span>(
+            Loan_Number__c = loanNumber,
+            Status__c      = status,
+            Timestamp__c   = <span class="cls">DateTime</span>.<span class="mth">now</span>()
+        );
+        <span class="cls">Database.SaveResult</span> result = <span class="cls">EventBus</span>.<span class="mth">publish</span>(evt);
+    }
+}
+
+<span class="cm">// Subscribe via Apex Trigger on the event object</span>
+<span class="kw">trigger</span> <span class="cls">LoanStatusEventTrigger</span> <span class="kw">on</span> <span class="cls">Loan_Status_Event__e</span> (after insert) {
+    <span class="kw">for</span> (<span class="cls">Loan_Status_Event__e</span> evt : <span class="cls">Trigger</span>.new) {
+        <span class="cm">// Process the event — create notification, update related records, etc.</span>
+    }
+}</code></pre>
+</div>
+</div>
+
+<div class="section"><span class="anchor" id="testing"></span>
+<h2><span class="pre">13</span>Testing Best Practices</h2>
+<table>
+  <tr><th>Practice</th><th>Why</th></tr>
+  <tr><td>Use @TestSetup for shared data</td><td>Runs once before all test methods in the class — faster than inserting data in every test method</td></tr>
+  <tr><td>Always test bulk scenarios (200 records)</td><td>Triggers run in batches of 200 — your code must handle 200 records without hitting limits</td></tr>
+  <tr><td>Test positive, negative, and edge cases</td><td>Positive: valid input. Negative: invalid input returns graceful error. Edge: empty lists, null values, boundary values</td></tr>
+  <tr><td>Use Test.startTest() and Test.stopTest()</td><td>Resets governor limits within the test — async operations (Batch, Queueable, Future) run synchronously between startTest and stopTest</td></tr>
+  <tr><td>Never use SeeAllData=true</td><td>Makes tests org-dependent and fragile. Always create your own test data.</td></tr>
+  <tr><td>Assert specific values not just that something ran</td><td>System.assertEquals('Expected', actual) not just System.assertNotEquals(null, result)</td></tr>
+  <tr><td>Use Test.isRunningTest() to skip Queueable chaining in tests</td><td>Chained Queueables throw errors in test context — always guard with if(!Test.isRunningTest())</td></tr>
+</table>
+<div class="code-wrap">
+  <div class="code-bar"><span class="code-lang">Apex</span><span class="code-file">Test class template</span></div>
+  <pre><code><span class="ann">@IsTest</span>
+<span class="kw">public class</span> <span class="cls">LoanApplicationTriggerTest</span> {
+
+    <span class="ann">@TestSetup</span>
+    <span class="kw">static void</span> <span class="mth">setup</span>() {
+        <span class="cls">Contact</span> c = <span class="kw">new</span> <span class="cls">Contact</span>(FirstName=<span class="str">'Test'</span>, LastName=<span class="str">'User'</span>,
+                                   Email=<span class="str">'test@test.com'</span>);
+        insert c;
+        <span class="cls">List</span>&lt;<span class="cls">Loan_Application__c</span>&gt; loans = <span class="kw">new</span> <span class="cls">List</span>&lt;<span class="cls">Loan_Application__c</span>&gt;();
+        <span class="kw">for</span> (<span class="cls">Integer</span> i = <span class="num">0</span>; i &lt; <span class="num">200</span>; i++) {
+            loans.<span class="mth">add</span>(<span class="kw">new</span> <span class="cls">Loan_Application__c</span>(
+                Application_Number__c = <span class="str">'HL-TEST-'</span> + i,
+                Status__c = <span class="str">'Draft'</span>, Applicant__c = c.Id,
+                Applied_Amount__c = <span class="num">1000000</span>, Tenure_Months__c = <span class="num">120</span>,
+                Applied_Date__c = <span class="cls">Date</span>.<span class="mth">today</span>()
+            ));
+        }
+        insert loans; <span class="cm">// Bulk insert 200 records — tests the trigger at scale</span>
+    }
+
+    <span class="ann">@IsTest</span>
+    <span class="kw">static void</span> <span class="mth">testBeforeInsertSetsExpectedDate</span>() {
+        <span class="cls">List</span>&lt;<span class="cls">Loan_Application__c</span>&gt; loans = [
+            <span class="kw">SELECT</span> Id, Expected_Decision_Date__c, Applied_Date__c
+            <span class="kw">FROM</span>   Loan_Application__c LIMIT <span class="num">200</span>
+        ];
+        <span class="cls">Test</span>.<span class="mth">startTest</span>();
+        <span class="cm">// Trigger runs inside startTest/stopTest for limit reset</span>
+        <span class="cls">Test</span>.<span class="mth">stopTest</span>();
+        <span class="kw">for</span> (<span class="cls">Loan_Application__c</span> l : loans) {
+            <span class="cls">System</span>.<span class="mth">assertNotEquals</span>(<span class="kw">null</span>, l.Expected_Decision_Date__c,
+                <span class="str">'Expected decision date should be set'</span>);
+        }
+    }
+}</code></pre>
+</div>
+</div>
+
+<div class="section"><span class="anchor" id="bestpractices"></span>
+<h2><span class="pre">14</span>Best Practices Summary</h2>
+<table>
+  <tr><th>Rule</th><th>Why it matters</th></tr>
+  <tr><td>One trigger per object, all logic in handler classes</td><td>Multiple triggers on same object fire in unpredictable order</td></tr>
+  <tr><td>Never SOQL or DML inside for loops</td><td>Governor limit violation — hits 100 SOQL or 150 DML limit instantly at scale</td></tr>
+  <tr><td>Always handle null before string operations</td><td>NullPointerException is the most common runtime error in Apex</td></tr>
+  <tr><td>Use WITH SYSTEM_MODE in agent action SOQL</td><td>Einstein Agent User has no FLS — queries silently return zero rows without it</td></tr>
+  <tr><td>Use Database.insert(list, false) for partial success in batch</td><td>Allows processing to continue even if some records fail</td></tr>
+  <tr><td>Use AccessLevel.SYSTEM_MODE for DML in community context</td><td>Community users' profiles block DML on custom objects — system mode bypasses profile restrictions</td></tr>
+  <tr><td>Always check List.isEmpty() before DML</td><td>DML on empty list throws an error in some contexts and wastes a DML statement</td></tr>
+  <tr><td>Prefer Queueable over @future for new development</td><td>Queueable supports typed parameters, chaining, and monitoring</td></tr>
+  <tr><td>Use Test.isRunningTest() to guard Queueable chaining</td><td>Chained jobs throw errors in test context</td></tr>
+</table>
+</div>
+
+</div>
+<footer><div class="footer-inner">
+  <div><div class="footer-brand">Anuj Panwar</div><div class="footer-sub">Apex Developer Guide · 2026</div></div>
+  <div class="footer-right"><a href="guides.html" style="color:var(--sf);text-decoration:none">← All Guides</a><br>Hosted on GitHub Pages</div>
+</div></footer>
+</div></div>
+<script>
+const links=document.querySelectorAll('.nav-link[href^="#"]');
+const sections=[];
+links.forEach(l=>{const id=l.getAttribute('href').slice(1);const el=document.getElementById(id);if(el)sections.push({link:l,el})});
+const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){links.forEach(l=>l.classList.remove('active'));const m=sections.find(s=>s.el===e.target);if(m)m.link.classList.add('active')}})},{rootMargin:'-20% 0px -70% 0px'});
+sections.forEach(s=>obs.observe(s.el));
+</script>
+</body></html>
