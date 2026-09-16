@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Developer Guides — Anuj Panwar</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--base:#050A14;--surface:#0D1B2E;--card:#112240;--card2:#162B50;--border:#1E3A5F;--border2:#2D5480;--sf:#00A1E0;--sf-dim:rgba(0,161,224,0.08);--body:#C8DCF0;--muted:#6B8CAE;--dim:#3A5872;--white:#F0F8FF;--green:#29D398;--amber:#F5A623;--purple:#9B7FE8;--mono:'DM Mono',monospace;--sans:'Inter',sans-serif}
+html{font-size:15px}body{font-family:var(--sans);background:var(--base);color:var(--body);line-height:1.75;-webkit-font-smoothing:antialiased}
+nav{position:sticky;top:0;z-index:100;background:rgba(5,10,20,0.92);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);padding:0 40px}
+.nav-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:56px}
+.nav-logo{font-family:var(--mono);font-weight:500;font-size:14px;color:var(--white);text-decoration:none}.nav-logo span{color:var(--sf)}
+.nav-links{display:flex;gap:24px;list-style:none}.nav-links a{color:var(--muted);text-decoration:none;font-size:13px;transition:color .15s}.nav-links a:hover{color:var(--white)}
+.wrap{max-width:1100px;margin:0 auto;padding:0 40px}
+.hero{padding:72px 40px 56px;max-width:1100px;margin:0 auto;border-bottom:1px solid var(--border)}
+.eyebrow{font-family:var(--mono);font-size:12px;color:var(--sf);margin-bottom:18px;display:flex;align-items:center;gap:10px}
+.eyebrow::before{content:'';display:inline-block;width:28px;height:1px;background:var(--sf)}
+h1{font-family:var(--mono);font-size:clamp(28px,4vw,42px);font-weight:400;color:var(--white);margin-bottom:16px;letter-spacing:-0.5px}
+.hero p{font-size:15.5px;color:var(--body);max-width:580px}
+.section{margin:56px 0}
+h2{font-family:var(--mono);font-size:13px;font-weight:500;color:var(--muted);letter-spacing:1.2px;margin-bottom:20px;padding-bottom:10px;border-bottom:1px solid var(--border)}
+.guides-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
+.guide-card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:28px;text-decoration:none;display:block;transition:border-color .2s,transform .15s}
+.guide-card:hover{border-color:rgba(0,161,224,0.4);transform:translateY(-2px);text-decoration:none}
+.guide-icon{font-size:32px;margin-bottom:14px;display:block}
+.guide-title{font-family:var(--mono);font-size:17px;font-weight:500;color:var(--white);margin-bottom:8px}
+.guide-sub{font-family:var(--mono);font-size:10px;color:var(--sf);margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.guide-desc{font-size:13px;color:var(--muted);line-height:1.65;margin-bottom:16px}
+.guide-topics{display:flex;flex-wrap:wrap;gap:5px}
+.tag{display:inline-block;font-family:var(--mono);font-size:10px;padding:2px 8px;border-radius:3px;border:1px solid var(--border);color:var(--muted)}
+footer{border-top:1px solid var(--border);padding:28px 40px;margin-top:80px}
+.footer-inner{max-width:1100px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+.footer-brand{font-family:var(--mono);font-size:13px;color:var(--white)}.footer-sub{font-size:11px;color:var(--dim);margin-top:2px}
+.footer-right{font-family:var(--mono);font-size:11px;color:var(--dim);text-align:right}
+@media(max-width:768px){.guides-grid{grid-template-columns:1fr}.wrap,.hero{padding-left:20px;padding-right:20px}nav{padding:0 20px}}
+</style>
+</head>
+<body>
+<nav><div class="nav-inner">
+  <a href="index.html" class="nav-logo">Anuj<span>.</span>dev</a>
+  <ul class="nav-links">
+    <li><a href="index.html">Portfolio</a></li>
+    <li><a href="guides.html" style="color:var(--white)">Guides</a></li>
+  </ul>
+</div></nav>
+
+<div class="hero">
+  <div class="eyebrow">Technical Writing</div>
+  <h1>Developer Guides</h1>
+  <p>Written from real project experience — every pattern here has been used in production across 5+ years of Salesforce development. No fluff, no theory-only content.</p>
+</div>
+
+<div class="wrap">
+<div class="section">
+  <h2>All Guides</h2>
+  <div class="guides-grid">
+
+    <a href="agentforce-guide.html" class="guide-card">
+      <span class="guide-icon">🤖</span>
+      <div class="guide-title">Agentforce Complete Guide</div>
+      <div class="guide-sub">Production Build · New Studio UI · 2026</div>
+      <p class="guide-desc">The complete Agentforce developer guide — from architecture and the Atlas ReAct loop to the new Agentforce Studio UI, Agent Script, Subagents, deterministic action chaining, and a fully working Loan Support Agent deployed in production. Covers every real issue encountered: WITH SYSTEM_MODE for FLS bypass, eliminating Prompt Templates, fixing agent narration-before-action failure, and Experience Cloud deployment.</p>
+      <div class="guide-topics">
+        <span class="tag">Agentforce Studio</span><span class="tag">Agent Script</span><span class="tag">Subagents</span><span class="tag">Apex Actions</span><span class="tag">WITH SYSTEM_MODE</span><span class="tag">Atlas ReAct</span><span class="tag">Guardrails</span><span class="tag">Experience Cloud Deploy</span>
+      </div>
+    </a>
+
+    <a href="lwc-guide.html" class="guide-card">
+      <span class="guide-icon">⚡</span>
+      <div class="guide-title">LWC Developer Guide</div>
+      <div class="guide-sub">Basic to Advanced · Spring 26 Features</div>
+      <p class="guide-desc">Lightning Web Components from the ground up. Component lifecycle, wire adapters, reactive properties, communication patterns, file uploads with ContentVersion, renderedCallback patterns for pre-filling inputs, native select reactive binding issues and fixes, LWC in Experience Cloud, and the latest Spring 26 LWC enhancements.</p>
+      <div class="guide-topics">
+        <span class="tag">Lifecycle Hooks</span><span class="tag">Wire Adapters</span><span class="tag">@track vs @api</span><span class="tag">File Uploads</span><span class="tag">ContentVersion</span><span class="tag">Parent-Child Comms</span><span class="tag">Custom Events</span><span class="tag">Spring 26</span>
+      </div>
+    </a>
+
+    <a href="apex-guide.html" class="guide-card">
+      <span class="guide-icon">🔷</span>
+      <div class="guide-title">Apex Developer Guide</div>
+      <div class="guide-sub">Best Practices · Sync vs Async · Governor Limits</div>
+      <p class="guide-desc">Everything an Apex developer needs — trigger framework patterns, SOQL optimization, governor limit management, synchronous vs asynchronous comparison, Batch Apex for large data, Queueable for chaining, Scheduled Apex, Platform Events, @InvocableMethod for Agentforce actions, and Tooling API usage. Includes real code from production implementations.</p>
+      <div class="guide-topics">
+        <span class="tag">Trigger Framework</span><span class="tag">Batch Apex</span><span class="tag">Queueable</span><span class="tag">Scheduled Apex</span><span class="tag">Platform Events</span><span class="tag">Governor Limits</span><span class="tag">SOQL Optimization</span><span class="tag">InvocableMethod</span>
+      </div>
+    </a>
+
+    <a href="integration-guide.html" class="guide-card">
+      <span class="guide-icon">🔗</span>
+      <div class="guide-title">Salesforce Integration Guide</div>
+      <div class="guide-sub">REST · Composite · Named Credentials · Connected Apps</div>
+      <p class="guide-desc">Every integration type and pattern in Salesforce — REST API callouts, Composite API for multi-object operations, Bulk API for large data, Named Credentials for secure auth management, Connected Apps for OAuth flows, External Services, Platform Events for real-time integration, and outbound messaging. Includes real MIP financial system integration patterns from the FAPO project.</p>
+      <div class="guide-topics">
+        <span class="tag">REST API</span><span class="tag">Composite API</span><span class="tag">Bulk API</span><span class="tag">Named Credentials</span><span class="tag">Connected Apps</span><span class="tag">OAuth 2.0</span><span class="tag">Platform Events</span><span class="tag">External Services</span>
+      </div>
+    </a>
+
+  </div>
+</div>
+</div>
+
+<footer><div class="footer-inner">
+  <div><div class="footer-brand">Anuj Panwar</div><div class="footer-sub">Technical Specialist · iLink Digital Systems · Noida, India</div></div>
+  <div class="footer-right">Hosted on GitHub Pages · © 2026</div>
+</div></footer>
+</body></html>
