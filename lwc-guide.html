@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LWC Developer Guide — Anuj Panwar</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--base:#050A14;--surface:#0D1B2E;--card:#112240;--card2:#162B50;--border:#1E3A5F;--border2:#2D5480;--sf:#00A1E0;--sf-dim:rgba(0,161,224,0.08);--body:#C8DCF0;--muted:#6B8CAE;--dim:#3A5872;--white:#F0F8FF;--green:#29D398;--amber:#F5A623;--red:#E05C5C;--purple:#9B7FE8;--mono:'DM Mono',monospace;--sans:'Inter',sans-serif;--nav-w:220px}
+html{scroll-behavior:smooth;font-size:15px}body{font-family:var(--sans);background:var(--base);color:var(--body);line-height:1.75;-webkit-font-smoothing:antialiased}
+.layout{display:flex;min-height:100vh}
+.sidebar{width:var(--nav-w);flex-shrink:0;position:sticky;top:0;height:100vh;overflow-y:auto;background:var(--surface);border-right:1px solid var(--border);padding:24px 0;scrollbar-width:thin;scrollbar-color:var(--border) transparent}
+.sidebar::-webkit-scrollbar{width:3px}.sidebar::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+.nav-brand{font-family:var(--mono);font-size:11px;color:var(--sf);padding:0 18px 20px;border-bottom:1px solid var(--border);margin-bottom:14px;line-height:1.4}
+.nav-section{font-family:var(--mono);font-size:9px;color:var(--dim);padding:10px 18px 4px;letter-spacing:1px}
+.nav-link{display:block;padding:5px 18px;font-size:12px;color:var(--muted);text-decoration:none;transition:color .15s,background .15s;border-left:2px solid transparent}
+.nav-link:hover{color:var(--white);background:var(--sf-dim)}.nav-link.active{color:var(--sf);border-left-color:var(--sf);background:var(--sf-dim)}
+.nav-link.sub{padding-left:28px;font-size:11.5px}
+.topbar{position:sticky;top:0;z-index:50;background:rgba(5,10,20,0.92);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);padding:0 32px;display:flex;align-items:center;justify-content:space-between;height:50px}
+.topbar-logo{font-family:var(--mono);font-size:13px;color:var(--white);text-decoration:none}.topbar-logo span{color:var(--sf)}
+.topbar-links{display:flex;gap:20px;list-style:none}.topbar-links a{color:var(--muted);text-decoration:none;font-size:12.5px;transition:color .15s}.topbar-links a:hover{color:var(--white)}
+.main{flex:1;min-width:0}
+.content{max-width:860px;margin:0 auto;padding:0 36px 100px}
+.hero{padding:56px 36px 48px;max-width:860px;margin:0 auto;border-bottom:1px solid var(--border)}
+.eyebrow{font-family:var(--mono);font-size:11px;color:var(--sf);margin-bottom:16px;display:flex;align-items:center;gap:10px}.eyebrow::before{content:'';display:inline-block;width:28px;height:1px;background:var(--sf)}
+h1{font-family:var(--mono);font-size:clamp(24px,3.5vw,38px);font-weight:400;color:var(--white);letter-spacing:-0.5px;margin-bottom:14px;line-height:1.15}
+h1 em{font-style:normal;color:var(--sf)}
+.hero-desc{font-size:15px;color:var(--body);max-width:560px;margin-bottom:24px}
+.hero-tags{display:flex;gap:7px;flex-wrap:wrap}
+.htag{font-family:var(--mono);font-size:10px;padding:3px 10px;border:1px solid var(--border2);border-radius:3px;color:var(--muted)}
+.htag.live{border-color:rgba(41,211,152,0.4);color:var(--green)}.htag.live::before{content:'● ';font-size:8px}
+.section{margin:52px 0}
+.anchor{display:block;position:relative;top:-72px;visibility:hidden}
+h2{font-family:var(--mono);font-size:20px;font-weight:500;color:var(--white);margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--border);letter-spacing:-0.3px}
+h2 .pre{color:var(--sf);margin-right:8px;font-weight:300}
+h3{font-family:var(--mono);font-size:14px;font-weight:500;color:var(--white);margin:24px 0 8px}
+h3 .pre{color:var(--muted);margin-right:6px;font-weight:300}
+h4{font-family:var(--mono);font-size:12.5px;font-weight:500;color:var(--sf);margin:18px 0 6px}
+p{color:var(--body);margin-bottom:12px;max-width:70ch}
+strong{color:var(--white);font-weight:500}
+.callout{border-left:2px solid var(--sf);background:var(--sf-dim);padding:12px 16px;border-radius:0 4px 4px 0;margin:16px 0;font-size:13px}
+.callout.green{border-color:var(--green);background:rgba(41,211,152,0.06)}.callout.amber{border-color:var(--amber);background:rgba(245,166,35,0.06)}.callout.red{border-color:var(--red);background:rgba(224,92,92,0.06)}
+.callout-label{font-family:var(--mono);font-size:9px;font-weight:500;letter-spacing:1px;margin-bottom:5px;color:var(--sf)}
+.callout.green .callout-label{color:var(--green)}.callout.amber .callout-label{color:var(--amber)}.callout.red .callout-label{color:var(--red)}
+.callout p{margin:0;max-width:none}
+.code-wrap{background:#020810;border:1px solid var(--border);border-radius:5px;overflow:hidden;margin:14px 0}
+.code-bar{display:flex;align-items:center;justify-content:space-between;padding:7px 14px;background:rgba(255,255,255,0.03);border-bottom:1px solid var(--border)}
+.code-lang{font-family:var(--mono);font-size:9px;font-weight:500;color:var(--sf);letter-spacing:1px}.code-file{font-family:var(--mono);font-size:9px;color:var(--dim)}
+pre{padding:18px;overflow-x:auto}code{font-family:var(--mono);font-size:12px;line-height:1.8;color:#CBD8E8}
+code.inline{background:rgba(0,161,224,0.1);color:var(--sf);padding:1px 6px;border-radius:3px;font-size:11.5px;border:1px solid rgba(0,161,224,0.2)}
+.kw{color:#C792EA}.str{color:#C3E88D}.cm{color:#445566;font-style:italic}.ann{color:#29D398}.cls{color:#FFCB6B}.mth{color:#82AAFF}.num{color:#F78C6C}.tag-c{color:#89DDFF}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:12.5px}
+th{background:var(--card2);padding:9px 12px;text-align:left;font-family:var(--mono);font-size:9px;font-weight:500;color:var(--muted);letter-spacing:0.8px;border-bottom:1px solid var(--border2)}
+td{padding:9px 12px;border-bottom:1px solid rgba(30,58,95,0.5);color:var(--muted);vertical-align:top}
+td:first-child{color:var(--white);font-weight:500;font-family:var(--mono);font-size:11.5px}
+tr:last-child td{border-bottom:none}tr:hover td{background:var(--sf-dim)}
+.tag{display:inline-block;font-family:var(--mono);font-size:9.5px;padding:2px 7px;border-radius:3px;border:1px solid var(--border);color:var(--muted);margin:2px}
+.tag.sf{border-color:rgba(0,161,224,0.3);color:var(--sf);background:var(--sf-dim)}.tag.green{border-color:rgba(41,211,152,0.3);color:var(--green);background:rgba(41,211,152,0.05)}
+.tag.new{border-color:rgba(245,166,35,0.4);color:var(--amber);background:rgba(245,166,35,0.05)}
+.steps{margin:18px 0}
+.step{display:flex;gap:16px;margin-bottom:22px;position:relative}
+.step::after{content:'';position:absolute;left:13px;top:30px;bottom:-16px;width:1px;background:var(--border)}
+.step:last-child::after{display:none}
+.step-num{width:28px;height:28px;border:1px solid var(--sf);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:11px;color:var(--sf);flex-shrink:0;background:var(--base);z-index:1}
+.step-body{flex:1;padding-top:3px}.step-title{font-family:var(--mono);font-size:13px;font-weight:500;color:var(--white);margin-bottom:5px;line-height:28px}
+.step-desc{font-size:13px;color:var(--body);margin:0}
+footer{border-top:1px solid var(--border);padding:28px 36px;margin-top:80px}
+.footer-inner{max-width:860px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+.footer-brand{font-family:var(--mono);font-size:12px;color:var(--white)}.footer-sub{font-size:11px;color:var(--dim);margin-top:2px}
+.footer-right{font-family:var(--mono);font-size:10px;color:var(--dim);text-align:right}
+@media(max-width:768px){.sidebar{display:none}.content,.hero{padding-left:20px;padding-right:20px}.topbar{padding:0 20px}}
+</style>
+</head>
+<body>
+<div class="layout">
+<nav class="sidebar" id="sidebar">
+  <div class="nav-brand">lwc<br>developer guide<br>2026</div>
+  <div class="nav-section">Fundamentals</div>
+  <a class="nav-link active" href="#intro">What is LWC</a>
+  <a class="nav-link" href="#structure">Component Structure</a>
+  <a class="nav-link" href="#lifecycle">Lifecycle Hooks</a>
+  <a class="nav-section" style="display:block">Data & State</a>
+  <a class="nav-link" href="#reactive">Reactive Properties</a>
+  <a class="nav-link" href="#wire">Wire Adapters</a>
+  <a class="nav-link" href="#apex">Calling Apex</a>
+  <div class="nav-section">Communication</div>
+  <a class="nav-link" href="#events">Component Events</a>
+  <a class="nav-link" href="#pubsub">Parent-Child Comms</a>
+  <div class="nav-section">Advanced</div>
+  <a class="nav-link" href="#files">File Uploads</a>
+  <a class="nav-link" href="#patterns">Common Patterns</a>
+  <a class="nav-link" href="#expcloud">Experience Cloud</a>
+  <a class="nav-link" href="#spring26">Spring 26 Features</a>
+  <a class="nav-link" href="#bestpractices">Best Practices</a>
+</nav>
+<div class="main">
+<div class="topbar">
+  <a href="index.html" class="topbar-logo">Anuj<span>.</span>dev</a>
+  <ul class="topbar-links">
+    <li><a href="index.html">Portfolio</a></li>
+    <li><a href="guides.html">Guides</a></li>
+    <li><a href="apex-guide.html">Apex</a></li>
+    <li><a href="integration-guide.html">Integration</a></li>
+  </ul>
+</div>
+<div class="hero">
+  <div class="eyebrow">Developer Guide · Lightning Web Components</div>
+  <h1>LWC — from basics<br>to <em>production patterns</em></h1>
+  <p class="hero-desc">Everything you need to build Lightning Web Components — component lifecycle, reactive state, wire adapters, file handling, Experience Cloud patterns, and Spring 26 new features. All patterns are from real production implementations.</p>
+  <div class="hero-tags">
+    <span class="htag live">Production Patterns</span>
+    <span class="htag">Lifecycle Hooks</span>
+    <span class="htag">Wire Adapters</span>
+    <span class="htag">File Uploads</span>
+    <span class="htag">ContentVersion</span>
+    <span class="htag">Spring 26</span>
+  </div>
+</div>
+<div class="content">
+
+<!-- INTRO -->
+<div class="section"><span class="anchor" id="intro"></span>
+<h2><span class="pre">01</span>What is LWC</h2>
+<p>Lightning Web Components (LWC) is Salesforce's modern component framework based on web standards — custom HTML elements, ES6+ JavaScript, and CSS. It replaced Aura Components as the recommended approach from Spring 19 onwards. LWC is faster, more standards-compliant, and easier to test than Aura.</p>
+<table>
+  <tr><th>Feature</th><th>LWC</th><th>Aura</th></tr>
+  <tr><td>Standard</td><td>Web Components standard</td><td>Proprietary Salesforce framework</td></tr>
+  <tr><td>Performance</td><td>Faster — native browser rendering</td><td>Slower — framework overhead</td></tr>
+  <tr><td>JavaScript</td><td>ES6+ modules</td><td>Aura-specific syntax</td></tr>
+  <tr><td>Testing</td><td>Jest — standard JS testing</td><td>Limited testing options</td></tr>
+  <tr><td>Interop</td><td>Can use Aura components inside LWC</td><td>Can use LWC inside Aura</td></tr>
+  <tr><td>Status</td><td>Active — new features added every release</td><td>Maintenance mode only</td></tr>
+</table>
+</div>
+
+<!-- STRUCTURE -->
+<div class="section"><span class="anchor" id="structure"></span>
+<h2><span class="pre">02</span>Component Structure</h2>
+<p>Every LWC component is a folder with the same name containing three files. The folder name becomes the component name.</p>
+<div class="code-wrap">
+  <div class="code-bar"><span class="code-lang">File Structure</span></div>
+  <pre><code>myComponent/
+├── myComponent.html       <!-- Template — what renders -->
+├── myComponent.js         <!-- Controller — the logic -->
+├── myComponent.js-meta.xml <!-- Metadata — where it can be used -->
+└── myComponent.css        <!-- Styles — scoped to this component --></code></pre>
+</div>
+<div class="code-wrap">
+  <div class="code-bar"><span class="code-lang">HTML</span><span class="code-file">loanStatusCard.html</span></div>
+  <pre><code><span class="tag-c">&lt;template&gt;</span>
+    <span class="tag-c">&lt;div</span> class=<span class="str">"card-container"</span><span class="tag-c">&gt;</span>
+        <span class="tag-c">&lt;h2&gt;</span>{loanStatus}<span class="tag-c">&lt;/h2&gt;</span>
+        <span class="cm">&lt;!-- Conditional rendering --&gt;</span>
+        <span class="kw">template lwc:if</span>={isPending}&gt;
+            <span class="tag-c">&lt;p&gt;</span>Your application is under review<span class="tag-c">&lt;/p&gt;</span>
+        <span class="tag-c">&lt;/template&gt;</span>
+        <span class="cm">&lt;!-- List rendering --&gt;</span>
+        <span class="tag-c">&lt;template</span> for:each={documents} for:item=<span class="str">"doc"</span><span class="tag-c">&gt;</span>
+            <span class="tag-c">&lt;p</span> key={doc.id}<span class="tag-c">&gt;</span>{doc.name}<span class="tag-c">&lt;/p&gt;</span>
+        <span class="tag-c">&lt;/template&gt;</span>
+    <span class="tag-c">&lt;/div&gt;</span>
+<span class="tag-c">&lt;/template&gt;</span></code></pre>
+</div>
+<div class="code-wrap">
+  <div class="code-bar"><span class="code-lang">JavaScript</span><span class="code-file">loanStatusCard.js</span></div>
+  <pre><code><span class="kw">import</span> { LightningElement, api, track, wire } <span class="kw">from</span> <span class="str">'lwc'</span>;
+<span class="kw">import</span> getLoanStatus <span class="kw">from</span> <span class="str">'@salesforce/apex/GetLoanStatusController.getLoanStatus'</span>;
+
+<span class="kw">export default class</span> <span class="cls">LoanStatusCard</span> <span class="kw">extends</span> <span class="cls">LightningElement</span> {
+    <span class="ann">@api</span> recordId;          <span class="cm">// Public — parent can set this</span>
+    <span class="ann">@track</span> documents = []; <span class="cm">// Tracked — deep object changes detected</span>
+    loanStatus = <span class="str">''</span>;       <span class="cm">// Primitive — reactive without @track</span>
+    isLoading = <span class="kw">false</span>;
+
+    <span class="kw">get</span> <span class="mth">isPending</span>() {
+        <span class="kw">return</span> <span class="kw">this</span>.loanStatus === <span class="str">'Under Review'</span>;
+    }
+}</code></pre>
+</div>
+<div class="code-wrap">
+  <div class="code-bar"><span class="code-lang">XML</span><span class="code-file">loanStatusCard.js-meta.xml</span></div>
+  <pre><code><span class="tag-c">&lt;?xml version=<span class="str">"1.0"</span> encoding=<span class="str">"UTF-8"</span>?&gt;</span>
+<span class="tag-c">&lt;LightningComponentBundle</span> xmlns=<span class="str">"http://soap.sforce.com/2006/04/metadata"</span><span class="tag-c">&gt;</span>
+    <span class="tag-c">&lt;apiVersion&gt;</span>63.0<span class="tag-c">&lt;/apiVersion&gt;</span>
+    <span class="tag-c">&lt;isExposed&gt;</span>true<span class="tag-c">&lt;/isExposed&gt;</span>
+    <span class="tag-c">&lt;targets&gt;</span>
+        <span class="tag-c">&lt;target&gt;</span>lightning__RecordPage<span class="tag-c">&lt;/target&gt;</span>
+        <span class="tag-c">&lt;target&gt;</span>lightning__AppPage<span class="tag-c">&lt;/target&gt;</span>
+        <span class="tag-c">&lt;target&gt;</span>lightning__HomePage<span class="tag-c">&lt;/target&gt;</span>
+        <span class="tag-c">&lt;target&gt;</span>lightningCommunity__Page<span class="tag-c">&lt;/target&gt;</span>
+    <span class="tag-c">&lt;/targets&gt;</span>
+<span class="tag-c">&lt;/LightningComponentBundle&gt;</span></code></pre>
+</div>
+</div>
+
+<!-- LIFECYCLE -->
+<div class="section"><span class="anchor" id="lifecycle"></span>
+<h2><span class="pre">03</span>Lifecycle Hooks</h2>
+<p>LWC components go through a defined lifecycle from construction to removal. Understanding when each hook fires is critical for data fetching, DOM manipulation, and cleanup.</p>
+<table>
+  <tr><th>Hook</th><th>When It Fires</th><th>Use For</th><th>Can Access DOM?</th></tr>
+  <tr><td>constructor()</td><td>Component instance created</td><td>Initialising class variables only</td><td>❌ No</td></tr>
+  <tr><td>connectedCallback()</td><td>Component inserted into DOM</td><td>Subscribing to events, initial data fetch via imperative Apex</td><td>✅ Yes</td></tr>
+  <tr><td>renderedCallback()</td><td>Every render completes</td><td>DOM manipulation after render, pre-filling inputs, third-party library init</td><td>✅ Yes</td></tr>
+  <tr><td>disconnectedCallback()</td><td>Component removed from DOM</td><td>Unsubscribing from events, cleanup</td><td>❌ No</td></tr>
+  <tr><td>errorCallback(error, stack)</td><td>Child component throws error</td><td>Error boundary handling</td><td>❌ No</td></tr>
+</table>
+
+<div class="callout amber">
+  <div class="callout-label">Common Mistake — renderedCallback Infinite Loop</div>
+  <p>renderedCallback fires on every render. If you update a property inside it, that triggers another render, which fires renderedCallback again — infinite loop. Always use a boolean flag to run DOM manipulation only once.</p>
+</div>
+
+<div class="code-wrap">
+  <div class="code-bar"><span class="code-lang">JavaScript</span><span class="code-file">renderedCallback pattern — textarea pre-fill</span></div>
+  <pre><code><span class="kw">export default class</span> <span class="cls">MyForm</span> <span class="kw">extends</span> <span class="cls">LightningElement</span> {
+    <span class="ann">@api</span> initialValue;
+    _rendered = <span class="kw">false</span>; <span class="cm">// Guard flag</span>
+
+    <span class="mth">renderedCallback</span>() {
+        <span class="kw">if</span> (<span class="kw">this</span>._rendered) <span class="kw">return</span>; <span class="cm">// Only run once</span>
+        <span class="kw">this</span>._rendered = <span class="kw">true</span>;
+
+        <span class="cm">// Access native textarea after DOM is ready</span>
+        <span class="kw">const</span> textarea = <span class="kw">this</span>.<span class="mth">template.querySelector</span>(<span class="str">'textarea'</span>);
+        <span class="kw">if</span> (textarea && <span class="kw">this</span>.initialValue) {
+            textarea.value = <span class="kw">this</span>.initialValue;
+        }
+    }
+}</code></pre>
+</div>
+</div>
+
+<!-- REACTIVE PROPERTIES -->
+<div class="section"><span class="anchor" id="reactive"></span>
+<h2><span class="pre">04</span>Reactive Properties</h2>
+<table>
+  <tr><th>Decorator</th><th>Purpose</th><th>When to Use</th></tr>
+  <tr><td>@api</td><td>Public property — parent can read/write</td><td>Component inputs, expose to parent, expose to App Builder</td></tr>
+  <tr><td>@track</td><td>Deep reactivity for objects and arrays</td><td>When you mutate a property inside an object or array and need the template to re-render. Primitives do NOT need @track.</td></tr>
+  <tr><td>(none)</td><td>Primitive reactive property</td><td>Strings, numbers, booleans — reactive by default since Spring 20. No @track needed.</td></tr>
+  <tr><td>@wire</td><td>Reactive wire service connection</td><td>Reading Salesforce data that should refresh when its parameters change</td></tr>
+</table>
+
+<div class="callout">
+  <div class="callout-label">Primitives are reactive without @track</div>
+  <p>Since Spring 20, all primitive properties (String, Number, Boolean) are reactive without @track. You only need @track when you mutate a property <em>inside</em> an object — e.g. this.myObj.name = 'x' — and need the template to re-render. Assigning a new object reference (this.myObj = newObj) is always reactive without @track.</p>
+</div>
+
+<h3><span class="pre">//</span>Native Select Reactive Binding Fix</h3>
+<p>Native HTML <code class="inline">&lt;select&gt;</code> elements do not react to value changes the same way <code class="inline">lightning-combobox</code> does. This is a real bug pattern encountered in the FAPO project.</p>
+<div class="code-wrap">
+  <div class="code-bar"><span class="code-lang">JavaScript</span><span class="code-file">The isSelected getter pattern</span></div>
+  <pre><code><span class="cm">// PROBLEM: Native &lt;select&gt; does not reflect value changes reactively</span>
+<span class="cm">// &lt;option value={opt.value}&gt; does NOT highlight the selected option</span>
+
+<span class="cm">// SOLUTION: Use an isSelected getter in your option objects</span>
+<span class="kw">get</span> <span class="mth">fundingOptions</span>() {
+    <span class="kw">return</span> [
+        { label: <span class="str">'Federal'</span>, value: <span class="str">'federal'</span>, 
+          isSelected: <span class="kw">this</span>.selectedFunding === <span class="str">'federal'</span> },
+        { label: <span class="str">'State'</span>, value: <span class="str">'state'</span>,   
+          isSelected: <span class="kw">this</span>.selectedFunding === <span class="str">'state'</span> },
+    ];
+}
+
+<span class="cm">// In HTML: &lt;option value={opt.value} selected={opt.isSelected}&gt;</span>
+<span class="cm">// Now when selectedFunding changes, getter re-evaluates,</span>
+<span class="cm">// and the correct option is highlighted</span></code></pre>
+</div>
+</div>
+
+<!-- WIRE -->
+<div class="section"><span class="anchor" id="wire"></span>
+<h2><span class="pre">05</span>Wire Adapters</h2>
+<p>Wire adapters connect your component to Salesforce data reactively. When the parameters change, the wire service re-fetches automatically.</p>
+<div class="code-wrap">
+  <div class="code-bar"><span class="code-lang">JavaScript</span><span class="code-file">Wire examples</span></div>
+  <pre><code><span class="kw">import</span> { LightningElement, api, wire } <span class="kw">from</span> <span class="str">'lwc'</span>;
+<span class="kw">import</span> { getRecord, getFieldValue } <span class="kw">from</span> <span class="str">'lightning/uiRecordApi'</span>;
+<span class="kw">import</span> { getPicklistValues, getObjectInfo } <span class="kw">from</span> <span class="str">'lightning/uiObjectInfoApi'</span>;
+<span class="kw">import</span> LOAN_STATUS <span class="kw">from</span> <span class="str">'@salesforce/schema/Loan_Application__c.Status__c'</span>;
+<span class="kw">import</span> getLoanDetails <span class="kw">from</span> <span class="str">'@salesforce/apex/LoanController.getDetails'</span>;
+
+<span class="kw">export default class</span> <span class="cls">LoanCard</span> <span class="kw">extends</span> <span class="cls">LightningElement</span> {
+    <span class="ann">@api</span> recordId;
+
+    <span class="cm">// Wire getRecord — auto-refreshes when recordId changes</span>
+    <span class="ann">@wire</span>(getRecord, { recordId: <span class="str">'$recordId'</span>, fields: [LOAN_STATUS] })
+    loan;
+
+    <span class="cm">// Computed getter from wire result</span>
+    <span class="kw">get</span> <span class="mth">status</span>() {
+        <span class="kw">return</span> <span class="mth">getFieldValue</span>(<span class="kw">this</span>.loan.data, LOAN_STATUS);
+    }
+
+    <span class="cm">// Wire an Apex method — reactive when recordId changes</span>
+    <span class="ann">@wire</span>(getLoanDetails, { loanId: <span class="str">'$recordId'</span> })
+    <span class="mth">wiredLoan</span>({ error, data }) {
+        <span class="kw">if</span> (data) {
+            <span class="kw">this</span>.loanData = data;
+        } <span class="kw">else if</span> (error) {
+            console.<span class="mth">error</span>(error);
+        }
+    }
+}</code></pre>
+</div>
+
+<h3><span class="pre">//</span>Wire vs Imperative Apex — When to Use Which</h3>
+<table>
+  <tr><th>Scenario</th><th>Use Wire</th><th>Use Imperative</th></tr>
+  <tr><td>Reading data on load</td><td>✅ Yes — auto-fetches</td><td>Can use either</td></tr>
+  <tr><td>Data depends on a changing property</td><td>✅ Yes — re-fetches automatically</td><td>❌ Must call manually</td></tr>
+  <tr><td>DML — insert/update/delete</td><td>❌ Wire is read-only</td><td>✅ Must use imperative</td></tr>
+  <tr><td>Call on button click</td><td>❌ Not triggered by events</td><td>✅ Imperative in handler</td></tr>
+  <tr><td>Show loading spinner</td><td>Complex — need to check wire state</td><td>✅ Easier — set isLoading flag</td></tr>
+  <tr><td>Error handling</td><td>Via error property</td><td>✅ Try/catch in async function</td></tr>
+</table>
+</div>
+
+<!-- CALLING APEX -->
+<div class="section"><span class="anchor" id="apex"></span>
+<h2><span class="pre">06</span>Calling Apex from LWC</h2>
+<div class="code-wrap">
+  <div class="code-bar"><span class="code-lang">JavaScript</span><span class="code-file">Imperative Apex with async/await</span></div>
+  <pre><code><span class="kw">import</span> { LightningElement, track } <span class="kw">from</span> <span class="str">'lwc'</span>;
+<span class="kw">import</span> { ShowToastEvent } <span class="kw">from</span> <span class="str">'lightning/platformShowToastEvent'</span>;
+<span class="kw">import</span> getLoanStatus <span class="kw">from</span> <span class="str">'@salesforce/apex/LoanController.getLoanStatus'</span>;
+
+<span class="kw">export default class</span> <span class="cls">StatusChecker</span> <span class="kw">extends</span> <span class="cls">LightningElement</span> {
+    <span class="ann">@track</span> loanData;
+    isLoading = <span class="kw">false</span>;
+    error;
+
+    <span class="kw">async</span> <span class="mth">handleCheckStatus</span>() {
+        <span class="kw">this</span>.isLoading = <span class="kw">true</span>;
+        <span class="kw">this</span>.error = <span class="kw">undefined</span>;
+        <span class="kw">try</span> {
+            <span class="kw">this</span>.loanData = <span class="kw">await</span> <span class="mth">getLoanStatus</span>({
+                loanNumber: <span class="kw">this</span>.loanNumber,
+                contactId: <span class="kw">this</span>.contactId
+            });
+            <span class="kw">this</span>.<span class="mth">dispatchEvent</span>(<span class="kw">new</span> <span class="cls">ShowToastEvent</span>({
+                title: <span class="str">'Success'</span>, message: <span class="str">'Status retrieved'</span>,
+                variant: <span class="str">'success'</span>
+            }));
+        } <span class="kw">catch</span> (error) {
+            <span class="kw">this</span>.error = error?.body?.message || <span class="str">'An error occurred'</span>;
+        } <span class="kw">finally</span> {
+            <span class="kw">this</span>.isLoading = <span class="kw">false</span>;
+        }
+    }
+}</code></pre>
+</div>
+</div>
+
+<!-- EVENTS -->
+<div class="section"><span class="anchor" id="events"></span>
+<h2><span class="pre">07</span>Component Events &amp; Communication</h2>
+<table>
+  <tr><th>Pattern</th><th>Direction</th><th>How</th><th>Use When</th></tr>
+  <tr><td>@api property</td><td>Parent → Child</td><td>Attribute binding in parent template</td><td>Passing data down to child</td></tr>
+  <tr><td>CustomEvent</td><td>Child → Parent</td><td>dispatchEvent in child, oneventname in parent</td><td>Child notifying parent of action</td></tr>
+  <tr><td>pubsub / LMS</td><td>Any → Any</td><td>Lightning Message Service</td><td>Unrelated components on same page</td></tr>
+  <tr><td>@wire CurrentPageReference</td><td>URL → Component</td><td>Wire CurrentPageReference</td><td>Reading URL state params</td></tr>
+</table>
+<div class="code-wrap">
+  <div class="code-bar"><span class="code-lang">JavaScript</span><span class="code-file">Child — firing a custom event</span></div>
+  <pre><code><span class="cm">// Child fires event with detail payload</span>
+<span class="mth">handleDocumentUploaded</span>(event) {
+    <span class="kw">const</span> uploadedDoc = { id: event.detail.id, name: event.detail.name };
+    <span class="kw">this</span>.<span class="mth">dispatchEvent</span>(<span class="kw">new</span> <span class="cls">CustomEvent</span>(<span class="str">'documentuploaded'</span>, {
+        detail: uploadedDoc,
+        bubbles: <span class="kw">true</span>,   <span class="cm">// bubbles up through DOM</span>
+        composed: <span class="kw">true</span>   <span class="cm">// crosses shadow DOM boundary</span>
+    }));
+}
+
+<span class="cm">// Parent HTML listens:  &lt;c-child ondocumentuploaded={handleUpload}&gt;&lt;/c-child&gt;</span>
+<span class="cm">// Parent JS: handleUpload(event) { const doc = event.detail; }</span></code></pre>
+</div>
+</div>
+
+<!-- FILE UPLOADS -->
+<div class="section"><span class="anchor" id="files"></span>
+<h2><span class="pre">08</span>File Uploads — ContentVersion Pattern</h2>
+<p>Uploading files in LWC for Experience Cloud requires converting to base64 and creating ContentVersion records via Apex. The standard lightning-file-upload component does not work reliably for community portal users.</p>
+<div class="code-wrap">
+  <div class="code-bar"><span class="code-lang">HTML</span><span class="code-file">File input in template</span></div>
+  <pre><code><span class="tag-c">&lt;template&gt;</span>
+    <span class="tag-c">&lt;input</span> type=<span class="str">"file"</span> accept=<span class="str">".pdf,.jpg,.png,.doc,.docx"</span>
+           onchange={handleFileChange} <span class="tag-c">/&gt;</span>
+    <span class="kw">template lwc:if</span>={isUploading}&gt;
+        <span class="tag-c">&lt;lightning-spinner&gt;&lt;/lightning-spinner&gt;</span>
+    <span class="tag-c">&lt;/template&gt;</span>
+<span class="tag-c">&lt;/template&gt;</span></code></pre>
+</div>
+<div class="code-wrap">
+  <div class="code-bar"><span class="code-lang">JavaScript</span><span class="code-file">FileReader → base64 → Apex → ContentVersion</span></div>
+  <pre><code><span class="mth">handleFileChange</span>(event) {
+    <span class="kw">const</span> file = event.target.files[<span class="num">0</span>];
+    <span class="kw">if</span> (!file) <span class="kw">return</span>;
+    <span class="kw">const</span> reader = <span class="kw">new</span> <span class="cls">FileReader</span>();
+    reader.onload = <span class="kw">async</span> () => {
+        <span class="kw">const</span> base64 = reader.result.<span class="mth">split</span>(<span class="str">','</span>)[<span class="num">1</span>]; <span class="cm">// strip data URI prefix</span>
+        <span class="kw">this</span>.isUploading = <span class="kw">true</span>;
+        <span class="kw">try</span> {
+            <span class="kw">const</span> result = <span class="kw">await</span> <span class="mth">uploadDocument</span>({
+                base64Data: base64,
+                fileName: file.name,
+                contentType: file.type,
+                recordId: <span class="kw">this</span>.recordId
+            });
+            <span class="kw">this</span>.<span class="mth">dispatchEvent</span>(<span class="kw">new</span> <span class="cls">CustomEvent</span>(<span class="str">'uploaded'</span>, { detail: result }));
+        } <span class="kw">catch</span>(e) {
+            console.<span class="mth">error</span>(<span class="str">'Upload failed'</span>, e);
+        } <span class="kw">finally</span> {
+            <span class="kw">this</span>.isUploading = <span class="kw">false</span>;
+        }
+    };
+    reader.<span class="mth">readAsDataURL</span>(file);
+}</code></pre>
+</div>
+<div class="code-wrap">
+  <div class="code-bar"><span class="code-lang">Apex</span><span class="code-file">Upload controller — ContentVersion + ContentDocumentLink</span></div>
+  <pre><code><span class="ann">@AuraEnabled</span>
+<span class="kw">public static</span> <span class="cls">String</span> <span class="mth">uploadDocument</span>(
+        <span class="cls">String</span> base64Data, <span class="cls">String</span> fileName,
+        <span class="cls">String</span> contentType, <span class="cls">String</span> recordId) {
+
+    ContentVersion cv = <span class="kw">new</span> ContentVersion();
+    cv.Title           = fileName;
+    cv.PathOnClient    = fileName;
+    cv.VersionData     = EncodingUtil.<span class="mth">base64Decode</span>(base64Data);
+    cv.FirstPublishLocationId = recordId;
+    insert cv;
+
+    <span class="cm">// Get ContentDocumentId for the link</span>
+    ContentVersion inserted = [
+        SELECT ContentDocumentId FROM ContentVersion
+        WHERE Id = :cv.Id WITH SYSTEM_MODE LIMIT 1
+    ];
+
+    <span class="kw">return</span> inserted.ContentDocumentId;
+}</code></pre>
+</div>
+
+<h3><span class="pre">//</span>Viewing Uploaded Files — PDF and Office</h3>
+<div class="callout amber">
+  <div class="callout-label">Common Bug — File Preview URLs</div>
+  <p>Rendition URLs from ContentVersion do not work for PDF and Office files in Experience Cloud. Use the servlet download URL instead: <code class="inline">/sfc/servlet.shepherd/version/download/{versionId}</code>. This works for all file types including PDF, Word, and Excel.</p>
+</div>
+</div>
+
+<!-- PATTERNS -->
+<div class="section"><span class="anchor" id="patterns"></span>
+<h2><span class="pre">09</span>Common LWC Patterns</h2>
+<h3><span class="pre">//</span>Show/Hide Loading Spinner Pattern</h3>
+<div class="code-wrap">
+  <div class="code-bar"><span class="code-lang">JavaScript</span></div>
+  <pre><code><span class="cm">// Always use try/catch/finally so spinner never gets stuck ON</span>
+<span class="kw">async</span> <span class="mth">loadData</span>() {
+    <span class="kw">this</span>.isLoading = <span class="kw">true</span>;
+    <span class="kw">try</span> {
+        <span class="kw">this</span>.data = <span class="kw">await</span> <span class="mth">getMyData</span>({ id: <span class="kw">this</span>.recordId });
+    } <span class="kw">catch</span> (e) {
+        <span class="kw">this</span>.error = e?.body?.message;
+    } <span class="kw">finally</span> {
+        <span class="kw">this</span>.isLoading = <span class="kw">false</span>; <span class="cm">// always runs — spinner always stops</span>
+    }
+}</code></pre>
+</div>
+<h3><span class="pre">//</span>Refresh on Save Pattern</h3>
+<div class="code-wrap">
+  <div class="code-bar"><span class="code-lang">JavaScript</span><span class="code-file">Using refreshApex after DML</span></div>
+  <pre><code><span class="kw">import</span> { refreshApex } <span class="kw">from</span> <span class="str">'@salesforce/apex'</span>;
+
+<span class="cm">// Store wire result reference</span>
+<span class="ann">@wire</span>(getLoanData, { loanId: <span class="str">'$recordId'</span> })
+wiredLoan; <span class="cm">// store the entire wire result</span>
+
+<span class="kw">async</span> <span class="mth">handleSave</span>() {
+    <span class="kw">await</span> <span class="mth">saveLoanData</span>({ data: <span class="kw">this</span>.updatedData });
+    <span class="cm">// Refresh the wired data after save</span>
+    <span class="kw">await</span> <span class="mth">refreshApex</span>(<span class="kw">this</span>.wiredLoan);
+}</code></pre>
+</div>
+</div>
+
+<!-- EXPERIENCE CLOUD -->
+<div class="section"><span class="anchor" id="expcloud"></span>
+<h2><span class="pre">10</span>LWC in Experience Cloud</h2>
+<table>
+  <tr><th>Issue</th><th>Root Cause</th><th>Fix</th></tr>
+  <tr><td>ContentDocumentLink query returns empty for portal users</td><td>File access respects running user's FLS regardless of without sharing keyword</td><td>Query ContentVersion separately or use WITH SYSTEM_MODE on SOQL</td></tr>
+  <tr><td>CRUD operations fail for community users</td><td>Community users have restricted profiles — DML blocked</td><td>Use AccessLevel.SYSTEM_MODE on Database.insert() / Database.update() calls</td></tr>
+  <tr><td>@wire getRecord returns null in community</td><td>Guest user profile lacks field-level read access</td><td>Grant field-level read on each field via Guest User Profile</td></tr>
+  <tr><td>lightning-file-upload does not work</td><td>Component not supported for guest users in Experience Cloud</td><td>Use native HTML input type=file with FileReader and Apex ContentVersion upload</td></tr>
+  <tr><td>Custom CSS not applying</td><td>LWC CSS is scoped — does not pierce child component shadow DOM</td><td>Use :host or CSS custom properties for theming. Never use !important to override child styles.</td></tr>
+</table>
+</div>
+
+<!-- SPRING 26 -->
+<div class="section"><span class="anchor" id="spring26"></span>
+<h2><span class="pre">11</span>Spring 26 — New LWC Features</h2>
+<p>Key LWC enhancements released in Spring 26:</p>
+<table>
+  <tr><th>Feature</th><th>What It Does</th><th>Before Spring 26</th></tr>
+  <tr><td>lwc:ref</td><td>Direct reference to a DOM element without template.querySelector</td><td>Had to use querySelector which is fragile</td></tr>
+  <tr><td>Signals (preview)</td><td>Fine-grained reactive state that only re-renders affected parts of the template</td><td>All tracked properties cause full re-render</td></tr>
+  <tr><td>Async iterators in for:each</td><td>Stream data into a list as it arrives from an async source</td><td>Had to wait for full data before rendering</td></tr>
+  <tr><td>Component State API</td><td>Persistent client-side state scoped to the component across navigation</td><td>State lost on navigation away and back</td></tr>
+  <tr><td>Enhanced lwc:if</td><td>lwc:elseif now supports multiple branches without nested templates</td><td>Required nested template blocks for multi-branch logic</td></tr>
+</table>
+
+<div class="code-wrap">
+  <div class="code-bar"><span class="code-lang">HTML</span><span class="code-file">lwc:ref — Spring 26</span></div>
+  <pre><code><span class="tag-c">&lt;template&gt;</span>
+    <span class="tag-c">&lt;input</span> lwc:ref=<span class="str">"myInput"</span> type=<span class="str">"text"</span> <span class="tag-c">/&gt;</span>
+<span class="tag-c">&lt;/template&gt;</span>
+
+<span class="cm">// In JS — no more querySelector</span>
+<span class="mth">focusInput</span>() {
+    <span class="kw">this</span>.refs.myInput.<span class="mth">focus</span>();
+}</code></pre>
+</div>
+</div>
+
+<!-- BEST PRACTICES -->
+<div class="section"><span class="anchor" id="bestpractices"></span>
+<h2><span class="pre">12</span>Best Practices</h2>
+<table>
+  <tr><th>Practice</th><th>Why</th></tr>
+  <tr><td>Never put logic in renderedCallback without a guard flag</td><td>Causes infinite re-render loop</td></tr>
+  <tr><td>Always use try/catch/finally around Apex calls</td><td>Ensures loading spinner always clears even on error</td></tr>
+  <tr><td>Use @salesforce/schema imports for field references</td><td>Gets compile-time validation and deployment warnings if field is deleted</td></tr>
+  <tr><td>Prefer wire for reads, imperative for writes</td><td>Wire is reactive — imperative is flexible. Using each for its purpose keeps code clean.</td></tr>
+  <tr><td>Use CustomEvent with bubbles:true for child-to-parent across multiple levels</td><td>Without bubbles:true, the event stops at the immediate parent</td></tr>
+  <tr><td>Never use document.querySelector — always use this.template.querySelector</td><td>LWC's shadow DOM means document.querySelector cannot see inside the component's shadow root</td></tr>
+  <tr><td>Use Lightning Message Service for cross-tree communication</td><td>CustomEvents cannot cross the component tree — LMS works across any components on the same page</td></tr>
+  <tr><td>Name files and folders in camelCase only</td><td>LWC folder and file names must match exactly — PascalCase or kebab-case will fail deployment</td></tr>
+</table>
+</div>
+
+</div>
+<footer><div class="footer-inner">
+  <div><div class="footer-brand">Anuj Panwar</div><div class="footer-sub">LWC Developer Guide · 2026</div></div>
+  <div class="footer-right"><a href="guides.html" style="color:var(--sf);text-decoration:none">← All Guides</a><br>Hosted on GitHub Pages</div>
+</div></footer>
+</div></div>
+<script>
+const links=document.querySelectorAll('.nav-link[href^="#"]');
+const sections=[];
+links.forEach(l=>{const id=l.getAttribute('href').slice(1);const el=document.getElementById(id);if(el)sections.push({link:l,el})});
+const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){links.forEach(l=>l.classList.remove('active'));const m=sections.find(s=>s.el===e.target);if(m)m.link.classList.add('active')}})},{rootMargin:'-20% 0px -70% 0px'});
+sections.forEach(s=>obs.observe(s.el));
+</script>
+</body></html>
